@@ -1,0 +1,188 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Contribution Guidelines" />
+
+# Contribution Guidelines
+
+We welcome contributions from the team! To ensure consistency and maintain high-quality standards in our Storybook, please follow these guidelines when contributing.
+
+## Story Format and Structure
+
+To maintain a consistent structure across all components in our Storybook, adhere to the following guidelines:
+
+### 1. **Component Story Format**
+
+All stories must follow the [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf) to ensure that our Storybook is easy to navigate and well-organized. CSF is the recommended way to write stories in Storybook, providing a clear, modular, and maintainable structure.
+
+### 2. **Default Story**
+
+Each component should include a default story titled `meta`. This default story should serve as the main entry point for the component. Place the component in the appropriate category in the `title` propery. This helps in maintaining consistency and clarity in how we organize our stories.
+
+#### a. Component Story Format
+
+Meta and story configuration (you can directly use this):
+
+```typescript
+const meta: Meta<typeof SampleButton> = {
+  title: "<Component_Category>/<Name_Of_Component>",
+  component: SampleButton,
+  parameters: {
+    layout: "centered",
+    docs: {
+      description: {
+        component: "Description of the component",
+      },
+    },
+  },
+  tags: ["autodocs"],
+  argTypes: {
+    // argument types of the props of the components with description for each arg type
+  },
+  args: {
+    // args of the default story
+  },
+};
+
+export default meta;
+```
+
+**Tags**
+
+Include the autodocs tag in your story metadata to enable automated documentation generation. This ensures that our Storybook remains well-documented and easy to understand.
+
+Example:
+
+```
+tags: ['autodocs'],
+```
+
+**Prop Descriptions and Controls**
+
+Make sure to add detailed descriptions for each prop using the `argTypes` property. This documentation helps other developers understand what each prop does and how to use it. Additionally, make sure to add controls for interactive testing in the Storybook UI.
+
+```
+argTypes: {
+  label: {
+    control: 'text',
+    description: 'The text to be displayed on the button',
+  },
+  onClick: {
+    action: 'clicked',
+    description: 'Callback function that is called when the button is clicked',
+  },
+}
+
+```
+
+### 3. Visual Changes based on Props
+
+For every component, create separate stories to showcase visual changes based on different props. This makes it easier for other developers and designers to understand how the component behaves with various configurations.
+
+```
+export const LongButton: Story = {
+  args: {
+    label: 'Button with long text',
+    onClick: action('onButtonClick'),
+  },
+};
+
+```
+
+To ensure your stories provide a comprehensive overview of how components behave under different conditions, follow these guidelines:
+
+    1. Cover Different Component States:
+        - Each story should represent distinct states of the component, such as loading, disabled, or/and error states.
+        - These stories should illustrate how the component responds when different props are passed, ensuring that the component's various UI states are well represented.
+
+    2. Do Not Create Separate Stories for Event-Driven UI Changes:
+        - Avoid creating stories for UI changes that occur due to internal event listeners (e.g., onMouseEnter, onMouseLeave, onFocus, onBlur).
+        - Example scenarios to avoid creating separate stories for:
+            Hover effects (UI changes when the component is hovered).
+            Focus or blur events (UI changes when the component gains or loses focus).
+            Active or selected states driven by user interaction (unless these states are controlled by component props).
+
+    3. Create Separate Stories for Prop-Driven UI Changes:
+        - Emphasize creating stories that demonstrate how the component behaves with different combinations of props.
+        These stories provide insight into how users can configure the component to meet their needs.
+        - When the UI changes based on prop values, create a dedicated story to showcase that behavior. These stories help visualize how different prop configurations affect the component’s appearance and behavior.
+        - Examples:
+
+            A Button component with an `isEnabled` prop:
+              - When `isEnabled` is true, the button has a default background color.
+              - When `isEnabled` is false, the button's background color changes to indicate that it's disabled.
+
+            A Button component with an `iconPosition` prop:
+              - When `iconPosition` is "left", the icon is displayed to the left of the button text.
+              - When `iconPosition` is "right", the icon is displayed to the right of the button text.
+
+### 4. Play Functions
+
+Each component should include a play function in relevant stories (stories depicting hover state UI may or may not require play functions for testing component logic) that not only demonstrates the component’s visual state but also tests its behavior. By separating the play functions into a dedicated `playFunctions.ts` file, you can maintain a modular and reusable structure across your stories. This approach helps validate that components work as expected when interacted with, while keeping the story files clean and focused on configuration.
+
+**Steps**
+
+1. Define reusable play functions in a separate playFunctions.ts file. Each play function can simulate user interactions and perform assertions to verify the behavior of the component.
+
+```
+// playFunctions.ts
+
+import { expect, fn, userEvent, within } from '@storybook/test';
+import { PlayFunctionProps } from '@definitions/playFunctions';
+import { SampleInputFieldProps } from './SampleInputField';
+
+// Play function for Email Input
+export const emailInputPlayFunction = async ({
+  canvasElement,
+  args,
+}: PlayFunctionProps<SampleInputFieldProps>) => {
+  const canvas = within(canvasElement);
+  const handleInputChange = fn();
+  const input = canvas.getByLabelText(args?.labelText || /email input label/i);
+  input.addEventListener('input', handleInputChange);
+  await userEvent.type(input, 'test@example.com');
+  expect(input).toHaveValue('test@example.com');
+  await expect(handleInputChange).toBeCalled();
+};
+```
+
+```
+import {
+  emailInputPlayFunction,
+} from './playFunctions';
+export const EmailInputField: Story = {
+  args: {
+    inputType: 'email',
+    inputName: 'emailInput',
+    inputId: 'emailInputId',
+    inputTestId: 'emailInputTestId',
+    labelText: 'Email Input Label',
+  },
+  play: emailInputPlayFunction,
+};
+```
+
+### Summary
+
+1. **Component Story Format (CSF)**: All stories should be written using the CSF, which is a standardized way to write stories in Storybook.
+2. **Default Story**: Each component should have a single default story titled `meta`. This story serves as the primary story for the component.
+   - **Tags**: Include `autodocs` in the tags to ensure automated documentation is generated.
+   - **Prop Descriptions and Controls**: Provide detailed descriptions for each prop using `argTypes`, and set up controls for interactive testing.
+
+3. **Visual Changes Based on Props**: Emphasize creating stories that demonstrate how the component behaves with different combinations of props. Separate stories should be created to showcase how different props affect the component’s appearance and behavior.
+
+4. **Play Functions**: Each story should include a play functions to test the component’s interaction in a separate `playFunctions.ts` file which can be imported in `Component.stories.tsx`. This ensures that the components behave as expected during user interactions.
+
+5. **Component State Management**: Ensure that your stories cover all possible states of the component to provide a comprehensive overview.
+
+This document will guide contributors in maintaining consistency and quality in the Storybook while ensuring that all components are well-documented, tested, and easily understandable.
+
+## General Contribution Steps
+
+Once you've completed your story:
+
+- **Pull Requests**: Submit pull requests for review once your work is complete for review from one of the maintainers. Include a clear description of the changes and reference the related _Linear ticket_.
+- **Report Issues**: Please report any issues via the _Linear App_ before starting work on them.
+- **Branching Strategy**: Always create a new branch for your work based on the `dev` branch (tentative for now)
+- **Note**: Ensure that your code adheres to the project's coding standards and that all tests pass
+
+Thank you for your contribution! By following these guidelines, you help maintain a high standard of quality in our Storybook, making it a valuable resource for the frontend and UI team.

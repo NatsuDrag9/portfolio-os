@@ -1,0 +1,89 @@
+# Create vite project
+yarn create vite
+
+#### Code Quality & Linting (Mandatory)
+
+# ESLint Configuration
+yarn add -D eslint@^8.56.0
+yarn add -D eslint-plugin-import eslint-import-resolver-typescript
+yarn add -D eslint-config-prettier
+yarn add -D eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-html eslint-plugin-react
+yarn add -D eslint-config-airbnb eslint-config-airbnb-typescript
+yarn add -D eslint-plugin-prettier
+
+# Prettier
+yarn add -D prettier
+
+# Stylelint Configuration
+yarn add -D stylelint@^16.1.0
+yarn add -D stylelint-config-standard stylelint-config-clean-order
+yarn add -D stylelint-scss stylelint-images stylelint-high-performance-animation
+yarn add -D stylelint-selector-bem-pattern stylelint-config-css-modules stylelint-config-standard-scss
+
+
+#### CSS Preprocessing (Mandatory)
+yarn add -D sass
+
+#### Git Hooks & Commit Standards (Mandatory)
+# Husky for Git Hooks (Linux)
+yarn add -D husky lint-staged
+npx husky-init && yarn
+
+# For Windows
+yarn add -D husky@latest
+yarn husky init
+
+# Commitlint
+yarn add -D @commitlint/cli @commitlint/config-conventional @types/node
+echo "yarn commitlint --edit \$1" > .husky/commit-msg
+
+#### Testing Framework
+```bash
+yarn add -D vitest@^2.0.2 @vitest/coverage-v8@^2.02.2
+yarn add -D @testing-library/react @testing-library/user-event @testing-library/jest-dom
+yarn add -D @testing-library/dom@^10.0.0
+yarn add -D jsdom
+```
+
+
+#### Miscellaneous
+
+# Images
+yarn add react-svg
+
+# Toast
+yarn add react-hot-toast
+
+# Log utilities
+yarn add detect-browser public-ip
+
+# Error Boundary
+yarn add react-error-boundary
+yarn add stacktrace-parser
+
+# Globals
+yarn add --dev globals
+
+#### Storybook (Mandatory)
+echo "   ⬇️  Downgrading Vite for Storybook compatibility..."
+yarn add -D vite@^6.0.0
+
+
+```bash
+# Core Storybook
+yarn add -D storybook@8.6.14 @storybook/react-vite@8.6.14 @storybook/addon-essentials@8.6.14 @storybook/addon-interactions@8.6.14 @storybook/addon-a11y@8.6.14 @storybook/test-runner@0.13.0 eslint-plugin-storybook@0.8.0
+# Add missing storybook dependencies
+yarn add -D @storybook/blocks@^8.6.14 @storybook/channels@^8.6.14 @storybook/components@^8.6.14 @storybook/core-events@^8.6.14 @storybook/manager-api@^8.6.14 @storybook/preview-api@^8.6.14 @storybook/theming@^8.6.14
+
+# Install playwright
+yarn playwright install 
+
+# Initialize Storybook
+npx storybook init
+```
+
+#### Build
+```bash
+# Bundle analyzer
+yarn add -D vite-bundle-analyzer
+```
