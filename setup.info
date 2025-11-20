@@ -95,4 +95,6 @@ App's libraries
 # Design
 yarn add @fluentui/tokens @fluentui/react-icons
 
-
+# Store setup and config
+yarn add zustand
+ 
