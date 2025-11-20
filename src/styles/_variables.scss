@@ -1,0 +1,19 @@
+/* Breakpoints - Device-Based (Firefox DevTools Reference) */
+
+// Mobile
+$breakpoint-mobile-small: 390px; // iPhone SE, small phones
+$breakpoint-mobile: 450px; // Standard mobile
+$breakpoint-mobile-lg: 576px; // Large phones (iPhone 12 Pro)
+
+// Tablet
+$breakpoint-tablet-portrait: 820px; // iPad portrait
+$breakpoint-tablet-landscape: 1024px; // iPad landscape
+
+// Desktop
+$breakpoint-desktop: 1200px; // Standard desktop
+$breakpoint-desktop-xl: 1400px; // Ultra-wide/4K
+
+// Shortcuts for readability
+$tablet: 820px;
+$desktop: 1200px;
+$desktop-xl: 1400px;
