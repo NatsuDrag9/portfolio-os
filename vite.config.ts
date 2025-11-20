@@ -27,7 +27,7 @@ const viteConfig = defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use 'sass:color';@use "@styles/index" as *;`,
+        additionalData: `@use 'sass:color';@use "@styles/_helpers" as *;`,
       },
     },
   },

@@ -87,3 +87,12 @@ npx storybook init
 # Bundle analyzer
 yarn add -D vite-bundle-analyzer
 ```
+
+
+####
+App's libraries
+
+# Design
+yarn add @fluentui/tokens @fluentui/react-icons
+
+

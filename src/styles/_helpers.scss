@@ -1,0 +1,23 @@
+// Re-export theme tokens (CSS custom properties)
+@forward 'reset';
+@forward 'theme';
+@forward 'mixins';
+
+/*
+   Usage in components:
+
+   @use 'styles/helpers' as *;
+
+   .component {
+     background: var(--color-neutral-background-1);
+     color: var(--color-neutral-foreground-1);
+     font-family: var(--font-family-base);
+     padding: var(--spacing-horizontal-m);
+     font-size: var(--font-size-base-300);
+     border-radius: var(--border-radius-medium);
+     box-shadow: var(--shadow-4);
+   }
+
+   To switch to dark theme at runtime:
+   document.documentElement.classList.toggle('dark-theme');
+*/

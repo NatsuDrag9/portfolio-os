@@ -33,6 +33,7 @@
     "css-property-order.mjs",
     "eslint.config.js",
     ".storybook/vitest.setup.ts",
-    ".storybook/main.ts"
+    ".storybook/main.ts",
+    "scripts/generate-tokens.js"
   ]
 }

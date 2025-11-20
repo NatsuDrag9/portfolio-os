@@ -4,15 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate:tokens": "node scripts/generate-tokens.js",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint-scss": "stylelint **/*.scss",
     "preview": "vite preview",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@fluentui/react-icons": "^2.0.315",
+    "@fluentui/tokens": "^1.0.0-alpha.22",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-svg": "^16.3.0"
