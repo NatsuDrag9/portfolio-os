@@ -26,3 +26,10 @@ dist-ssr
 
 # Env files
 .env
+
+# Coverage
+/coverage
+
+# Unwanted files
+DESIGN_TODOS_VALIDATION_AND_LIGHTHOUSE.md
+FLUENT2_COLORS_SIMPLIFIED.md
