@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { logErrorInDev } from '../utils/logUtils';
+import { logErrorInDev } from '@utils/logUtils';
 
 export function useMediaQuery(query: string): boolean {
   // Check if MediaQueryList is supported (client-side only)
