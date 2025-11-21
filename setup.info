@@ -90,7 +90,7 @@ yarn add -D vite-bundle-analyzer
 
 
 ####
-App's libraries
+Project specific libraries
 
 # Design
 yarn add @fluentui/tokens @fluentui/react-icons
