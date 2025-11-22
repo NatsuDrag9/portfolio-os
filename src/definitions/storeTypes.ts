@@ -8,10 +8,8 @@ export type BootStatusType =
 
 export interface BootStatusState {
   bootStatus: BootStatusType;
-  currentOperation: string;
-  operationIndex: number;
   updateBootStatus: (nextStatus: BootStatusType, username?: string) => void;
-  nextOperation: (username?: string) => void;
+  allOperations: string[];
 }
 
 export interface AuthState {
