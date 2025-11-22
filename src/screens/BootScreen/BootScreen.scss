@@ -4,5 +4,100 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-vertical-xl);
-  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-horizontal-xxxl);
+  background-color: var(--color-static-black);
+
+  &__operations {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xl);
+    max-width: 60rem;
+    padding: 0;
+
+    // Fluent design with retro terminal aesthetic
+    color: var(--color-palette-green-foreground3);
+    font-family: var(--font-family-monospace);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base300);
+    list-style: none;
+  }
+
+  &__operation {
+    opacity: 0;
+    animation: fade-in-operation 0.3s ease forwards;
+
+    // Retro terminal prefix
+    &::before {
+      color: var(--color-palette-green-foreground3);
+      content: '> ';
+    }
+  }
+
+  &__progress-container {
+    width: 100%;
+    height: 4rem;
+    overflow: hidden;
+    border: 1px solid
+      color-mix(
+        in srgb,
+        var(--color-palette-green-foreground3) 30%,
+        transparent
+      );
+    border-radius: var(--border-radius-small);
+
+    // Subtle container background (Fluent neutral)
+    background-color: color-mix(
+      in srgb,
+      var(--color-static-white) 10%,
+      transparent
+    );
+  }
+
+  &__progress-bar {
+    width: 0;
+    height: 100%;
+    border-radius: var(--border-radius-small);
+
+    // Retro green glow effect on progress bar
+    background-color: var(--color-palette-green-foreground3);
+    box-shadow:
+      0 0 8px
+        color-mix(
+          in srgb,
+          var(--color-palette-green-foreground3) 60%,
+          transparent
+        ),
+      0 0 16px
+        color-mix(
+          in srgb,
+          var(--color-palette-green-foreground3) 30%,
+          transparent
+        );
+  }
+}
+
+// Animation for progress bar fill
+@keyframes fill-progress {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+// Animation for operation text fade-in
+@keyframes fade-in-operation {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
