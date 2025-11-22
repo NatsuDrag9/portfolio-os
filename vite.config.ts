@@ -11,7 +11,7 @@ const viteConfig = defineConfig({
       '@assets': '/src/assets',
       '@store': '/src/store',
       '@components': '/src/components',
-      '@modules': '/src/modules',
+      '@screens': '/src/screens',
       '@hooks': '/src/hooks',
       '@layouts': '/src/layouts',
       '@pages': '/src/pages',

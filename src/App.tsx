@@ -1,13 +1,8 @@
-import {
-  BootScreen,
-  Desktop,
-  LoginScreen,
-  PowerOffScreen,
-} from '@components/screens';
 import { useAuth, useBootStatus } from '@store/store';
 import '@styles/main.scss';
 import { logInDev } from '@utils/logUtils';
 import { useEffect } from 'react';
+import { BootScreen, Desktop, LoginScreen, PowerOffScreen } from './screens';
 
 function App() {
   const { bootStatus } = useBootStatus();
