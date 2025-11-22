@@ -37,7 +37,7 @@ module.exports = {
     "scss/dollar-variable-no-missing-interpolation": true,
     "scss/dollar-variable-pattern": /^[a-z0-9-]+$/,
     "scss/double-slash-comment-whitespace-inside": "always",
-    "alpha-value-notation": "percentage",
+    "alpha-value-notation": null,
     "scss/operator-no-newline-before": true,
     "scss/operator-no-unspaced": true,
     "scss/selector-no-redundant-nesting-selector": true,
