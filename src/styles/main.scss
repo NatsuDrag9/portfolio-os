@@ -16,3 +16,10 @@ body {
   font-size: var(--font-size-base-300); // 1.4rem = 14px
   line-height: var(--line-height-base-300);
 }
+
+.app {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}

@@ -13,7 +13,7 @@ export interface BootStatusState {
 }
 
 export interface AuthState {
-  username: string;
+  username: string | null;
   isAdmin: boolean;
   updateAuthState: (newUsername: string) => void;
 }

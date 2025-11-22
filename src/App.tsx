@@ -1,35 +1,52 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import {
+  BootScreen,
+  Desktop,
+  LoginScreen,
+  PowerOffScreen,
+} from '@components/screens';
+import { useAuth, useBootStatus } from '@store/store';
 import '@styles/main.scss';
+import { logInDev } from '@utils/logUtils';
+import { useEffect } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { bootStatus } = useBootStatus();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+  // To Do: Remove this useEffect after development
+  useEffect(() => {
+    // Subscribe to useBootStatus store
+    const unsubscribeBootStatus = useBootStatus.subscribe((state) => {
+      logInDev('Boot Status Store:', state);
+    });
+
+    // Subscribe to useAuth store
+    const unsubscribeAuth = useAuth.subscribe((state) => {
+      logInDev('Auth Store:', state);
+    });
+
+    // Cleanup subscriptions on unmount
+    return () => {
+      unsubscribeBootStatus();
+      unsubscribeAuth();
+    };
+  }, []);
+
+  const renderScreen = () => {
+    if (bootStatus === 'ON') {
+      return <Desktop />;
+    }
+    if (bootStatus === 'OFF') {
+      return <PowerOffScreen />;
+    }
+
+    if (bootStatus === 'DISPLAY_LOGIN_SCREEN') {
+      return <LoginScreen />;
+    }
+
+    return <BootScreen />;
+  };
+
+  return <div className="app">{renderScreen()}</div>;
 }
 
 export default App;
