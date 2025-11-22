@@ -1,5 +1,6 @@
 import { useBootStatus } from '@store/store';
 import './PowerOffScreen.scss';
+import { PowerFilled } from '@fluentui/react-icons';
 
 function PowerOffScreen() {
   const { updateBootStatus } = useBootStatus();
@@ -10,15 +11,15 @@ function PowerOffScreen() {
 
   return (
     <div className="po-screen">
-      <h4 className="po-screen__title">Powered OFF</h4>
-
       <button
         type="button"
         onClick={handleButtonClick}
         className="po-screen__button"
       >
-        Click me to power on
+        <PowerFilled className="po-screen__image" />
       </button>
+
+      <p className="po-screen__text">Press Power to turn on</p>
     </div>
   );
 }

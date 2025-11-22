@@ -3,23 +3,79 @@
 
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-vertical-xl);
+  gap: var(--spacing-vertical-m);
+  justify-content: center;
   align-items: center;
 
-  &__title {
-    color: var(--color-palette-red-foreground3);
-  }
+  // Solid material with subtle depth (Fluent solid fallback for non-themeable screen)
+  background-color: var(--color-static-black);
 
   &__button {
     @include disable-default-button-styles;
 
-    min-width: max-content;
-    max-width: 7rem;
-    height: 5rem;
-    padding: 1rem;
-    border-radius: var(--border-radius-xlarge);
-    background-color: var(--color-neutral-foreground4);
-    font-size: var(--font-size-base400);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-m);
+    align-items: center;
+    padding: var(--spacing-horizontal-xl);
     cursor: pointer;
+  }
+
+  &__image {
+    width: 10rem;
+    height: 10rem;
+    padding: var(--spacing-horizontal-m);
+    border-radius: var(--border-radius-xlarge);
+    color: var(--color-palette-red-background3);
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      filter 0.2s ease;
+
+    // Fluent interaction state: hover on image
+    .po-screen__button:hover & {
+      // background-color: color-mix(
+      //   in srgb,
+      //   var(--color-static-white) 5%,
+      //   transparent
+      // );
+      transform: scale(1.1);
+
+      // Red glow highlight effect (Fluent elevation + semantic color)
+      filter: drop-shadow(
+          0 0 12px
+            color-mix(
+              in srgb,
+              var(--color-palette-red-background3) 60%,
+              transparent
+            )
+        )
+        drop-shadow(
+          0 0 24px
+            color-mix(
+              in srgb,
+              var(--color-palette-red-background3) 40%,
+              transparent
+            )
+        );
+    }
+
+    // Fluent pressed state: darker
+    .po-screen__button:active & {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 3%,
+        transparent
+      );
+      transform: scale(0.95);
+    }
+  }
+
+  &__text {
+    // Fluent typography: high contrast text for dark backgrounds
+    color: var(--color-static-white);
+    font-size: var(--font-size-base400);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base400);
   }
 }
