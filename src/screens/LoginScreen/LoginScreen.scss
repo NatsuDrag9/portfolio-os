@@ -1,25 +1,292 @@
 .login-screen {
   @include screen-layout;
 
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-vertical-xl);
+  justify-content: center;
   align-items: center;
 
-  &__title {
-    font-size: var(--font-size-hero900);
-    font-weight: var(--font-weight-bold);
+  // Background: Wallpaper image (set via inline style)
+  background-position: center;
+  background-size: cover;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: var(--color-background-overlay);
   }
 
-  &__button {
+  &__panel {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-l);
+    align-items: center;
+    padding: var(--spacing-horizontal-xxxl);
+
+    // ACRYLIC MATERIAL - Frosted glass effect
+    @include acrylic-material;
+  }
+
+  &__user-card {
     @include disable-default-button-styles;
 
-    min-width: 10rem;
-    height: 5rem;
-    padding: 1rem;
-    border-radius: var(--border-radius-xlarge);
-    background-color: var(--color-neutral-foreground4);
-    font-size: var(--font-size-base400);
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-xl);
+    align-items: start;
+    width: 100%;
+    padding: var(--spacing-horizontal-l);
+    border-radius: var(--border-radius-large);
     cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 10%,
+        transparent
+      );
+    }
+
+    &:active {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 5%,
+        transparent
+      );
+      transform: scale(0.98);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-static-white);
+      outline-offset: 2px;
+    }
+  }
+
+  &__user {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xxs);
+    justify-content: center;
+    height: 100%;
+  }
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8rem;
+    height: 8rem;
+    border-radius: var(--border-radius-circular);
+    color: var(--color-static-white);
+    font-size: var(--font-size-hero700);
+    font-weight: var(--font-weight-semibold);
+
+    &--admin {
+      border: 2px solid
+        color-mix(in srgb, var(--color-static-white) 30%, transparent);
+      object-fit: cover;
+    }
+
+    &--other {
+      border: 2px dashed
+        color-mix(in srgb, var(--color-static-white) 40%, transparent);
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 10%,
+        transparent
+      );
+    }
+  }
+
+  &__username {
+    color: var(--color-static-white);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base500);
+  }
+
+  &__role {
+    color: color-mix(in srgb, var(--color-static-white) 60%, transparent);
+    font-size: var(--font-size-base300);
+    line-height: var(--line-height-base300);
+  }
+
+  &__divider {
+    width: 100%;
+    height: 1px;
+    background-color: color-mix(
+      in srgb,
+      var(--color-static-white) 15%,
+      transparent
+    );
+  }
+
+  &__input-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-m);
+    align-items: center;
+    padding: var(--spacing-horizontal-l);
+  }
+
+  &__input {
+    width: 100%;
+    min-width: 20rem;
+    padding: var(--spacing-horizontal-m) var(--spacing-horizontal-l);
+    border: 1px solid
+      color-mix(in srgb, var(--color-static-white) 20%, transparent);
+    border-radius: var(--border-radius-medium);
+
+    // ACRYLIC on input field
+    background-color: color-mix(
+      in srgb,
+      var(--color-static-black) 40%,
+      transparent
+    );
+    backdrop-filter: blur(10px);
+    color: var(--color-static-white);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base400);
+    line-height: var(--line-height-base400);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &::placeholder {
+      color: color-mix(in srgb, var(--color-static-white) 50%, transparent);
+    }
+
+    &:focus {
+      border-color: var(--color-brand-foreground1);
+      outline: none;
+      box-shadow: 0 0 0 2px
+        color-mix(in srgb, var(--color-brand-foreground1) 30%, transparent);
+    }
+  }
+
+  &__input-actions {
+    display: flex;
+    gap: var(--spacing-horizontal-m);
+  }
+
+  &__action-btn {
+    @include disable-default-button-styles;
+
+    padding: var(--spacing-vertical-s) var(--spacing-horizontal-l);
+    border-radius: var(--border-radius-medium);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      opacity 0.2s ease;
+
+    &--submit {
+      background-color: var(--color-brand-background);
+      color: var(--color-static-white);
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: var(--color-brand-background-hover);
+      }
+
+      &:active:not(:disabled) {
+        background-color: var(--color-brand-background-pressed);
+      }
+    }
+
+    &--cancel {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 10%,
+        transparent
+      );
+      color: var(--color-static-white);
+
+      &:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--color-static-white) 15%,
+          transparent
+        );
+      }
+
+      &:active {
+        background-color: color-mix(
+          in srgb,
+          var(--color-static-white) 8%,
+          transparent
+        );
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-static-white);
+      outline-offset: 2px;
+    }
+  }
+
+  .power-button {
+    @include disable-default-button-styles;
+
+    position: absolute;
+    right: var(--spacing-horizontal-xxxl);
+    bottom: var(--spacing-vertical-xxxl);
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: var(--border-radius-circular);
+    background-color: color-mix(
+      in srgb,
+      var(--color-static-white) 10%,
+      transparent
+    );
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 20%,
+        transparent
+      );
+    }
+
+    &:active {
+      background-color: color-mix(
+        in srgb,
+        var(--color-palette-red-background3) 40%,
+        transparent
+      );
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-static-white);
+      outline-offset: 2px;
+    }
+
+    &__icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      color: var(--color-static-white);
+    }
   }
 }
