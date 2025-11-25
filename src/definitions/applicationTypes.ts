@@ -11,8 +11,6 @@ export interface AppMetadata {
 
 export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu' | 'mobile';
 
-export type AppIconShape = 'square' | 'circular' | 'water-droplet';
-
 export interface WindowData {
   id: string | null; // Unique identifier for the Window Instance (e.g., browser)
   title: string | null; // Title displayed on window's title bar

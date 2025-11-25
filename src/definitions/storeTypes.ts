@@ -1,4 +1,4 @@
-import { WindowData } from './applicationTypes';
+import { AppMetadata, WindowData } from './applicationTypes';
 import {
   CustomTheme,
   SnapPositionType,
@@ -31,9 +31,10 @@ export interface WorkspaceState {
   activeWindows: WindowData[]; // Only data, no methods
   taskbarPinnedAppIds: string[];
   activeBackground: string;
+  windowInstanceCounters: Record<string, number>; // Tracks instance count per app ID (e.g., { 'vscode': 2, 'notepad': 1 })
 
   // Window management
-  addWindow: (window: WindowData) => void;
+  addWindow: (appId: string, appMetaData: AppMetadata) => void;
   removeWindow: (windowId: string) => void;
 
   // Window property updates (all at WorkspaceState level)

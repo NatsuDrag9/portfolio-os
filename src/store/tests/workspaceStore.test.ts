@@ -1,18 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useWorkspaceState } from '../store';
-import { WindowData } from '@definitions/applicationTypes';
+import { AppMetadata } from '@definitions/applicationTypes';
 
-// Mock window data for testing (data only, no methods)
-const createMockWindow = (overrides: Partial<WindowData> = {}): WindowData => ({
-  id: 'window-1',
-  title: 'Test Window',
+// Mock app metadata
+const createMockAppMetadata = (
+  overrides: Partial<AppMetadata> = {}
+): AppMetadata => ({
+  id: 'test-app',
+  appName: 'Test App',
+  desktopIcon: '/test-icon.png',
   windowName: 'TestApp',
-  isMaximized: false,
-  position: { x: 100, y: 100 },
-  zIndex: 1,
-  size: { width: 45, height: 35 },
-  customTheme: undefined,
-  snapPosition: 'fullscreen',
+  defaultPinned: false,
   ...overrides,
 });
 
@@ -22,6 +20,7 @@ beforeEach(() => {
     activeWindows: [],
     taskbarPinnedAppIds: [],
     activeBackground: '/default-wallpaper.jpg',
+    windowInstanceCounters: {},
   });
 });
 
@@ -32,6 +31,7 @@ describe('useWorkspaceState', () => {
       expect(state.activeWindows).toStrictEqual([]);
       expect(state.taskbarPinnedAppIds).toStrictEqual([]);
       expect(state.activeBackground).toBe('/default-wallpaper.jpg');
+      expect(state.windowInstanceCounters).toStrictEqual({});
     });
   });
 
@@ -172,60 +172,111 @@ describe('useWorkspaceState', () => {
   });
 
   describe('Add Window', () => {
-    it('should add a window to active windows', () => {
+    it('should add a single window instance', () => {
       const { addWindow } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow();
+      const appMetadata = createMockAppMetadata({ id: 'vscode' });
 
-      addWindow(mockWindow);
+      addWindow('vscode', appMetadata);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(1);
-      expect(state.activeWindows[0]).toStrictEqual(mockWindow);
+      expect(state.activeWindows[0].id).toBe('vscode-1');
+      expect(state.activeWindows[0].title).toBe('Test App');
+      expect(state.windowInstanceCounters['vscode']).toBe(1);
     });
 
-    it('should add multiple windows', () => {
+    it('should increment instance counter for same app', () => {
       const { addWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
-      const window3 = createMockWindow({ id: 'window-3' });
+      const appMetadata = createMockAppMetadata({
+        id: 'vscode',
+        appName: 'VSCode',
+      });
 
-      addWindow(window1);
-      addWindow(window2);
-      addWindow(window3);
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(3);
       expect(state.activeWindows.map((w) => w.id)).toStrictEqual([
-        'window-1',
-        'window-2',
-        'window-3',
+        'vscode-1',
+        'vscode-2',
+        'vscode-3',
       ]);
+      expect(state.windowInstanceCounters['vscode']).toBe(3);
     });
 
-    it('should preserve existing windows when adding new one', () => {
+    it('should maintain separate counters for different apps', () => {
       const { addWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
+      const vscodeMetadata = createMockAppMetadata({
+        id: 'vscode',
+        appName: 'VSCode',
+      });
+      const notepadMetadata = createMockAppMetadata({
+        id: 'notepad',
+        appName: 'Notepad',
+      });
 
-      addWindow(window1);
-      const firstState = useWorkspaceState.getState();
-      const firstWindow = firstState.activeWindows[0];
+      addWindow('vscode', vscodeMetadata);
+      addWindow('notepad', notepadMetadata);
+      addWindow('vscode', vscodeMetadata);
+      addWindow('notepad', notepadMetadata);
 
-      addWindow(window2);
-      const secondState = useWorkspaceState.getState();
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows.map((w) => w.id)).toStrictEqual([
+        'vscode-1',
+        'notepad-1',
+        'vscode-2',
+        'notepad-2',
+      ]);
+      expect(state.windowInstanceCounters['vscode']).toBe(2);
+      expect(state.windowInstanceCounters['notepad']).toBe(2);
+    });
 
-      expect(secondState.activeWindows[0]).toStrictEqual(firstWindow);
-      expect(secondState.activeWindows[1]).toStrictEqual(window2);
+    it('should set correct window properties on creation', () => {
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata({
+        id: 'browser',
+        appName: 'Chrome',
+        windowName: 'ChromeApp',
+      });
+
+      addWindow('browser', appMetadata);
+
+      const state = useWorkspaceState.getState();
+      const window = state.activeWindows[0];
+      expect(window.id).toBe('browser-1');
+      expect(window.title).toBe('Chrome');
+      expect(window.windowName).toBe('ChromeApp');
+      expect(window.isMaximized).toBe(false);
+      expect(window.position).toStrictEqual({ x: 100, y: 100 });
+      expect(window.size).toStrictEqual({ width: 45, height: 35 });
+      expect(window.customTheme).toBeUndefined();
+      expect(window.snapPosition).toBe('fullscreen');
+    });
+
+    it('should set incremental z-index for windows', () => {
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('app1', appMetadata);
+      addWindow('app2', appMetadata);
+      addWindow('app3', appMetadata);
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].zIndex).toBe(1);
+      expect(state.activeWindows[1].zIndex).toBe(2);
+      expect(state.activeWindows[2].zIndex).toBe(3);
     });
   });
 
   describe('Remove Window', () => {
     it('should remove a window by ID', () => {
       const { addWindow, removeWindow } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      removeWindow('window-1');
+      addWindow('vscode', appMetadata);
+      removeWindow('vscode-1');
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(0);
@@ -233,71 +284,57 @@ describe('useWorkspaceState', () => {
 
     it('should remove specific window from multiple windows', () => {
       const { addWindow, removeWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
-      const window3 = createMockWindow({ id: 'window-3' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(window1);
-      addWindow(window2);
-      addWindow(window3);
+      addWindow('vscode', appMetadata);
+      addWindow('notepad', appMetadata);
+      addWindow('vscode', appMetadata);
 
-      removeWindow('window-2');
+      removeWindow('vscode-1');
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(2);
       expect(state.activeWindows.map((w) => w.id)).toStrictEqual([
-        'window-1',
-        'window-3',
+        'notepad-1',
+        'vscode-2',
       ]);
     });
 
     it('should handle removing non-existent window', () => {
       const { addWindow, removeWindow } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
+      addWindow('vscode', appMetadata);
       removeWindow('non-existent-id');
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(1);
     });
 
-    it('should remove first window', () => {
+    it('should not reset instance counter on remove', () => {
       const { addWindow, removeWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(window1);
-      addWindow(window2);
-      removeWindow('window-1');
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      removeWindow('vscode-1');
 
-      const state = useWorkspaceState.getState();
-      expect(state.activeWindows).toHaveLength(1);
-      expect(state.activeWindows[0].id).toBe('window-2');
-    });
-
-    it('should remove last window', () => {
-      const { addWindow, removeWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
-
-      addWindow(window1);
-      addWindow(window2);
-      removeWindow('window-2');
-
-      const state = useWorkspaceState.getState();
-      expect(state.activeWindows).toHaveLength(1);
-      expect(state.activeWindows[0].id).toBe('window-1');
+      let state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters['vscode']).toBe(2);
+      // Next instance should be vscode-3
+      addWindow('vscode', appMetadata);
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows[1].id).toBe('vscode-3');
     });
   });
 
   describe('Update Window Properties', () => {
     it('should set window title', () => {
       const { addWindow, setWindowTitle } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      setWindowTitle('window-1', 'New Title');
+      addWindow('vscode', appMetadata);
+      setWindowTitle('vscode-1', 'New Title');
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].title).toBe('New Title');
@@ -305,10 +342,10 @@ describe('useWorkspaceState', () => {
 
     it('should set window maximized state', () => {
       const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      setWindowIsMaximized('window-1', true);
+      addWindow('vscode', appMetadata);
+      setWindowIsMaximized('vscode-1', true);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].isMaximized).toBe(true);
@@ -316,10 +353,10 @@ describe('useWorkspaceState', () => {
 
     it('should update window position', () => {
       const { addWindow, updateWindowPosition } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      updateWindowPosition('window-1', 200, 200);
+      addWindow('vscode', appMetadata);
+      updateWindowPosition('vscode-1', 200, 200);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].position).toStrictEqual({ x: 200, y: 200 });
@@ -327,10 +364,10 @@ describe('useWorkspaceState', () => {
 
     it('should update window z-index', () => {
       const { addWindow, updateWindowZIndex } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      updateWindowZIndex('window-1', 100);
+      addWindow('vscode', appMetadata);
+      updateWindowZIndex('vscode-1', 100);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].zIndex).toBe(100);
@@ -338,10 +375,10 @@ describe('useWorkspaceState', () => {
 
     it('should update window size', () => {
       const { addWindow, updateWindowSize } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      updateWindowSize('window-1', 60, 50);
+      addWindow('vscode', appMetadata);
+      updateWindowSize('vscode-1', 60, 50);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].size).toStrictEqual({
@@ -352,15 +389,15 @@ describe('useWorkspaceState', () => {
 
     it('should set window custom theme', () => {
       const { addWindow, setWindowCustomTheme } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
       const customTheme = {
         fontColor: 'rgba(255, 0, 0, 1)',
         bgColor: 'rgba(0, 0, 0, 1)',
         iconShape: 'circle' as const,
       };
 
-      addWindow(mockWindow);
-      setWindowCustomTheme('window-1', customTheme);
+      addWindow('vscode', appMetadata);
+      setWindowCustomTheme('vscode-1', customTheme);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].customTheme).toStrictEqual(customTheme);
@@ -369,10 +406,10 @@ describe('useWorkspaceState', () => {
     it('should update window snap position', () => {
       const { addWindow, updateWindowSnapPosition } =
         useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      updateWindowSnapPosition('window-1', 'left-half');
+      addWindow('vscode', appMetadata);
+      updateWindowSnapPosition('vscode-1', 'left-half');
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].snapPosition).toBe('left-half');
@@ -380,28 +417,27 @@ describe('useWorkspaceState', () => {
 
     it('should handle updating non-existent window', () => {
       const { addWindow, setWindowTitle } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
+      addWindow('vscode', appMetadata);
       setWindowTitle('non-existent-id', 'New Title');
 
       const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].title).toBe('Test Window'); // Unchanged
+      expect(state.activeWindows[0].title).toBe('Test App'); // Unchanged
     });
 
     it('should preserve other window properties when updating one', () => {
       const { addWindow, setWindowTitle } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({
-        id: 'window-1',
-        title: 'Original Title',
-        zIndex: 5,
-      });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
-      setWindowTitle('window-1', 'New Title');
+      addWindow('vscode', appMetadata);
+      const originalZIndex =
+        useWorkspaceState.getState().activeWindows[0].zIndex;
+
+      setWindowTitle('vscode-1', 'New Title');
 
       const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].zIndex).toBe(5); // Unchanged
+      expect(state.activeWindows[0].zIndex).toBe(originalZIndex); // Unchanged
       expect(state.activeWindows[0].title).toBe('New Title');
     });
   });
@@ -410,12 +446,13 @@ describe('useWorkspaceState', () => {
     it('should handle open, update, and close window workflow', () => {
       const { addWindow, updateWindowPosition, removeWindow } =
         useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'browser-1' });
+      const appMetadata = createMockAppMetadata();
 
       // Open window
-      addWindow(mockWindow);
+      addWindow('browser', appMetadata);
       let state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(1);
+      expect(state.activeWindows[0].id).toBe('browser-1');
 
       // Update window position
       updateWindowPosition('browser-1', 250, 250);
@@ -431,15 +468,14 @@ describe('useWorkspaceState', () => {
     it('should handle multiple windows with independent updates', () => {
       const { addWindow, updateWindowZIndex, updateWindowPosition } =
         useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1' });
-      const window2 = createMockWindow({ id: 'window-2' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(window1);
-      addWindow(window2);
+      addWindow('vscode', appMetadata);
+      addWindow('notepad', appMetadata);
 
-      updateWindowZIndex('window-1', 50);
-      updateWindowZIndex('window-2', 100);
-      updateWindowPosition('window-1', 500, 500);
+      updateWindowZIndex('vscode-1', 50);
+      updateWindowZIndex('notepad-1', 100);
+      updateWindowPosition('vscode-1', 500, 500);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].zIndex).toBe(50);
@@ -449,9 +485,9 @@ describe('useWorkspaceState', () => {
 
     it('should maintain workspace state across background changes', () => {
       const { addWindow, setActiveBackground } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
+      const appMetadata = createMockAppMetadata();
 
-      addWindow(mockWindow);
+      addWindow('vscode', appMetadata);
       setActiveBackground('/new-wallpaper.jpg');
 
       const state = useWorkspaceState.getState();
@@ -470,8 +506,8 @@ describe('useWorkspaceState', () => {
         removeWindow,
       } = useWorkspaceState.getState();
 
-      const mockWindow = createMockWindow({ id: 'app-1' });
-      addWindow(mockWindow);
+      const appMetadata = createMockAppMetadata({ appName: 'My App' });
+      addWindow('app', appMetadata);
 
       setWindowTitle('app-1', 'My App');
       setWindowIsMaximized('app-1', true);
@@ -481,6 +517,7 @@ describe('useWorkspaceState', () => {
 
       let state = useWorkspaceState.getState();
       const window = state.activeWindows[0];
+      expect(window.id).toBe('app-1');
       expect(window.title).toBe('My App');
       expect(window.isMaximized).toBe(true);
       expect(window.position).toStrictEqual({ x: 100, y: 100 });
@@ -490,6 +527,36 @@ describe('useWorkspaceState', () => {
       removeWindow('app-1');
       state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(0);
+    });
+
+    it('should handle instance counter across multiple app types', () => {
+      const { addWindow } = useWorkspaceState.getState();
+      const vscodeMetadata = createMockAppMetadata({ id: 'vscode' });
+      const notepadMetadata = createMockAppMetadata({ id: 'notepad' });
+      const browserMetadata = createMockAppMetadata({ id: 'browser' });
+
+      // Open multiple instances of each app
+      addWindow('vscode', vscodeMetadata);
+      addWindow('notepad', notepadMetadata);
+      addWindow('vscode', vscodeMetadata);
+      addWindow('browser', browserMetadata);
+      addWindow('notepad', notepadMetadata);
+      addWindow('vscode', vscodeMetadata);
+
+      const state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters).toStrictEqual({
+        vscode: 3,
+        notepad: 2,
+        browser: 1,
+      });
+      expect(state.activeWindows.map((w) => w.id)).toStrictEqual([
+        'vscode-1',
+        'notepad-1',
+        'vscode-2',
+        'browser-1',
+        'notepad-2',
+        'vscode-3',
+      ]);
     });
   });
 });

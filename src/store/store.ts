@@ -16,7 +16,7 @@ import {
   ThemeType,
 } from '@definitions/desktopTypes';
 import { DefaultWallpaper } from '@assets/images/specifics';
-import { WindowData } from '@definitions/applicationTypes';
+import { AppMetadata } from '@definitions/applicationTypes';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
   bootStatus: 'OFF',
@@ -82,11 +82,35 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
   activeWindows: [],
   taskbarPinnedAppIds: [],
   activeBackground: DefaultWallpaper,
+  windowInstanceCounters: {},
 
-  addWindow: (window: WindowData) => {
-    set((state) => ({
-      activeWindows: [...state.activeWindows, window],
-    }));
+  addWindow: (appId: string, appMetadata: AppMetadata) => {
+    set((state) => {
+      // Increment instance counter for this app
+      const instanceCount = (state.windowInstanceCounters[appId] || 0) + 1;
+      const windowId = `${appId}-${instanceCount}`;
+
+      // Create new window data
+      const newWindow = {
+        id: windowId,
+        title: appMetadata.appName,
+        windowName: appMetadata.windowName,
+        isMaximized: false,
+        position: { x: 100, y: 100 },
+        zIndex: state.activeWindows.length + 1,
+        size: { width: 45, height: 35 },
+        customTheme: undefined,
+        snapPosition: 'fullscreen' as SnapPositionType,
+      };
+
+      return {
+        activeWindows: [...state.activeWindows, newWindow],
+        windowInstanceCounters: {
+          ...state.windowInstanceCounters,
+          [appId]: instanceCount,
+        },
+      };
+    });
   },
   removeWindow: (windowId: string) => {
     set((state) => ({
