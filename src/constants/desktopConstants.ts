@@ -1,45 +1,50 @@
-import { IAppMetadata } from '@definitions/applicationTypes';
+import { AppMetadata } from '@definitions/applicationTypes';
 
-export const APP_REGISTRY: IAppMetadata[] = [
+export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'file-explorer',
     appName: 'File Explorer',
-    icon: '/apps/file-explorer-48.png',
+    mobileIcon: '/apps/file-explorer-48.png',
+    desktopIcon: '/apps/file-explorer-96.png',
     defaultPinned: true,
     windowName: 'FileExplorerApp',
   },
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
-    icon: '/apps/chrome-48.png',
+    mobileIcon: '/apps/chrome-48.png',
+    desktopIcon: '/apps/chrome-96.png',
     defaultPinned: true,
     windowName: 'GoogleChromApp',
   },
   {
     id: 'vscode',
     appName: 'VSCode',
-    icon: '/apps/vscode-48.png',
+    mobileIcon: '/apps/vscode-48.png',
+    desktopIcon: '/apps/vscode-96.png',
     defaultPinned: true,
     windowName: 'VSCodeApp',
   },
   {
     id: 'firefox',
     appName: 'Firefox',
-    icon: '/apps/firefox.png',
+    desktopIcon: '/apps/firefox.png',
     defaultPinned: true,
     windowName: 'FirefoxApp',
   },
   {
     id: 'notepad',
     appName: 'Notepad',
-    icon: '/apps/notepad-48.png',
+    mobileIcon: '/apps/notepad-48.png',
+    desktopIcon: '/apps/notepad-96.png',
     defaultPinned: true,
     windowName: 'NotepadApp',
   },
   {
     id: 'github',
     appName: 'Github',
-    icon: '/apps/github-48.png',
+    mobileIcon: '/apps/github-48.png',
+    desktopIcon: '/apps/github-60.png',
     defaultPinned: true,
     windowName: 'GithubApp',
   },

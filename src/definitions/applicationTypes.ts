@@ -3,10 +3,15 @@ import { CustomTheme, SnapPositionType } from './desktopTypes';
 export interface AppMetadata {
   id: string;
   appName: string; // Display name used by Taskbar, Start Menu, Desktop Icons (for labels) and Window's Title Bar
-  icon: string;
+  desktopIcon: string;
+  mobileIcon?: string;
   defaultPinned: boolean; // Static configuration: Should this app be pinned by default?
   windowName: string; // Component reference used to dynamically lookup and render the corresponding component (e.g., 'FileExplorerApp')
 }
+
+export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu' | 'mobile';
+
+export type AppIconShape = 'square' | 'circular' | 'water-droplet';
 
 export interface WindowData {
   id: string | null; // Unique identifier for the Window Instance (e.g., browser)
