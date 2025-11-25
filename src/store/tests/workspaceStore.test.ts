@@ -1,12 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useWorkspaceState } from '../store';
-import { WindowState } from '@definitions/storeTypes';
-import { DefaultWallpaper } from '@assets/images/specifics';
+import { WindowData } from '@definitions/applicationTypes';
 
-// Mock window state for testing
-const createMockWindow = (
-  overrides: Partial<WindowState> = {}
-): WindowState => ({
+// Mock window data for testing (data only, no methods)
+const createMockWindow = (overrides: Partial<WindowData> = {}): WindowData => ({
   id: 'window-1',
   title: 'Test Window',
   windowName: 'TestApp',
@@ -16,13 +13,6 @@ const createMockWindow = (
   size: { width: 45, height: 35 },
   customTheme: undefined,
   snapPosition: 'fullscreen',
-  setTitle: () => {},
-  setIsMaximized: () => {},
-  updatePosition: () => {},
-  updateZIndex: () => {},
-  updateSize: () => {},
-  setCustomTheme: () => {},
-  updateSnapPosition: () => {},
   ...overrides,
 });
 
@@ -31,7 +21,7 @@ beforeEach(() => {
   useWorkspaceState.setState({
     activeWindows: [],
     taskbarPinnedAppIds: [],
-    activeBackground: DefaultWallpaper,
+    activeBackground: '/default-wallpaper.jpg',
   });
 });
 
@@ -41,7 +31,7 @@ describe('useWorkspaceState', () => {
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toStrictEqual([]);
       expect(state.taskbarPinnedAppIds).toStrictEqual([]);
-      expect(state.activeBackground).toBe(DefaultWallpaper);
+      expect(state.activeBackground).toBe('/default-wallpaper.jpg');
     });
   });
 
@@ -301,24 +291,57 @@ describe('useWorkspaceState', () => {
     });
   });
 
-  describe('Update Window', () => {
-    it('should update window position', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
+  describe('Update Window Properties', () => {
+    it('should set window title', () => {
+      const { addWindow, setWindowTitle } = useWorkspaceState.getState();
       const mockWindow = createMockWindow({ id: 'window-1' });
 
       addWindow(mockWindow);
-      updateWindow('window-1', { position: { x: 200, y: 200 } });
+      setWindowTitle('window-1', 'New Title');
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].title).toBe('New Title');
+    });
+
+    it('should set window maximized state', () => {
+      const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
+      const mockWindow = createMockWindow({ id: 'window-1' });
+
+      addWindow(mockWindow);
+      setWindowIsMaximized('window-1', true);
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe(true);
+    });
+
+    it('should update window position', () => {
+      const { addWindow, updateWindowPosition } = useWorkspaceState.getState();
+      const mockWindow = createMockWindow({ id: 'window-1' });
+
+      addWindow(mockWindow);
+      updateWindowPosition('window-1', 200, 200);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].position).toStrictEqual({ x: 200, y: 200 });
     });
 
-    it('should update window size', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
+    it('should update window z-index', () => {
+      const { addWindow, updateWindowZIndex } = useWorkspaceState.getState();
       const mockWindow = createMockWindow({ id: 'window-1' });
 
       addWindow(mockWindow);
-      updateWindow('window-1', { size: { width: 60, height: 50 } });
+      updateWindowZIndex('window-1', 100);
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].zIndex).toBe(100);
+    });
+
+    it('should update window size', () => {
+      const { addWindow, updateWindowSize } = useWorkspaceState.getState();
+      const mockWindow = createMockWindow({ id: 'window-1' });
+
+      addWindow(mockWindow);
+      updateWindowSize('window-1', 60, 50);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].size).toStrictEqual({
@@ -327,86 +350,65 @@ describe('useWorkspaceState', () => {
       });
     });
 
-    it('should update window zIndex', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
+    it('should set window custom theme', () => {
+      const { addWindow, setWindowCustomTheme } = useWorkspaceState.getState();
+      const mockWindow = createMockWindow({ id: 'window-1' });
+      const customTheme = {
+        fontColor: 'rgba(255, 0, 0, 1)',
+        bgColor: 'rgba(0, 0, 0, 1)',
+        iconShape: 'circle' as const,
+      };
+
+      addWindow(mockWindow);
+      setWindowCustomTheme('window-1', customTheme);
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].customTheme).toStrictEqual(customTheme);
+    });
+
+    it('should update window snap position', () => {
+      const { addWindow, updateWindowSnapPosition } =
+        useWorkspaceState.getState();
       const mockWindow = createMockWindow({ id: 'window-1' });
 
       addWindow(mockWindow);
-      updateWindow('window-1', { zIndex: 100 });
+      updateWindowSnapPosition('window-1', 'left-half');
 
       const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].zIndex).toBe(100);
-    });
-
-    it('should update multiple window properties at once', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({ id: 'window-1' });
-
-      addWindow(mockWindow);
-      updateWindow('window-1', {
-        position: { x: 300, y: 300 },
-        size: { width: 70, height: 60 },
-        zIndex: 50,
-        isMaximized: true,
-      });
-
-      const state = useWorkspaceState.getState();
-      const updatedWindow = state.activeWindows[0];
-      expect(updatedWindow.position).toStrictEqual({ x: 300, y: 300 });
-      expect(updatedWindow.size).toStrictEqual({ width: 70, height: 60 });
-      expect(updatedWindow.zIndex).toBe(50);
-      expect(updatedWindow.isMaximized).toBe(true);
-    });
-
-    it('should update specific window among multiple windows', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
-      const window1 = createMockWindow({ id: 'window-1', title: 'Window 1' });
-      const window2 = createMockWindow({ id: 'window-2', title: 'Window 2' });
-      const window3 = createMockWindow({ id: 'window-3', title: 'Window 3' });
-
-      addWindow(window1);
-      addWindow(window2);
-      addWindow(window3);
-
-      updateWindow('window-2', { zIndex: 100 });
-
-      const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].zIndex).toBe(1);
-      expect(state.activeWindows[1].zIndex).toBe(100);
-      expect(state.activeWindows[2].zIndex).toBe(1);
-    });
-
-    it('should preserve other window properties when updating', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
-      const mockWindow = createMockWindow({
-        id: 'window-1',
-        title: 'Original Title',
-      });
-
-      addWindow(mockWindow);
-      updateWindow('window-1', { zIndex: 50 });
-
-      const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].title).toBe('Original Title');
-      expect(state.activeWindows[0].zIndex).toBe(50);
+      expect(state.activeWindows[0].snapPosition).toBe('left-half');
     });
 
     it('should handle updating non-existent window', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
+      const { addWindow, setWindowTitle } = useWorkspaceState.getState();
       const mockWindow = createMockWindow({ id: 'window-1' });
 
       addWindow(mockWindow);
-      updateWindow('non-existent-id', { zIndex: 100 });
+      setWindowTitle('non-existent-id', 'New Title');
 
       const state = useWorkspaceState.getState();
-      expect(state.activeWindows).toHaveLength(1);
-      expect(state.activeWindows[0].zIndex).toBe(1);
+      expect(state.activeWindows[0].title).toBe('Test Window'); // Unchanged
+    });
+
+    it('should preserve other window properties when updating one', () => {
+      const { addWindow, setWindowTitle } = useWorkspaceState.getState();
+      const mockWindow = createMockWindow({
+        id: 'window-1',
+        title: 'Original Title',
+        zIndex: 5,
+      });
+
+      addWindow(mockWindow);
+      setWindowTitle('window-1', 'New Title');
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].zIndex).toBe(5); // Unchanged
+      expect(state.activeWindows[0].title).toBe('New Title');
     });
   });
 
   describe('Integrated Workflows', () => {
     it('should handle open, update, and close window workflow', () => {
-      const { addWindow, updateWindow, removeWindow } =
+      const { addWindow, updateWindowPosition, removeWindow } =
         useWorkspaceState.getState();
       const mockWindow = createMockWindow({ id: 'browser-1' });
 
@@ -416,7 +418,7 @@ describe('useWorkspaceState', () => {
       expect(state.activeWindows).toHaveLength(1);
 
       // Update window position
-      updateWindow('browser-1', { position: { x: 250, y: 250 } });
+      updateWindowPosition('browser-1', 250, 250);
       state = useWorkspaceState.getState();
       expect(state.activeWindows[0].position).toStrictEqual({ x: 250, y: 250 });
 
@@ -427,16 +429,17 @@ describe('useWorkspaceState', () => {
     });
 
     it('should handle multiple windows with independent updates', () => {
-      const { addWindow, updateWindow } = useWorkspaceState.getState();
+      const { addWindow, updateWindowZIndex, updateWindowPosition } =
+        useWorkspaceState.getState();
       const window1 = createMockWindow({ id: 'window-1' });
       const window2 = createMockWindow({ id: 'window-2' });
 
       addWindow(window1);
       addWindow(window2);
 
-      updateWindow('window-1', { zIndex: 50 });
-      updateWindow('window-2', { zIndex: 100 });
-      updateWindow('window-1', { position: { x: 500, y: 500 } });
+      updateWindowZIndex('window-1', 50);
+      updateWindowZIndex('window-2', 100);
+      updateWindowPosition('window-1', 500, 500);
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].zIndex).toBe(50);
@@ -454,6 +457,39 @@ describe('useWorkspaceState', () => {
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toHaveLength(1);
       expect(state.activeBackground).toBe('/new-wallpaper.jpg');
+    });
+
+    it('should handle complete window lifecycle with all operations', () => {
+      const {
+        addWindow,
+        setWindowTitle,
+        setWindowIsMaximized,
+        updateWindowPosition,
+        updateWindowSize,
+        updateWindowZIndex,
+        removeWindow,
+      } = useWorkspaceState.getState();
+
+      const mockWindow = createMockWindow({ id: 'app-1' });
+      addWindow(mockWindow);
+
+      setWindowTitle('app-1', 'My App');
+      setWindowIsMaximized('app-1', true);
+      updateWindowPosition('app-1', 100, 100);
+      updateWindowSize('app-1', 80, 70);
+      updateWindowZIndex('app-1', 10);
+
+      let state = useWorkspaceState.getState();
+      const window = state.activeWindows[0];
+      expect(window.title).toBe('My App');
+      expect(window.isMaximized).toBe(true);
+      expect(window.position).toStrictEqual({ x: 100, y: 100 });
+      expect(window.size).toStrictEqual({ width: 80, height: 70 });
+      expect(window.zIndex).toBe(10);
+
+      removeWindow('app-1');
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows).toHaveLength(0);
     });
   });
 });

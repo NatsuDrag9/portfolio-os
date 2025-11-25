@@ -4,7 +4,6 @@ import {
   BootStatusState,
   BootStatusType,
   SystemUIState,
-  WindowState,
   WorkspaceState,
 } from '@definitions/storeTypes';
 import { create } from 'zustand';
@@ -17,6 +16,7 @@ import {
   ThemeType,
 } from '@definitions/desktopTypes';
 import { DefaultWallpaper } from '@assets/images/specifics';
+import { WindowData } from '@definitions/applicationTypes';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
   bootStatus: 'OFF',
@@ -39,61 +39,6 @@ export const useAuth = create<AuthState>((set) => ({
       username: newUsername,
       isAdmin: newUsername === ADMIN,
     });
-  },
-}));
-
-export const useWindowState = create<WindowState>((set) => ({
-  id: null,
-  title: null,
-  windowName: null,
-  isMaximized: false,
-  position: undefined,
-  zIndex: 1, // Default
-  size: { width: 45, height: 35 }, // in rem
-  customTheme: undefined,
-  snapPosition: 'fullscreen', // Default in desktop mode
-
-  setTitle: (title: string) => {
-    set((state) => ({
-      ...state,
-      title,
-    }));
-  },
-  setIsMaximized: (isMaximized: boolean) => {
-    set((state) => ({
-      ...state,
-      isMaximized,
-    }));
-  },
-  updatePosition: (x: number, y: number) => {
-    set((state) => ({
-      ...state,
-      position: { x, y },
-    }));
-  },
-  updateZIndex: (zIndex: number) => {
-    set((state) => ({
-      ...state,
-      zIndex,
-    }));
-  },
-  updateSize: (width: number, height: number) => {
-    set((state) => ({
-      ...state,
-      size: { width, height },
-    }));
-  },
-  setCustomTheme: (customTheme: CustomTheme | undefined) => {
-    set((state) => ({
-      ...state,
-      customTheme,
-    }));
-  },
-  updateSnapPosition: (snapPosition: SnapPositionType | undefined) => {
-    set((state) => ({
-      ...state,
-      snapPosition,
-    }));
   },
 }));
 
@@ -138,23 +83,7 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
   taskbarPinnedAppIds: [],
   activeBackground: DefaultWallpaper,
 
-  setActiveBackground: (image: string) => {
-    set({ activeBackground: image });
-  },
-  setTaskbarPinnedAppIds: (idArray: string[]) => {
-    set({ taskbarPinnedAppIds: idArray });
-  },
-  togglePin: (appId: string) => {
-    set((state) => {
-      const isPinned = state.taskbarPinnedAppIds.includes(appId);
-      return {
-        taskbarPinnedAppIds: isPinned
-          ? state.taskbarPinnedAppIds.filter((id) => id !== appId)
-          : [...state.taskbarPinnedAppIds, appId],
-      };
-    });
-  },
-  addWindow: (window: WindowState) => {
+  addWindow: (window: WindowData) => {
     set((state) => ({
       activeWindows: [...state.activeWindows, window],
     }));
@@ -164,11 +93,85 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
       activeWindows: state.activeWindows.filter((w) => w.id !== windowId),
     }));
   },
-  updateWindow: (windowId: string, updates: Partial<WindowState>) => {
+
+  setWindowTitle: (windowId: string, title: string) => {
     set((state) => ({
       activeWindows: state.activeWindows.map((w) =>
-        w.id === windowId ? { ...w, ...updates } : w
+        w.id === windowId ? { ...w, title } : w
       ),
     }));
+  },
+
+  setWindowIsMaximized: (windowId: string, isMaximized: boolean) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, isMaximized } : w
+      ),
+    }));
+  },
+
+  updateWindowPosition: (windowId: string, x: number, y: number) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, position: { x, y } } : w
+      ),
+    }));
+  },
+
+  updateWindowZIndex: (windowId: string, zIndex: number) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, zIndex } : w
+      ),
+    }));
+  },
+
+  updateWindowSize: (windowId: string, width: number, height: number) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, size: { width, height } } : w
+      ),
+    }));
+  },
+
+  setWindowCustomTheme: (
+    windowId: string,
+    customTheme: CustomTheme | undefined
+  ) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, customTheme } : w
+      ),
+    }));
+  },
+
+  updateWindowSnapPosition: (
+    windowId: string,
+    snapPosition: SnapPositionType | undefined
+  ) => {
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, snapPosition } : w
+      ),
+    }));
+  },
+
+  setActiveBackground: (image: string) => {
+    set({ activeBackground: image });
+  },
+
+  setTaskbarPinnedAppIds: (idArray: string[]) => {
+    set({ taskbarPinnedAppIds: idArray });
+  },
+
+  togglePin: (appId: string) => {
+    set((state) => {
+      const isPinned = state.taskbarPinnedAppIds.includes(appId);
+      return {
+        taskbarPinnedAppIds: isPinned
+          ? state.taskbarPinnedAppIds.filter((id) => id !== appId)
+          : [...state.taskbarPinnedAppIds, appId],
+      };
+    });
   },
 }));

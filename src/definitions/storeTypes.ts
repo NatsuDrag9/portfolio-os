@@ -1,3 +1,4 @@
+import { WindowData } from './applicationTypes';
 import {
   CustomTheme,
   SnapPositionType,
@@ -26,24 +27,34 @@ export interface AuthState {
   updateAuthState: (newUsername: string) => void;
 }
 
-export interface WindowState {
-  id: string | null; // Unique identifier for the Window Instance (e.g., browser)
-  title: string | null; // Title displayed on window's title bar
-  windowName: string | null; // Identifies specific React component to render inside the window frame (e.g., 'BrowserApp', 'Notepad')
-  isMaximized: boolean;
-  position: { x: number; y: number } | undefined; // x,y co-ordinates
-  zIndex: number; // For stacking
-  size: { width: number; height: number }; // Width of the window and height of the window
-  customTheme?: CustomTheme; // For personalization
-  snapPosition?: SnapPositionType; // Mobile-only
+export interface WorkspaceState {
+  activeWindows: WindowData[]; // Only data, no methods
+  taskbarPinnedAppIds: string[];
+  activeBackground: string;
 
-  setTitle: (title: string) => void;
-  setIsMaximized: (isMaximized: boolean) => void;
-  updatePosition: (x: number, y: number) => void;
-  updateZIndex: (zIndex: number) => void;
-  updateSize: (width: number, height: number) => void;
-  setCustomTheme: (customTheme: CustomTheme | undefined) => void;
-  updateSnapPosition: (snapPosition: SnapPositionType | undefined) => void;
+  // Window management
+  addWindow: (window: WindowData) => void;
+  removeWindow: (windowId: string) => void;
+
+  // Window property updates (all at WorkspaceState level)
+  setWindowTitle: (windowId: string, title: string) => void;
+  setWindowIsMaximized: (windowId: string, isMaximized: boolean) => void;
+  updateWindowPosition: (windowId: string, x: number, y: number) => void;
+  updateWindowZIndex: (windowId: string, zIndex: number) => void;
+  updateWindowSize: (windowId: string, width: number, height: number) => void;
+  setWindowCustomTheme: (
+    windowId: string,
+    customTheme: CustomTheme | undefined
+  ) => void;
+  updateWindowSnapPosition: (
+    windowId: string,
+    snapPosition: SnapPositionType | undefined
+  ) => void;
+
+  // Taskbar & background
+  setActiveBackground: (image: string) => void;
+  setTaskbarPinnedAppIds: (idArray: string[]) => void;
+  togglePin: (appId: string) => void;
 }
 
 export interface SystemUIState {
@@ -64,17 +75,4 @@ export interface SystemUIState {
   setShowMoreIcons: (show: boolean) => void;
   setVolumeLevel: (value: number) => void;
   setTheme: (theme: ThemeType) => void;
-}
-
-export interface WorkspaceState {
-  activeWindows: WindowState[]; // Array of all currently open window instances
-  taskbarPinnedAppIds: string[]; // IDs of apps pinned to the taskbar for quick access
-  activeBackground: string; // URL/path of the current desktop wallpaper image
-
-  setActiveBackground: (image: string) => void;
-  setTaskbarPinnedAppIds: (idArray: string[]) => void;
-  togglePin: (appId: string) => void; // Add or remove an app from taskbar pins
-  addWindow: (window: WindowState) => void; // Open a new window/application
-  removeWindow: (windowId: string) => void; // Close a window by its ID
-  updateWindow: (windowId: string, updates: Partial<WindowState>) => void; // Update window properties (position, size, zIndex, etc)
 }
