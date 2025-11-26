@@ -1,0 +1,246 @@
+@use '../../styles/variables' as *;
+
+.app-icon {
+  @include disable-default-button-styles;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xs);
+  align-items: center;
+  width: clamp(5rem, 8vw, 7rem);
+  padding: var(--spacing-horizontal-s);
+  border-radius: var(--border-radius-medium);
+  font-family: var(--font-family-base);
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-foreground1) 8%,
+      transparent
+    );
+  }
+
+  &:active {
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-foreground1) 12%,
+      transparent
+    );
+    transform: scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-stroke1);
+    outline-offset: 2px;
+  }
+
+  // Selected state (for future use)
+  // &--selected {
+  //   background-color: color-mix(
+  //     in srgb,
+  //     var(--color-brand-background) 15%,
+  //     transparent
+  //   );
+  // }
+
+  &__image {
+    width: clamp(3rem, 4vw, 4rem);
+    height: clamp(3rem, 4vw, 4rem);
+    object-fit: contain;
+
+    filter: drop-shadow(var(--shadow2));
+
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__name {
+    // Text overflow handling - Windows 11 shows 2 lines max
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
+
+    // Fluent typography: Caption 1 style (12px/16px)
+    color: var(--color-neutral-foreground1);
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base200);
+    text-align: center;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+  }
+
+  // Square shape (Windows 11 default - slightly rounded)
+  &.square &__image {
+    border-radius: var(--border-radius-medium);
+  }
+
+  // Circle shape (Custom)
+  &.circle &__image {
+    border-radius: var(--border-radius-circular);
+  }
+
+  // Water-droplet shape (Custom - teardrop/squircle variant)
+  &.water-droplet &__image {
+    // Asymmetric border radius creates droplet effect
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+
+  // Dark theme adjustments
+  &.dark {
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 8%,
+        transparent
+      );
+    }
+
+    &:active {
+      background-color: color-mix(
+        in srgb,
+        var(--color-static-white) 12%,
+        transparent
+      );
+    }
+  }
+
+  &.dark &__name {
+    color: var(--color-static-white);
+    text-shadow: 0 1px 2px
+      color-mix(in srgb, var(--color-static-black) 50%, transparent);
+  }
+
+  // Light theme text shadow for wallpaper readability
+  &.light &__name {
+    text-shadow: 0 1px 2px
+      color-mix(in srgb, var(--color-static-white) 80%, transparent);
+  }
+}
+
+// Desktop XL (1400px+) - Larger icons for high-res displays
+@media (min-width: $breakpoint-desktop-xl) {
+  .app-icon {
+    width: 9rem;
+    padding: var(--spacing-horizontal-m);
+
+    &__image {
+      width: 5.6rem;
+      height: 5.6rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base200);
+    }
+  }
+}
+
+// Desktop (1200px+) - Standard desktop sizing
+@media (min-width: $breakpoint-desktop) and (max-width: #{$breakpoint-desktop-xl - 1}) {
+  .app-icon {
+    width: 8rem;
+
+    &__image {
+      width: 4.8rem;
+      height: 4.8rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base200);
+    }
+  }
+}
+
+// Tablet Landscape (1024px - 1199px)
+@media (min-width: $breakpoint-tablet-landscape) and (max-width: #{$breakpoint-desktop - 1}) {
+  .app-icon {
+    width: 7.2rem;
+
+    &__image {
+      width: 4.4rem;
+      height: 4.4rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base100);
+    }
+  }
+}
+
+// Tablet Portrait (820px - 1023px)
+@media (min-width: $breakpoint-tablet-portrait) and (max-width: #{$breakpoint-tablet-landscape - 1}) {
+  .app-icon {
+    width: 7rem;
+    padding: var(--spacing-horizontal-s);
+
+    &__image {
+      width: 4rem;
+      height: 4rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base100);
+      -webkit-line-clamp: 1;
+    }
+  }
+}
+
+// Mobile Large (576px - 819px)
+@media (min-width: $breakpoint-mobile-lg) and (max-width: #{$breakpoint-tablet-portrait - 1}) {
+  .app-icon {
+    width: 6.4rem;
+    padding: var(--spacing-horizontal-xs);
+
+    &__image {
+      width: 3.6rem;
+      height: 3.6rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base100);
+      -webkit-line-clamp: 1;
+    }
+  }
+}
+
+// Mobile (450px - 575px)
+@media (min-width: $breakpoint-mobile) and (max-width: #{$breakpoint-mobile-lg - 1}) {
+  .app-icon {
+    width: 6rem;
+    padding: var(--spacing-horizontal-xs);
+
+    &__image {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base100);
+      -webkit-line-clamp: 1;
+    }
+  }
+}
+
+// Mobile Small (< 450px)
+@media (max-width: #{$breakpoint-mobile - 1}) {
+  .app-icon {
+    width: 5.6rem;
+    padding: var(--spacing-horizontal-xxs);
+
+    &__image {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    &__name {
+      font-size: var(--font-size-base100);
+      -webkit-line-clamp: 1;
+    }
+  }
+}
