@@ -3,6 +3,7 @@
 .app-icon {
   @include disable-default-button-styles;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-vertical-xs);
@@ -121,6 +122,75 @@
   &.light &__name {
     text-shadow: 0 1px 2px
       color-mix(in srgb, var(--color-static-white) 80%, transparent);
+  }
+
+  // Multiple windows stacked effect (Windows 11 style depth indicator)
+  &--multiple-windows {
+    // Stacked layer effect behind the button
+    &::before {
+      position: absolute;
+      top: 0.1rem;
+      left: 0.6rem;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      border-right: 1px solid var(--color-neutral-stroke1);
+      border-radius: inherit;
+      background-color: var(--color-neutral-background3);
+      opacity: 0.8;
+      content: '';
+    }
+  }
+
+  // Dark theme stacked effect
+  &.dark#{&}--multiple-windows::before {
+    border-color: var(--color-neutral-stroke2);
+    background-color: var(--color-neutral-background4);
+  }
+
+  // Taskbar focused state - background highlight (Windows 11 style)
+  &--taskbar-focused {
+    border: 1px solid var(--color-neutral-stroke1);
+    background-color: var(--color-neutral-background3);
+  }
+
+  // Dark theme focused state
+  &.dark#{&}--taskbar-focused {
+    border-color: var(--color-neutral-stroke2);
+    background-color: var(--color-neutral-background4);
+  }
+
+  // Taskbar dot indicator
+  &__dot {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0.8rem;
+    height: 0.4rem;
+    border-radius: var(--border-radius-circular);
+    background-color: var(--color-neutral-foreground3);
+    transition:
+      width 0.2s ease-out,
+      background-color 0.2s ease-out,
+      opacity 0.15s ease-out;
+    transform: translateX(-50%);
+
+    // Hidden state - no windows open
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    // Unfocused state - grey dot
+    &--unfocused {
+      background-color: var(--color-neutral-foreground3);
+    }
+
+    // Focused state - blue pill/rectangle
+    &--focused {
+      width: 1.8rem;
+      background-color: var(--color-brand-background);
+    }
   }
 }
 

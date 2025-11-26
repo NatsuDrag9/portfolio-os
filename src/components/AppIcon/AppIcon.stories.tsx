@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import AppIcon from './AppIcon';
-import appIconPlayFunction from './playFunctions';
-import { useSystemUIState } from '@store/store';
+import appIconPlayFunction, { appIconDotPlayFunction } from './playFunctions';
+import { useSystemUIState, useWorkspaceState } from '@store/store';
 
 export default {
   title: 'Applications/AppIcon',
@@ -81,6 +81,30 @@ export default {
     onSingleClick: fn(),
     onDoubleClick: fn(),
   },
+  decorators: [
+    // Global decorator to reset store state before each story
+    (Story) => {
+      useSystemUIState.setState({
+        taskbarAlignment: 'bottom',
+        isSearchVisible: true,
+        startMenuOpen: false,
+        startMenuLayout: 'grid',
+        showRecommendedApps: true,
+        showMoreIcons: true,
+        volumeLevel: 50,
+        currentTheme: 'light',
+      });
+
+      useWorkspaceState.setState({
+        activeWindows: [],
+        taskbarPinnedAppIds: [],
+        activeBackground: '/default-wallpaper.jpg',
+        windowInstanceCounters: {},
+      });
+
+      return <Story />;
+    },
+  ],
 } as Meta<typeof AppIcon>;
 
 type Story = StoryObj<typeof AppIcon>;
@@ -109,7 +133,8 @@ export const TaskbarIcon: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Taskbar icon variant - uses single-click to open applications',
+        story:
+          'Taskbar icon variant with no open windows - uses single-click to open applications. ',
       },
     },
   },
@@ -160,20 +185,6 @@ export const WaterDropletShape: Story = {
     },
   },
 };
-
-// export const FileExplorerIcon: Story = {
-//   args: {
-//     appId: 'file-explorer',
-//     iconVariant: 'taskbar',
-//   },
-//   parameters: {
-//     docs: {
-//       description: {
-//         story: 'File Explorer application icon',
-//       },
-//     },
-//   },
-// };
 
 export const AppIconWithInteractions: Story = {
   name: 'AppIcon with Play Function',
@@ -245,6 +256,163 @@ export const DarkTheme: Story = {
       description: {
         story:
           'Desktop icon with dark theme styling - shows text shadow and adjusted hover states for dark backgrounds',
+      },
+    },
+  },
+};
+
+export const TaskbarWithOpenWindow: Story = {
+  name: 'Taskbar with Open Unfocused Window',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      // Add a window to the workspace
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon with one open unfocused window - dot indicator shows unfocused state',
+      },
+    },
+  },
+};
+
+export const TaskbarWithFocusedWindow: Story = {
+  name: 'Taskbar with Open Focused Window',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      // Add a window to the workspace and set its zIndex to highest
+      const { addWindow, updateWindowZIndex, setWindowIsMaximized } =
+        useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+
+      const state = useWorkspaceState.getState();
+      const lastWindow = state.activeWindows[state.activeWindows.length - 1];
+      if (lastWindow.id) {
+        updateWindowZIndex(lastWindow.id, 9999); // Set highest zIndex
+        setWindowIsMaximized(lastWindow.id, true); // Set isMaximized
+      }
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon with one open focused window - dot indicator shows focused state',
+      },
+    },
+  },
+};
+
+export const TaskbarWithMultipleWindows: Story = {
+  name: 'Taskbar with Multiple Open Windows',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      // Add multiple windows to the workspace
+      const { addWindow, updateWindowZIndex, setWindowIsMaximized } =
+        useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+
+      // Set last window as focused (highest zIndex)
+      const state = useWorkspaceState.getState();
+      const lastWindow = state.activeWindows[state.activeWindows.length - 1];
+      if (lastWindow.id) {
+        updateWindowZIndex(lastWindow.id, 9999);
+        setWindowIsMaximized(lastWindow.id, true); // Set isMaximized
+      }
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window',
+      },
+    },
+  },
+};
+
+export const TaskbarDotInteractions: Story = {
+  name: 'Taskbar Dot Indicator with Play Function',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+    onSingleClick: fn(),
+  },
+  decorators: [
+    (Story) => {
+      // Add a window to show dot indicator
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  play: appIconDotPlayFunction,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Interactive story demonstrating taskbar dot indicator behavior when windows are open',
       },
     },
   },
