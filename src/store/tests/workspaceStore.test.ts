@@ -311,7 +311,7 @@ describe('useWorkspaceState', () => {
       expect(state.activeWindows).toHaveLength(1);
     });
 
-    it('should not reset instance counter on remove', () => {
+    it('should keep instance counter when windows remain for that app', () => {
       const { addWindow, removeWindow } = useWorkspaceState.getState();
       const appMetadata = createMockAppMetadata();
 
@@ -321,10 +321,66 @@ describe('useWorkspaceState', () => {
 
       let state = useWorkspaceState.getState();
       expect(state.windowInstanceCounters['vscode']).toBe(2);
-      // Next instance should be vscode-3
+      expect(state.activeWindows).toHaveLength(1);
+
+      // Next instance should be vscode-3 (counter continues)
       addWindow('vscode', appMetadata);
       state = useWorkspaceState.getState();
       expect(state.activeWindows[1].id).toBe('vscode-3');
+      expect(state.windowInstanceCounters['vscode']).toBe(3);
+    });
+
+    it('should reset instance counter when last window is removed', () => {
+      const { addWindow, removeWindow } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+
+      let state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters['vscode']).toBe(3);
+
+      // Remove all windows
+      removeWindow('vscode-1');
+      removeWindow('vscode-2');
+      removeWindow('vscode-3');
+
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows).toHaveLength(0);
+      expect(state.windowInstanceCounters['vscode']).toBeUndefined();
+
+      // Next window should restart at vscode-1
+      addWindow('vscode', appMetadata);
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].id).toBe('vscode-1');
+      expect(state.windowInstanceCounters['vscode']).toBe(1);
+    });
+
+    it("should preserve other app counters when removing one app's windows", () => {
+      const { addWindow, removeWindow } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      addWindow('notepad', appMetadata);
+      addWindow('notepad', appMetadata);
+
+      let state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters).toStrictEqual({
+        vscode: 2,
+        notepad: 2,
+      });
+
+      // Remove all vscode windows
+      removeWindow('vscode-1');
+      removeWindow('vscode-2');
+
+      state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters).toStrictEqual({
+        notepad: 2,
+      });
+      expect(state.windowInstanceCounters['vscode']).toBeUndefined();
     });
   });
 

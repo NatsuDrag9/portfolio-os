@@ -112,10 +112,28 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
       };
     });
   },
+
   removeWindow: (windowId: string) => {
-    set((state) => ({
-      activeWindows: state.activeWindows.filter((w) => w.id !== windowId),
-    }));
+    set((state) => {
+      // Extract appId from windowId (format: "appId-instanceNumber")
+      const appId = windowId.substring(0, windowId.lastIndexOf('-'));
+
+      // Get remaining windows for this app
+      const remainingWindowsForApp = state.activeWindows
+        .filter((w) => w.id !== windowId)
+        .filter((w) => w.id?.startsWith(`${appId}-`));
+
+      // If no more windows for this app, reset counter. Otherwise keep it.
+      const updatedCounters = { ...state.windowInstanceCounters };
+      if (remainingWindowsForApp.length === 0) {
+        delete updatedCounters[appId];
+      }
+
+      return {
+        activeWindows: state.activeWindows.filter((w) => w.id !== windowId),
+        windowInstanceCounters: updatedCounters,
+      };
+    });
   },
 
   setWindowTitle: (windowId: string, title: string) => {
