@@ -1,7 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import AppIcon from './AppIcon';
-import appIconPlayFunction, { appIconDotPlayFunction } from './playFunctions';
+import appIconPlayFunction, {
+  appIconDotPlayFunction,
+  appIconPopupPlayFunction,
+} from './playFunctions';
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 
 export default {
@@ -241,7 +244,7 @@ export const DarkTheme: Story = {
         <div
           style={{
             padding: '2rem',
-            backgroundColor: '#1a1a2e',
+            // backgroundColor: '#1a1a2e',
             borderRadius: '8px',
           }}
         >
@@ -331,14 +334,50 @@ export const TaskbarWithFocusedWindow: Story = {
     docs: {
       description: {
         story:
-          'Taskbar icon with one open focused window - dot indicator shows focused state',
+          'Taskbar icon with one open focused window - dot indicator shows focused state. Hover over the taskbar icon to see the popup.',
+      },
+    },
+  },
+};
+
+export const TaskbarWithMultipleWindowsAndUnfocused: Story = {
+  name: 'Taskbar with Multiple Open Windows and Unfocused',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      // Add multiple windows to the workspace
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window. Hover over the taskbar icon to see the popup with all windows listed. ',
       },
     },
   },
 };
 
 export const TaskbarWithMultipleWindows: Story = {
-  name: 'Taskbar with Multiple Open Windows',
+  name: 'Taskbar with Multiple Open Windows and Focused',
   args: {
     appId: 'vscode',
     iconVariant: 'taskbar',
@@ -376,7 +415,7 @@ export const TaskbarWithMultipleWindows: Story = {
     docs: {
       description: {
         story:
-          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window',
+          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window. Hover over the taskbar icon to see the popup with all windows listed. ',
       },
     },
   },
@@ -413,6 +452,80 @@ export const TaskbarDotInteractions: Story = {
       description: {
         story:
           'Interactive story demonstrating taskbar dot indicator behavior when windows are open',
+      },
+    },
+  },
+};
+
+export const TaskbarPopupDarkTheme: Story = {
+  name: 'Taskbar Popup - Dark Theme',
+  args: {
+    appId: 'google-chrome',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      useSystemUIState.getState().setTheme('dark');
+
+      // Add multiple windows
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'google-chrome',
+        appName: 'Google Chrome',
+        desktopIcon: '/apps/chrome-96.png',
+        mobileIcon: '/apps/chrome-48.png',
+        defaultPinned: true,
+        windowName: 'ChromeApp',
+      };
+      addWindow('google-chrome', appMetadata);
+      addWindow('google-chrome', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    backgrounds: { default: 'dark' },
+    docs: {
+      description: {
+        story:
+          'Taskbar icon popup with dark theme - shows acrylic material effect on dark background. Hover to see the popup.',
+      },
+    },
+  },
+};
+
+export const TaskbarPopupInteractions: Story = {
+  name: 'Taskbar Popup - Click & Close Interactions',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+  },
+  decorators: [
+    (Story) => {
+      // Add multiple windows for popup interaction
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  play: appIconPopupPlayFunction,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Interactive story testing popup window click and close button functionality with workspace store integration',
       },
     },
   },

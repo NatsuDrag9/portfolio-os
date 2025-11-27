@@ -1,8 +1,14 @@
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
 import './AppIcon.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
-import { useSystemUIState, useWorkspaceState } from '@store/store';
+import { useWorkspaceState } from '@store/store';
 import { IconShapeType } from '@definitions/desktopTypes';
+import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
+import AppIconPopup from './AppIconPopup';
+
+const POPUP_UNMOUNT_DELAY = 600; // 0.6s total before unmount
+
+// To Do: Handle touch events in tablet and mobile devices
 
 export interface AppIconProps {
   appId: string;
@@ -23,7 +29,38 @@ function AppIcon({
 }: AppIconProps) {
   const { addWindow, activeWindows, windowInstanceCounters } =
     useWorkspaceState();
-  const { currentTheme } = useSystemUIState();
+  const [showPopup, setShowPopup] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const unmountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    // Clear any pending unmount when re-entering
+    if (unmountTimeoutRef.current) {
+      clearTimeout(unmountTimeoutRef.current);
+      unmountTimeoutRef.current = null;
+    }
+    setIsExiting(false);
+    setShowPopup(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Start exit animation
+    setIsExiting(true);
+    // Unmount after delay
+    unmountTimeoutRef.current = setTimeout(() => {
+      setShowPopup(false);
+      setIsExiting(false);
+    }, POPUP_UNMOUNT_DELAY);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (unmountTimeoutRef.current) {
+        clearTimeout(unmountTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const appMetaData = APP_REGISTRY.find(
     (app) => app.id === appId
@@ -95,14 +132,29 @@ function AppIcon({
     return classes.join(' ');
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (iconVariant === 'desktop') {
+        handleDoubleClick();
+        return;
+      }
+      handleSingleClick();
+    }
+  };
+
   return (
-    <button
-      className={`app-icon ${shape} ${currentTheme} ${getTaskbarModifiers()}`}
-      type="button"
+    <div
+      className={`app-icon ${shape} ${getTaskbarModifiers()}`}
+      role="button"
+      tabIndex={0}
       onDoubleClick={handleDoubleClick}
       onClick={handleSingleClick}
+      onKeyDown={handleKeyDown}
       onContextMenu={handleRightClick}
       title={appMetaData.appName}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <img
         srcSet={srcSet}
@@ -115,9 +167,27 @@ function AppIcon({
       )}
 
       {iconVariant === 'taskbar' && (
-        <span className={`app-icon__dot ${getDotModifier()}`}></span>
+        <>
+          <span className={`app-icon__dot ${getDotModifier()}`}></span>
+
+          {showPopup && (
+            <div
+              className={`app-icon__popup-container ${isExiting ? 'app-icon__popup-container--exiting' : ''}`}
+            >
+              {activeWindows
+                .filter((w) => w.id?.startsWith(`${appId}-`))
+                .map((windowData) => (
+                  <AppIconPopup
+                    key={windowData.id}
+                    windowData={windowData}
+                    appId={appId}
+                  />
+                ))}
+            </div>
+          )}
+        </>
       )}
-    </button>
+    </div>
   );
 }
 

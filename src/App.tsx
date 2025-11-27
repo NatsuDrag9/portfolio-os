@@ -1,4 +1,4 @@
-import { useAuth, useBootStatus } from '@store/store';
+import { useAuth, useBootStatus, useSystemUIState } from '@store/store';
 import '@styles/main.scss';
 import { logInDev } from '@utils/logUtils';
 import { useEffect } from 'react';
@@ -6,6 +6,7 @@ import { BootScreen, Desktop, LoginScreen, PowerOffScreen } from './screens';
 
 function App() {
   const { bootStatus } = useBootStatus();
+  const { currentTheme } = useSystemUIState();
 
   // To Do: Remove this useEffect after development
   useEffect(() => {
@@ -41,7 +42,10 @@ function App() {
     return <BootScreen />;
   };
 
-  return <div className="app">{renderScreen()}</div>;
+  // Apply dark-theme class when currentTheme is 'dark' for CSS variable switching
+  const themeClass = currentTheme === 'dark' ? 'dark-theme' : '';
+
+  return <div className={`app ${themeClass}`}>{renderScreen()}</div>;
 }
 
 export default App;

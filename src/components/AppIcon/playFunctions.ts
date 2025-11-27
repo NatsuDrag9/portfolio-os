@@ -3,6 +3,7 @@ import { expect, userEvent, within } from '@storybook/test';
 import { AppIconProps } from './AppIcon';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata } from '@definitions/applicationTypes';
+import { useWorkspaceState } from '@store/store';
 
 const appIconPlayFunction = async ({
   canvasElement,
@@ -40,9 +41,14 @@ const appIconPlayFunction = async ({
     expect(args?.onSingleClick).toHaveBeenCalledWith(args?.appId);
     expect(args?.onDoubleClick).not.toHaveBeenCalled();
 
-    // Taskbar/start-menu variant only shows icon, not name
+    // Taskbar variant only shows icon, not name
     const buttonChildren = button.children;
-    expect(buttonChildren.length).toBe(2); // All children without text-element
+    // if (args.iconVariant === 'taskbar') {
+    //   const appName = canvas.getByText(
+    //     new RegExp(appMetaData.appName as string, 'i')
+    //   );
+    //   expect(appName).not.toBeInTheDocument();
+    // }
     expect(buttonChildren[0]).toHaveClass('app-icon__image');
   }
 
@@ -56,10 +62,6 @@ const appIconPlayFunction = async ({
   if (args?.shape) {
     expect(button).toHaveClass(args.shape);
   }
-
-  // Verify theme class is applied
-  const themeClass = button.className.match(/(light|dark)/);
-  expect(themeClass).toBeTruthy();
 };
 
 export const appIconDotPlayFunction = async ({
@@ -120,6 +122,106 @@ export const appIconDotPlayFunction = async ({
 
   // Verify dot is a child of the button
   expect(button.contains(dotIndicator)).toBe(true);
+};
+
+export const appIconPopupPlayFunction = async ({
+  canvasElement,
+  args,
+}: PlayFunctionProps<AppIconProps>) => {
+  const canvas = within(canvasElement);
+  const button = canvas.getByRole('button');
+
+  // Verify button exists
+  expect(button).toBeInTheDocument();
+
+  // Only test popup for taskbar variant
+  if (args?.iconVariant !== 'taskbar') {
+    return;
+  }
+
+  // Initially, popup should not be visible
+  let popupContainer = button.querySelector('.app-icon__popup-container');
+  expect(popupContainer).not.toBeInTheDocument();
+
+  // Hover over button to show popup
+  await userEvent.hover(button);
+
+  // Wait for popup to appear
+  const maxAttempts = 10;
+  let attempt = 0;
+  while (!popupContainer && attempt < maxAttempts) {
+    popupContainer = button.querySelector('.app-icon__popup-container');
+    if (!popupContainer) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    attempt++;
+  }
+
+  expect(popupContainer).toBeInTheDocument();
+  expect(popupContainer).not.toHaveClass('app-icon__popup-container--exiting');
+
+  // Verify popup contains popup items (one per window)
+  const popupItems = popupContainer?.querySelectorAll('.app-icon-popup');
+  expect(popupItems).toBeTruthy();
+  expect((popupItems?.length || 0) > 0).toBe(true);
+
+  // Test first popup item click - should focus window
+  const firstPopupItem = popupItems?.[0] as HTMLElement;
+  if (firstPopupItem) {
+    const initialState = useWorkspaceState.getState();
+    const windowBefore = initialState.activeWindows[0];
+
+    if (windowBefore) {
+      const initialZIndex = windowBefore.zIndex;
+
+      await userEvent.click(firstPopupItem);
+
+      const stateAfter = useWorkspaceState.getState();
+      const windowAfter = stateAfter.activeWindows.find(
+        (w) => w.id === windowBefore.id
+      );
+
+      // Verify window was brought to front
+      expect(windowAfter?.zIndex).toBeGreaterThan(initialZIndex);
+      expect(windowAfter?.isMaximized).toBe(true);
+    }
+  }
+
+  // Verify unhover behavior
+  await userEvent.unhover(button);
+
+  // Popup should start exiting animation
+  popupContainer = button.querySelector('.app-icon__popup-container');
+  if (popupContainer) {
+    expect(popupContainer).toHaveClass('app-icon__popup-container--exiting');
+  }
+
+  // Hover again to cancel exit animation
+  await userEvent.hover(button);
+  popupContainer = button.querySelector('.app-icon__popup-container');
+  if (popupContainer) {
+    expect(popupContainer).not.toHaveClass(
+      'app-icon__popup-container--exiting'
+    );
+  }
+
+  // Test close button
+  const closeButtons = popupContainer?.querySelectorAll(
+    '.app-icon-popup__close-button'
+  );
+  if (closeButtons && closeButtons.length > 0) {
+    const stateBeforeClose = useWorkspaceState.getState();
+    const windowCountBefore = stateBeforeClose.activeWindows.length;
+
+    const firstCloseButton = closeButtons[0] as HTMLElement;
+    await userEvent.click(firstCloseButton);
+
+    const stateAfterClose = useWorkspaceState.getState();
+    const windowCountAfter = stateAfterClose.activeWindows.length;
+
+    // Verify window was removed
+    expect(windowCountAfter).toBe(windowCountBefore - 1);
+  }
 };
 
 export default appIconPlayFunction;
