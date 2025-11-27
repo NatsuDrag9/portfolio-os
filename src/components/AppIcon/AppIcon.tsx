@@ -4,7 +4,7 @@ import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
 import { IconShapeType } from '@definitions/desktopTypes';
 import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
-import AppIconPopup from './AppIconPopup';
+import ActiveWindowsPopup from './ActiveWindowsPopup/ActiveWindowsPopup';
 
 const POPUP_UNMOUNT_DELAY = 600; // 0.6s total before unmount
 
@@ -27,11 +27,19 @@ function AppIcon({
   onDoubleClick,
   onRightClick,
 }: AppIconProps) {
-  const { addWindow, activeWindows, windowInstanceCounters } =
-    useWorkspaceState();
+  const { activeWindows, windowInstanceCounters } = useWorkspaceState();
   const [showPopup, setShowPopup] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const unmountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const appMetaData = APP_REGISTRY.find(
+    (app) => app.id === appId
+  ) as AppMetadata;
+
+  // Get window instance count for this app from the store
+  const instanceCount = windowInstanceCounters[appId] || 0;
+  const hasOpenWindows = instanceCount > 0;
+  const hasMultipleWindows = instanceCount > 1;
 
   const handleMouseEnter = () => {
     // Clear any pending unmount when re-entering
@@ -62,15 +70,6 @@ function AppIcon({
     };
   }, []);
 
-  const appMetaData = APP_REGISTRY.find(
-    (app) => app.id === appId
-  ) as AppMetadata;
-
-  // Get window instance count for this app from the store
-  const instanceCount = windowInstanceCounters[appId] || 0;
-  const hasOpenWindows = instanceCount > 0;
-  const hasMultipleWindows = instanceCount > 1;
-
   // Find the focused window (highest zIndex) and check if it belongs to this app
   const focusedWindow =
     activeWindows.length > 0
@@ -85,8 +84,6 @@ function AppIcon({
   const handleSingleClick = () => {
     // Taskbar, start menu and mobile touch
     if (iconVariant !== 'desktop') {
-      addWindow(appId, appMetaData);
-
       if (onSingleClick) {
         onSingleClick(appId);
       }
@@ -96,8 +93,6 @@ function AppIcon({
   const handleDoubleClick = () => {
     // Desktop view in pc
     if (iconVariant === 'desktop') {
-      addWindow(appId, appMetaData);
-
       if (onDoubleClick) {
         onDoubleClick(appId);
       }
@@ -170,14 +165,14 @@ function AppIcon({
         <>
           <span className={`app-icon__dot ${getDotModifier()}`}></span>
 
-          {showPopup && (
+          {showPopup && hasOpenWindows && (
             <div
               className={`app-icon__popup-container ${isExiting ? 'app-icon__popup-container--exiting' : ''}`}
             >
               {activeWindows
                 .filter((w) => w.id?.startsWith(`${appId}-`))
                 .map((windowData) => (
-                  <AppIconPopup
+                  <ActiveWindowsPopup
                     key={windowData.id}
                     windowData={windowData}
                     appId={appId}

@@ -1,0 +1,72 @@
+.active-windows-popup {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  gap: var(--spacing-horizontal-s);
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+  height: 2.4rem;
+  padding: var(--spacing-horizontal-xs);
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+
+  // Hover state (Windows 7 style highlight)
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--color-brand-background) 15%,
+      transparent
+    );
+
+    .dark-theme & {
+      background-color: color-mix(
+        in srgb,
+        var(--color-brand-foreground1) 15%,
+        transparent
+      );
+    }
+  }
+
+  &__applogo {
+    flex-shrink: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  &__appname {
+    flex-shrink: 0;
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base100);
+    font-weight: var(--font-weight-regular);
+    white-space: nowrap;
+  }
+
+  &__close-button {
+    @include disable-default-button-styles;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 2.8rem;
+    height: 1.6rem;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    .close-image {
+      color: var(--color-neutral-foreground2);
+      transition: color 0.1s ease;
+    }
+
+    &:hover {
+      background-color: var(--color-palette-red-background3);
+
+      .close-image {
+        color: var(--color-static-white);
+      }
+    }
+  }
+}

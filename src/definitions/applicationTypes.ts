@@ -9,7 +9,7 @@ export interface AppMetadata {
   windowName: string; // Component reference used to dynamically lookup and render the corresponding component (e.g., 'FileExplorerApp')
 }
 
-export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu' | 'mobile';
+export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu';
 
 export interface WindowData {
   id: string | null; // Unique identifier for the Window Instance (e.g., browser)

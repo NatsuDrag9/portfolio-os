@@ -161,7 +161,7 @@ export const appIconPopupPlayFunction = async ({
   expect(popupContainer).not.toHaveClass('app-icon__popup-container--exiting');
 
   // Verify popup contains popup items (one per window)
-  const popupItems = popupContainer?.querySelectorAll('.app-icon-popup');
+  const popupItems = popupContainer?.querySelectorAll('.active-windows-popup');
   expect(popupItems).toBeTruthy();
   expect((popupItems?.length || 0) > 0).toBe(true);
 
@@ -207,7 +207,7 @@ export const appIconPopupPlayFunction = async ({
 
   // Test close button
   const closeButtons = popupContainer?.querySelectorAll(
-    '.app-icon-popup__close-button'
+    '.active-windows-popup__close-button'
   );
   if (closeButtons && closeButtons.length > 0) {
     const stateBeforeClose = useWorkspaceState.getState();

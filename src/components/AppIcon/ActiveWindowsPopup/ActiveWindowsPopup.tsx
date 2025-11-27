@@ -1,16 +1,16 @@
 import type { MouseEvent } from 'react';
-import './AppIcon';
+import './ActiveWindowsPopup.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata, WindowData } from '@definitions/applicationTypes';
 import { DismissRegular } from '@fluentui/react-icons';
 import { useWorkspaceState } from '@store/store';
 
-export interface AppIconPopupProps {
+export interface ActiveWindowsPopupProps {
   windowData: WindowData;
   appId: string;
 }
 
-function AppIconPopup({ windowData, appId }: AppIconPopupProps) {
+function ActiveWindowsPopup({ windowData, appId }: ActiveWindowsPopupProps) {
   const {
     removeWindow,
     activeWindows,
@@ -32,6 +32,7 @@ function AppIconPopup({ windowData, appId }: AppIconPopupProps) {
 
   const handleCloseClick = (e: MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the parent click handler
+    e.preventDefault(); // Prevent default button behavior
     if (windowData.id) {
       removeWindow(windowData.id);
     }
@@ -48,10 +49,13 @@ function AppIconPopup({ windowData, appId }: AppIconPopupProps) {
 
   return (
     <div
-      className="app-icon-popup"
+      className="active-windows-popup"
       onClick={handlePopupClick}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') handlePopupClick();
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handlePopupClick();
+        }
       }}
       role="button"
       tabIndex={0}
@@ -59,15 +63,17 @@ function AppIconPopup({ windowData, appId }: AppIconPopupProps) {
       <img
         srcSet={srcSet}
         src={appMetaData?.desktopIcon}
-        className="app-icon-popup__applogo"
+        className="active-windows-popup__applogo"
         alt={displayTitle}
       />
-      <p className="app-icon-popup__appname">{displayTitle}</p>
+      <p className="active-windows-popup__appname">{displayTitle}</p>
       <button
         type="button"
         title="Close"
-        className="app-icon-popup__close-button"
+        className="active-windows-popup__close-button"
         onClick={handleCloseClick}
+        onMouseDown={(e) => e.stopPropagation()} // Prevent parent :active state
+        onTouchStart={(e) => e.stopPropagation()} // Prevent parent :active state on touch
       >
         <DismissRegular className="close-image" />
       </button>
@@ -75,4 +81,4 @@ function AppIconPopup({ windowData, appId }: AppIconPopupProps) {
   );
 }
 
-export default AppIconPopup;
+export default ActiveWindowsPopup;

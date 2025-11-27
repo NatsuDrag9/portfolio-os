@@ -14,8 +14,23 @@ export default {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'The `AppIcon` component displays an application icon that can be clicked to open the application. Supports different variants (desktop, taskbar, start-menu) and custom icon shapes. Single-click opens apps on taskbar/start-menu, double-click opens apps on desktop.',
+        component: `The \`AppIcon\` component displays an application icon that can be clicked to open the application.
+
+**Variants:**
+- \`desktop\`: Double-click to open apps, displays icon + name
+- \`taskbar\`: Single-click to open apps, displays icon only with dot indicator and hover popup
+- \`start-menu\`: Single-click to open apps, displays icon + name
+
+**Sub-components:**
+- \`ActiveWindowsPopup\`: Hover popup for taskbar variant showing all open windows for the app. Allows focusing or closing individual windows.
+- \`ContextMenu\` (planned): Right-click menu with options like "New window", "Pin/Unpin from taskbar", "Close window(s)"
+
+**Features:**
+- Custom icon shapes: square, circle, water-droplet
+- Dot indicator states: hidden (no windows), unfocused (grey), focused (accent color pill)
+- Multiple windows stacked effect (::before pseudo-element)
+- Keyboard accessible with Enter/Space support
+- Uses CSS \`:has()\` to prevent hover/active states when interacting with popup`,
       },
     },
   },
