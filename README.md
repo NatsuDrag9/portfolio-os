@@ -21,6 +21,10 @@ yarn dev
 
 ```
 
+## Project Structure
+
+<!-- Place static images in public/ and dynamically imported images in src/assets/images/<category=specific|generic> -->
+
 ## System Requirements
 
 | Technology | Version  |

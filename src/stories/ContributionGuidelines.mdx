@@ -1,10 +1,10 @@
-import { Meta } from "@storybook/blocks";
+import { Meta } from '@storybook/blocks';
 
 <Meta title="Contribution Guidelines" />
 
 # Contribution Guidelines
 
-We welcome contributions from the team! To ensure consistency and maintain high-quality standards in our Storybook, please follow these guidelines when contributing.
+We welcome contributions from anyone! To ensure consistency and maintain high-quality standards in our Storybook, please follow these guidelines when contributing.
 
 ## Story Format and Structure
 
@@ -24,17 +24,17 @@ Meta and story configuration (you can directly use this):
 
 ```typescript
 const meta: Meta<typeof SampleButton> = {
-  title: "<Component_Category>/<Name_Of_Component>",
+  title: '<Component_Category>/<Name_Of_Component>',
   component: SampleButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component: "Description of the component",
+        component: 'Description of the component',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     // argument types of the props of the components with description for each arg type
   },
