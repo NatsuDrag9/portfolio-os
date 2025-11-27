@@ -17,6 +17,7 @@ import {
 } from '@definitions/desktopTypes';
 import { DefaultWallpaper } from '@assets/images/specifics';
 import { AppMetadata } from '@definitions/applicationTypes';
+import { APP_REGISTRY } from '@constants/desktopConstants';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
   bootStatus: 'OFF',
@@ -80,7 +81,9 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
 
 export const useWorkspaceState = create<WorkspaceState>((set) => ({
   activeWindows: [],
-  taskbarPinnedAppIds: [],
+  taskbarPinnedAppIds: APP_REGISTRY.filter(
+    (app) => app.defaultPinned === true
+  ).map((item) => item.id), // Initialize with all the apps containing defaultPinned = true in APP_REGISTRY
   activeBackground: DefaultWallpaper,
   windowInstanceCounters: {},
 

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useWorkspaceState } from '../store';
 import { AppMetadata } from '@definitions/applicationTypes';
+import { APP_REGISTRY } from '@constants/desktopConstants';
 
 // Mock app metadata
 const createMockAppMetadata = (
@@ -14,11 +15,15 @@ const createMockAppMetadata = (
   ...overrides,
 });
 
+const pinnedAppIds = APP_REGISTRY.filter(
+  (app) => app.defaultPinned === true
+).map((item) => item.id);
+
 // Reset store between tests
 beforeEach(() => {
   useWorkspaceState.setState({
     activeWindows: [],
-    taskbarPinnedAppIds: [],
+    taskbarPinnedAppIds: pinnedAppIds,
     activeBackground: '/default-wallpaper.jpg',
     windowInstanceCounters: {},
   });
@@ -29,7 +34,7 @@ describe('useWorkspaceState', () => {
     it('should initialize with default values', () => {
       const state = useWorkspaceState.getState();
       expect(state.activeWindows).toStrictEqual([]);
-      expect(state.taskbarPinnedAppIds).toStrictEqual([]);
+      expect(state.taskbarPinnedAppIds).toStrictEqual(pinnedAppIds);
       expect(state.activeBackground).toBe('/default-wallpaper.jpg');
       expect(state.windowInstanceCounters).toStrictEqual({});
     });
@@ -108,7 +113,7 @@ describe('useWorkspaceState', () => {
 
       const state = useWorkspaceState.getState();
       expect(state.taskbarPinnedAppIds).toContain('browser-1');
-      expect(state.taskbarPinnedAppIds).toHaveLength(1);
+      expect(state.taskbarPinnedAppIds).toHaveLength(pinnedAppIds.length + 1);
     });
 
     it('should unpin an app that is already pinned', () => {
@@ -132,6 +137,7 @@ describe('useWorkspaceState', () => {
 
       const state = useWorkspaceState.getState();
       expect(state.taskbarPinnedAppIds).toStrictEqual([
+        ...pinnedAppIds,
         'browser-1',
         'notepad-1',
         'vscode-1',
@@ -165,6 +171,7 @@ describe('useWorkspaceState', () => {
 
       const state = useWorkspaceState.getState();
       expect(state.taskbarPinnedAppIds).toStrictEqual([
+        ...pinnedAppIds,
         'browser-1',
         'vscode-1',
       ]);
