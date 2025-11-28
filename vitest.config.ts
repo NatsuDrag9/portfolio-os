@@ -6,7 +6,7 @@ const vitestConfig = defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/tests/setup'],
+    setupFiles: ['./src/tests/setup.ts'],
     testTransformMode: {
       web: ['.*\\.tsx?$', '.*\\.jsx?$'], // Ensure all JS and TS files, including JSX/TSX, are transformed
     },
