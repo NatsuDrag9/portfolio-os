@@ -71,7 +71,7 @@ export default {
     onSingleClick: {
       action: 'Single clicked',
       description:
-        'Callback function triggered on single-click (taskbar/start-menu variants)',
+        'Callback function triggered on single-click (taskbar/start-menu variants). Called by parent to launch/add window.',
       table: {
         type: { summary: '(appId: string) => void' },
       },
@@ -79,7 +79,7 @@ export default {
     onDoubleClick: {
       action: 'Double clicked',
       description:
-        'Callback function triggered on double-click (desktop variant)',
+        'Callback function triggered on double-click (desktop variant). Called by parent to launch/add window.',
       table: {
         type: { summary: '(appId: string) => void' },
       },
@@ -87,9 +87,25 @@ export default {
     onRightClick: {
       action: 'Right clicked',
       description:
-        'Callback function triggered on right-click (desktop variant)',
+        'Callback function triggered on right-click. Called by parent for context menu.',
       table: {
         type: { summary: '(appId: string) => void' },
+      },
+    },
+    onWindowFocus: {
+      action: 'Window focused',
+      description:
+        'Callback function triggered when popup item is clicked. Parent handles bringing window to front.',
+      table: {
+        type: { summary: '(windowId: string) => void' },
+      },
+    },
+    onWindowClose: {
+      action: 'Window closed',
+      description:
+        'Callback function triggered when popup close button is clicked. Parent handles window removal.',
+      table: {
+        type: { summary: '(windowId: string) => void' },
       },
     },
   },
@@ -98,6 +114,8 @@ export default {
     iconVariant: 'desktop',
     onSingleClick: fn(),
     onDoubleClick: fn(),
+    onWindowFocus: fn(),
+    onWindowClose: fn(),
   },
   decorators: [
     // Global decorator to reset store state before each story
@@ -259,7 +277,6 @@ export const DarkTheme: Story = {
         <div
           style={{
             padding: '2rem',
-            // backgroundColor: '#1a1a2e',
             borderRadius: '8px',
           }}
         >
@@ -385,7 +402,7 @@ export const TaskbarWithMultipleWindowsAndUnfocused: Story = {
     docs: {
       description: {
         story:
-          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window. Hover over the taskbar icon to see the popup with all windows listed. ',
+          'Taskbar icon with three open windows - dot indicator shows unfocused state. Hover over the taskbar icon to see the popup with all windows listed.',
       },
     },
   },
@@ -430,7 +447,7 @@ export const TaskbarWithMultipleWindows: Story = {
     docs: {
       description: {
         story:
-          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window. Hover over the taskbar icon to see the popup with all windows listed. ',
+          'Taskbar icon with three open windows - dot indicator shows focused state for the highest zIndex window. Hover over the taskbar icon to see the popup with all windows listed.',
       },
     },
   },
@@ -478,6 +495,8 @@ export const TaskbarPopupDarkTheme: Story = {
     appId: 'google-chrome',
     iconVariant: 'taskbar',
     shape: 'square',
+    onWindowFocus: fn(),
+    onWindowClose: fn(),
   },
   decorators: [
     (Story) => {
@@ -516,6 +535,9 @@ export const TaskbarPopupInteractions: Story = {
     appId: 'vscode',
     iconVariant: 'taskbar',
     shape: 'square',
+    onSingleClick: fn(),
+    onWindowFocus: fn(),
+    onWindowClose: fn(),
   },
   decorators: [
     (Story) => {
@@ -540,7 +562,7 @@ export const TaskbarPopupInteractions: Story = {
     docs: {
       description: {
         story:
-          'Interactive story testing popup window click and close button functionality with workspace store integration',
+          'Interactive story testing popup window click and close button functionality with callback handlers',
       },
     },
   },

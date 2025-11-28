@@ -1,4 +1,4 @@
-import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
+import { AppIconVariant } from '@definitions/applicationTypes';
 import './AppIcon.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
@@ -8,7 +8,7 @@ import ActiveWindowsPopup from './ActiveWindowsPopup/ActiveWindowsPopup';
 
 const POPUP_UNMOUNT_DELAY = 600; // 0.6s total before unmount
 
-// To Do: Handle touch events in tablet and mobile devices
+// To Do: Handle touch events for tablet and mobile devices
 
 export interface AppIconProps {
   appId: string;
@@ -17,6 +17,8 @@ export interface AppIconProps {
   onSingleClick?: (appId: string) => void;
   onDoubleClick?: (appId: string) => void;
   onRightClick?: (appId: string) => void;
+  onWindowFocus?: (windowId: string) => void;
+  onWindowClose?: (windowId: string) => void;
 }
 
 function AppIcon({
@@ -26,15 +28,15 @@ function AppIcon({
   onSingleClick,
   onDoubleClick,
   onRightClick,
+  onWindowFocus,
+  onWindowClose,
 }: AppIconProps) {
   const { activeWindows, windowInstanceCounters } = useWorkspaceState();
   const [showPopup, setShowPopup] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const unmountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const appMetaData = APP_REGISTRY.find(
-    (app) => app.id === appId
-  ) as AppMetadata;
+  const appMetaData = APP_REGISTRY.find((app) => app.id === appId);
 
   // Get window instance count for this app from the store
   const instanceCount = windowInstanceCounters[appId] || 0;
@@ -106,9 +108,9 @@ function AppIcon({
   };
 
   // Build srcSet: use mobileIcon if available, otherwise use desktopIcon
-  const srcSet = appMetaData.mobileIcon
+  const srcSet = appMetaData?.mobileIcon
     ? `${appMetaData.mobileIcon} 1x, ${appMetaData.desktopIcon} 2x`
-    : appMetaData.desktopIcon;
+    : appMetaData?.desktopIcon;
 
   // Build dot class for taskbar indicator
   const getDotModifier = () => {
@@ -137,6 +139,10 @@ function AppIcon({
       handleSingleClick();
     }
   };
+
+  if (!appMetaData) {
+    return null;
+  }
 
   return (
     <div
@@ -176,6 +182,8 @@ function AppIcon({
                     key={windowData.id}
                     windowData={windowData}
                     appId={appId}
+                    onFocus={onWindowFocus}
+                    onClose={onWindowClose}
                   />
                 ))}
             </div>

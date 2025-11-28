@@ -3,21 +3,20 @@ import './ActiveWindowsPopup.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata, WindowData } from '@definitions/applicationTypes';
 import { DismissRegular } from '@fluentui/react-icons';
-import { useWorkspaceState } from '@store/store';
 
 export interface ActiveWindowsPopupProps {
   windowData: WindowData;
   appId: string;
+  onFocus?: (windowId: string) => void;
+  onClose?: (windowId: string) => void;
 }
 
-function ActiveWindowsPopup({ windowData, appId }: ActiveWindowsPopupProps) {
-  const {
-    removeWindow,
-    activeWindows,
-    updateWindowZIndex,
-    setWindowIsMaximized,
-  } = useWorkspaceState();
-
+function ActiveWindowsPopup({
+  windowData,
+  appId,
+  onFocus,
+  onClose,
+}: ActiveWindowsPopupProps) {
   const appMetaData = APP_REGISTRY.find(
     (app) => app.id === appId
   ) as AppMetadata;
@@ -30,20 +29,18 @@ function ActiveWindowsPopup({ windowData, appId }: ActiveWindowsPopupProps) {
   // Use window title from windowData, fallback to app name
   const displayTitle = windowData.title || appMetaData?.appName || 'Window';
 
-  const handleCloseClick = (e: MouseEvent) => {
+  const handleCloseClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent triggering the parent click handler
     e.preventDefault(); // Prevent default button behavior
-    if (windowData.id) {
-      removeWindow(windowData.id);
+    if (windowData.id && onClose) {
+      onClose(windowData.id);
     }
   };
 
-  // Bring window to focus: set zIndex to max + 1 and maximize it
+  // Bring window to focus: delegate to parent handler
   const handlePopupClick = () => {
-    if (windowData.id) {
-      const maxZIndex = Math.max(...activeWindows.map((w) => w.zIndex), 0);
-      updateWindowZIndex(windowData.id, maxZIndex + 1);
-      setWindowIsMaximized(windowData.id, true);
+    if (windowData.id && onFocus) {
+      onFocus(windowData.id);
     }
   };
 

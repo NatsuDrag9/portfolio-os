@@ -3,7 +3,6 @@ import { expect, userEvent, within } from '@storybook/test';
 import { AppIconProps } from './AppIcon';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata } from '@definitions/applicationTypes';
-import { useWorkspaceState } from '@store/store';
 
 const appIconPlayFunction = async ({
   canvasElement,
@@ -43,12 +42,6 @@ const appIconPlayFunction = async ({
 
     // Taskbar variant only shows icon, not name
     const buttonChildren = button.children;
-    // if (args.iconVariant === 'taskbar') {
-    //   const appName = canvas.getByText(
-    //     new RegExp(appMetaData.appName as string, 'i')
-    //   );
-    //   expect(appName).not.toBeInTheDocument();
-    // }
     expect(buttonChildren[0]).toHaveClass('app-icon__image');
   }
 
@@ -124,6 +117,10 @@ export const appIconDotPlayFunction = async ({
   expect(button.contains(dotIndicator)).toBe(true);
 };
 
+/**
+ * Play function for testing AppIcon popup interactions with callback handlers
+ * Tests popup visibility, focus callback, and close callback
+ */
 export const appIconPopupPlayFunction = async ({
   canvasElement,
   args,
@@ -165,26 +162,14 @@ export const appIconPopupPlayFunction = async ({
   expect(popupItems).toBeTruthy();
   expect((popupItems?.length || 0) > 0).toBe(true);
 
-  // Test first popup item click - should focus window
+  // Test first popup item click - should trigger onWindowFocus callback
   const firstPopupItem = popupItems?.[0] as HTMLElement;
-  if (firstPopupItem) {
-    const initialState = useWorkspaceState.getState();
-    const windowBefore = initialState.activeWindows[0];
+  if (firstPopupItem && args?.onWindowFocus) {
+    await userEvent.click(firstPopupItem);
 
-    if (windowBefore) {
-      const initialZIndex = windowBefore.zIndex;
-
-      await userEvent.click(firstPopupItem);
-
-      const stateAfter = useWorkspaceState.getState();
-      const windowAfter = stateAfter.activeWindows.find(
-        (w) => w.id === windowBefore.id
-      );
-
-      // Verify window was brought to front
-      expect(windowAfter?.zIndex).toBeGreaterThan(initialZIndex);
-      expect(windowAfter?.isMaximized).toBe(true);
-    }
+    // Verify the callback was called with a window ID
+    expect(args.onWindowFocus).toHaveBeenCalled();
+    expect(args.onWindowFocus).toHaveBeenCalledWith('vscode-1');
   }
 
   // Verify unhover behavior
@@ -205,22 +190,17 @@ export const appIconPopupPlayFunction = async ({
     );
   }
 
-  // Test close button
+  // Test close button - should trigger onWindowClose callback
   const closeButtons = popupContainer?.querySelectorAll(
     '.active-windows-popup__close-button'
   );
-  if (closeButtons && closeButtons.length > 0) {
-    const stateBeforeClose = useWorkspaceState.getState();
-    const windowCountBefore = stateBeforeClose.activeWindows.length;
-
+  if (closeButtons && closeButtons.length > 0 && args?.onWindowClose) {
     const firstCloseButton = closeButtons[0] as HTMLElement;
     await userEvent.click(firstCloseButton);
 
-    const stateAfterClose = useWorkspaceState.getState();
-    const windowCountAfter = stateAfterClose.activeWindows.length;
-
-    // Verify window was removed
-    expect(windowCountAfter).toBe(windowCountBefore - 1);
+    // Verify the callback was called with a window ID
+    expect(args.onWindowClose).toHaveBeenCalled();
+    expect(args.onWindowClose).toHaveBeenCalledWith('vscode-1');
   }
 };
 
