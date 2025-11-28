@@ -40,7 +40,9 @@
 
   // Prevent :hover and :active states when interacting with popup container
   &:has(.app-icon__popup-container:hover),
-  &:has(.app-icon__popup-container:active) {
+  &:has(.app-icon__popup-container:active),
+  &:has(.rc-menu:hover),
+  &:has(.rc-menu:active) {
     background-color: transparent;
     transform: none;
   }

@@ -205,3 +205,111 @@ export const appIconPopupPlayFunction = async ({
 };
 
 export default appIconPlayFunction;
+
+export const appIconContextMenuPlayFunction = async ({
+  canvasElement,
+  args,
+}: PlayFunctionProps<AppIconProps>) => {
+  const canvas = within(canvasElement);
+  const button = canvas.getByRole('button');
+
+  // Verify button exists
+  expect(button).toBeInTheDocument();
+
+  // Initially, context menu should not be visible
+  let contextMenu = canvasElement.querySelector('.rc-menu');
+  expect(contextMenu).not.toBeInTheDocument();
+
+  // Right-click the icon to show context menu
+  await userEvent.pointer({ keys: '[MouseRight]', target: button });
+
+  // Wait for context menu to appear
+  const maxAttempts = 10;
+  let attempt = 0;
+  while (!contextMenu && attempt < maxAttempts) {
+    contextMenu = canvasElement.querySelector('.rc-menu');
+    if (!contextMenu) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    attempt++;
+  }
+
+  expect(contextMenu).toBeInTheDocument();
+  expect(args?.onRightClick).toHaveBeenCalledWith(args?.appId);
+
+  // Verify context menu items exist
+  const menuItems = contextMenu?.querySelectorAll('[role="menuitem"]');
+  expect(menuItems).toBeTruthy();
+  expect((menuItems?.length || 0) > 0).toBe(true);
+
+  // Test clicking a menu item - should trigger onContextMenuItemClick callback
+  const firstMenuItem = menuItems?.[0] as HTMLElement;
+  if (firstMenuItem && args?.onContextMenuItemClick) {
+    await userEvent.click(firstMenuItem);
+
+    // Verify the callback was called with appId, action, and variant
+    expect(args.onContextMenuItemClick).toHaveBeenCalled();
+    expect(args.onContextMenuItemClick).toHaveBeenCalledWith(
+      args.appId,
+      'new-window',
+      args.iconVariant
+    );
+
+    // Verify context menu is closed after selection
+    contextMenu = canvasElement.querySelector('.rc-menu');
+    expect(contextMenu).not.toBeInTheDocument();
+  }
+
+  // Test reopening and closing via Escape key
+  await userEvent.pointer({ keys: '[MouseRight]', target: button });
+
+  // Wait for menu to reappear
+  attempt = 0;
+  contextMenu = null;
+  while (!contextMenu && attempt < maxAttempts) {
+    contextMenu = canvasElement.querySelector('.rc-menu');
+    if (!contextMenu) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    attempt++;
+  }
+
+  expect(contextMenu).toBeInTheDocument();
+
+  // Press Escape to close
+  await userEvent.keyboard('{Escape}');
+
+  // Verify context menu is closed
+  contextMenu = canvasElement.querySelector('.rc-menu');
+  expect(contextMenu).not.toBeInTheDocument();
+
+  // Test closing by clicking outside
+  await userEvent.pointer({ keys: '[MouseRight]', target: button });
+
+  // Wait for menu to appear
+  attempt = 0;
+  contextMenu = null;
+  while (!contextMenu && attempt < maxAttempts) {
+    contextMenu = canvasElement.querySelector('.rc-menu');
+    if (!contextMenu) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    attempt++;
+  }
+
+  expect(contextMenu).toBeInTheDocument();
+
+  // Click outside the menu (on the document)
+  await userEvent.click(document.body);
+
+  // Verify context menu is closed
+  contextMenu = canvasElement.querySelector('.rc-menu');
+  expect(contextMenu).not.toBeInTheDocument();
+};
+
+/* 
+ To Do: Test edge cases for ActiveWindowsPopup - 
+ 1. It shouldn't be open when RightClickMenu is opened
+ 
+ 
+ */

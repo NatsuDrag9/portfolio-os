@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import AppIcon from './AppIcon';
 import appIconPlayFunction, {
+  appIconContextMenuPlayFunction,
   appIconDotPlayFunction,
   appIconPopupPlayFunction,
 } from './playFunctions';
@@ -563,6 +564,213 @@ export const TaskbarPopupInteractions: Story = {
       description: {
         story:
           'Interactive story testing popup window click and close button functionality with callback handlers',
+      },
+    },
+  },
+};
+
+export const DesktopIconContextMenu: Story = {
+  name: 'Desktop Icon - Right Click Context Menu (Unpinned)',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'desktop',
+    shape: 'square',
+    isPinned: false,
+    onContextMenuItemClick: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Desktop icon context menu when app is unpinned from taskbar. Shows "Open", "Pin to taskbar", and "Properties" options.',
+      },
+    },
+  },
+};
+
+export const DesktopIconContextMenuPinned: Story = {
+  name: 'Desktop Icon - Right Click Context Menu (Pinned)',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'desktop',
+    shape: 'square',
+    isPinned: true,
+    onContextMenuItemClick: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Desktop icon context menu when app is pinned to taskbar. Shows "Open", "Unpin from taskbar", and "Properties" options.',
+      },
+    },
+  },
+};
+
+export const TaskbarIconContextMenuNoWindows: Story = {
+  name: 'Taskbar Icon - Right Click Context Menu (No Windows)',
+  args: {
+    appId: 'google-chrome',
+    iconVariant: 'taskbar',
+    shape: 'square',
+    isPinned: true,
+    onContextMenuItemClick: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon context menu with no open windows. Shows "New window" and "Unpin from taskbar" options.',
+      },
+    },
+  },
+};
+
+export const TaskbarIconContextMenuWithWindows: Story = {
+  name: 'Taskbar Icon - Right Click Context Menu (Single Window)',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+    isPinned: true,
+    onContextMenuItemClick: fn(),
+  },
+  decorators: [
+    (Story) => {
+      // Add a single window to the workspace
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon context menu with one open window. Shows "New window", "Unpin from taskbar", and "Close window" (destructive) options.',
+      },
+    },
+  },
+};
+
+export const TaskbarIconContextMenuWithMultipleWindows: Story = {
+  name: 'Taskbar Icon - Right Click Context Menu (Multiple Windows)',
+  args: {
+    appId: 'notepad',
+    iconVariant: 'taskbar',
+    shape: 'square',
+    isPinned: true,
+    onContextMenuItemClick: fn(),
+  },
+  decorators: [
+    (Story) => {
+      // Add multiple windows to the workspace
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'notepad',
+        appName: 'Notepad',
+        desktopIcon: '/apps/notepad-96.png',
+        mobileIcon: '/apps/notepad-48.png',
+        defaultPinned: false,
+        windowName: 'NotepadApp',
+      };
+      addWindow('notepad', appMetadata);
+      addWindow('notepad', appMetadata);
+      addWindow('notepad', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Taskbar icon context menu with three open windows. Shows "New window", "Unpin from taskbar", "Close window" (single), and "Close all windows" (destructive, multiple) options.',
+      },
+    },
+  },
+};
+
+export const StartMenuIconContextMenuUnpinned: Story = {
+  name: 'Start Menu Icon - Right Click Context Menu (Unpinned)',
+  args: {
+    appId: 'firefox',
+    iconVariant: 'start-menu',
+    shape: 'square',
+    isPinned: false,
+    onContextMenuItemClick: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Start menu icon context menu when app is unpinned from taskbar. Shows "Open" and "Pin to taskbar" options.',
+      },
+    },
+  },
+};
+
+export const StartMenuIconContextMenuPinned: Story = {
+  name: 'Start Menu Icon - Right Click Context Menu (Pinned)',
+  args: {
+    appId: 'firefox',
+    iconVariant: 'start-menu',
+    shape: 'square',
+    isPinned: true,
+    onContextMenuItemClick: fn(),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Start menu icon context menu when app is pinned to taskbar. Shows "Open" and "Unpin from taskbar" options.',
+      },
+    },
+  },
+};
+
+export const ContextMenuInteractions: Story = {
+  name: 'Context Menu - Click & Close Interactions',
+  args: {
+    appId: 'vscode',
+    iconVariant: 'taskbar',
+    shape: 'square',
+    isPinned: true,
+    onRightClick: fn(),
+    onContextMenuItemClick: fn(),
+  },
+  decorators: [
+    (Story) => {
+      // Add a window to show context menu with window-related options
+      const { addWindow } = useWorkspaceState.getState();
+      const appMetadata = {
+        id: 'vscode',
+        appName: 'VSCode',
+        desktopIcon: '/apps/vscode-96.png',
+        mobileIcon: '/apps/vscode-48.png',
+        defaultPinned: true,
+        windowName: 'VSCodeApp',
+      };
+      addWindow('vscode', appMetadata);
+
+      return <Story />;
+    },
+  ],
+  play: appIconContextMenuPlayFunction,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Interactive story testing context menu item clicks and closing behavior. Right-click the icon to see the menu, click an item to trigger the callback.',
       },
     },
   },

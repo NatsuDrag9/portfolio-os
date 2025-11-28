@@ -2,9 +2,10 @@ import { AppIconVariant } from '@definitions/applicationTypes';
 import './AppIcon.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
-import { IconShapeType } from '@definitions/desktopTypes';
+import { IconShapeType, RightClickActionType } from '@definitions/desktopTypes';
 import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
 import ActiveWindowsPopup from './ActiveWindowsPopup/ActiveWindowsPopup';
+import RightClickMenu from './RightClickMenu/RightClickMenu';
 
 const POPUP_UNMOUNT_DELAY = 600; // 0.6s total before unmount
 
@@ -19,6 +20,12 @@ export interface AppIconProps {
   onRightClick?: (appId: string) => void;
   onWindowFocus?: (windowId: string) => void;
   onWindowClose?: (windowId: string) => void;
+  isPinned?: boolean;
+  onContextMenuItemClick?: (
+    appId: string,
+    action: RightClickActionType,
+    variant: AppIconVariant
+  ) => void;
 }
 
 function AppIcon({
@@ -30,10 +37,13 @@ function AppIcon({
   onRightClick,
   onWindowFocus,
   onWindowClose,
+  isPinned = false,
+  onContextMenuItemClick,
 }: AppIconProps) {
   const { activeWindows, windowInstanceCounters } = useWorkspaceState();
   const [showPopup, setShowPopup] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [showContextMenu, setShowContextMenu] = useState(false);
   const unmountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const appMetaData = APP_REGISTRY.find((app) => app.id === appId);
@@ -102,9 +112,14 @@ function AppIcon({
   };
 
   const handleRightClick = () => {
+    setShowContextMenu(true);
     if (onRightClick) {
       onRightClick(appId);
     }
+  };
+
+  const handleRightClickMenuClose = () => {
+    setShowContextMenu(false);
   };
 
   // Build srcSet: use mobileIcon if available, otherwise use desktopIcon
@@ -171,7 +186,7 @@ function AppIcon({
         <>
           <span className={`app-icon__dot ${getDotModifier()}`}></span>
 
-          {showPopup && hasOpenWindows && (
+          {showPopup && hasOpenWindows && !showContextMenu && (
             <div
               className={`app-icon__popup-container ${isExiting ? 'app-icon__popup-container--exiting' : ''}`}
             >
@@ -189,6 +204,26 @@ function AppIcon({
             </div>
           )}
         </>
+      )}
+
+      {showContextMenu && (
+        <RightClickMenu
+          appId={appId}
+          iconVariant={iconVariant}
+          isPinned={isPinned}
+          onClick={(
+            appId: string,
+            action: RightClickActionType,
+            variant: AppIconVariant
+          ) => {
+            if (onContextMenuItemClick) {
+              onContextMenuItemClick(appId, action, variant);
+            }
+            handleRightClickMenuClose();
+          }}
+          isOpen={showContextMenu}
+          onClose={handleRightClickMenuClose}
+        />
       )}
     </div>
   );
