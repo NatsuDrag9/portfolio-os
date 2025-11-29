@@ -1,0 +1,132 @@
+.slider {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-horizontal-xs);
+  align-items: center;
+
+  &__label {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__fluent-icon {
+    width: 1.8rem;
+    height: auto;
+
+    .dark-theme & {
+      color: var(--color-static-white);
+    }
+  }
+
+  &__range {
+    --slider-thumb-size: 2rem;
+    --slider-track-height: 0.4rem;
+    --slider-track-bg: var(--color-neutral-foreground4);
+    --slider-track-fill: var(--color-brand-background);
+    --slider-thumb-bg: var(--color-brand-background);
+    --slider-thumb-inner: var(--color-static-white);
+
+    width: 100%;
+    height: var(--slider-thumb-size);
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+
+    // Track styles (WebKit)
+    &::-webkit-slider-runnable-track {
+      width: 100%;
+      height: var(--slider-track-height);
+      border-radius: var(--border-radius-circular);
+      background: var(--slider-track-bg);
+    }
+
+    // Track styles (Firefox)
+    &::-moz-range-track {
+      width: 100%;
+      height: var(--slider-track-height);
+      border-radius: var(--border-radius-circular);
+      background: var(--slider-track-bg);
+    }
+
+    // Filled portion of track (Firefox only)
+    &::-moz-range-progress {
+      height: var(--slider-track-height);
+      border-radius: var(--border-radius-circular);
+      background: var(--slider-track-fill);
+    }
+
+    // Thumb styles (WebKit)
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: var(--slider-thumb-size);
+      height: var(--slider-thumb-size);
+      margin-top: calc(
+        (var(--slider-track-height) - var(--slider-thumb-size)) / 2
+      );
+      border: 0.4rem solid var(--slider-thumb-inner);
+      border-radius: var(--border-radius-circular);
+      background: var(--slider-thumb-bg);
+      box-shadow: var(--shadow4);
+      transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
+    }
+
+    // Thumb styles (Firefox)
+    &::-moz-range-thumb {
+      width: calc(var(--slider-thumb-size) - 0.8rem);
+      height: calc(var(--slider-thumb-size) - 0.8rem);
+      border: 0.4rem solid var(--slider-thumb-inner);
+      border-radius: var(--border-radius-circular);
+      background: var(--slider-thumb-bg);
+      box-shadow: var(--shadow4);
+      transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
+    }
+
+    // Hover states
+    &:hover::-webkit-slider-thumb {
+      background: var(--color-brand-background-hover);
+      box-shadow: var(--shadow8);
+    }
+
+    &:hover::-moz-range-thumb {
+      background: var(--color-brand-background-hover);
+      box-shadow: var(--shadow8);
+    }
+
+    // Active/pressed states
+    &:active::-webkit-slider-thumb {
+      background: var(--color-brand-background-pressed);
+      transform: scale(0.9);
+    }
+
+    &:active::-moz-range-thumb {
+      background: var(--color-brand-background-pressed);
+      transform: scale(0.9);
+    }
+
+    // Focus states
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible::-webkit-slider-thumb {
+      outline: 2px solid var(--color-brand-stroke1);
+      outline-offset: 2px;
+    }
+
+    &:focus-visible::-moz-range-thumb {
+      outline: 2px solid var(--color-brand-stroke1);
+      outline-offset: 2px;
+    }
+
+    // Dark theme overrides
+    .dark-theme & {
+      --slider-thumb-inner: var(--color-static-black);
+    }
+  }
+}

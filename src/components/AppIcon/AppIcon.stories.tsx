@@ -9,7 +9,7 @@ import appIconPlayFunction, {
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 
 export default {
-  title: 'Applications/AppIcon',
+  title: 'Components/AppIcon',
   component: AppIcon,
   parameters: {
     layout: 'centered',

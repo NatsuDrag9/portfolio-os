@@ -1,0 +1,142 @@
+import { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { useState } from 'react';
+import Slider, { SliderProps } from './Slider';
+import sliderPlayFunction, {
+  sliderVolumeIconPlayFunction,
+  sliderBrightnessIconPlayFunction,
+  sliderInteractionPlayFunction,
+  sliderZeroValuePlayFunction,
+  sliderMaxValuePlayFunction,
+} from './playFunctions';
+
+const SliderWithState = (args: SliderProps) => {
+  const [value, setValue] = useState(args.sliderValue);
+
+  const handleChange = (newValue: number) => {
+    setValue(newValue);
+    args.onSliderChange(newValue);
+  };
+
+  return <Slider {...args} sliderValue={value} onSliderChange={handleChange} />;
+};
+
+const meta: Meta<typeof Slider> = {
+  title: 'Components/Slider',
+  component: Slider,
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A reusable slider component designed for brightness and volume controls. Displays contextual icons based on the slider type and current value.',
+      },
+    },
+  },
+  argTypes: {
+    sliderFor: {
+      control: 'radio',
+      options: ['volume', 'brightness'],
+      description: 'Determines the slider type and associated icons',
+      table: {
+        type: { summary: "'volume' | 'brightness'" },
+        defaultValue: { summary: 'volume' },
+      },
+    },
+    sliderValue: {
+      control: { type: 'range', min: 0, max: 100, step: 1 },
+      description: 'Current value of the slider (0-100)',
+      table: {
+        type: { summary: 'number' },
+        defaultValue: { summary: '50' },
+      },
+    },
+    onSliderChange: {
+      action: 'sliderChanged',
+      description: 'Callback fired when slider value changes',
+      table: {
+        type: { summary: '(value: number) => void' },
+      },
+    },
+  },
+  args: {
+    onSliderChange: fn(),
+  },
+  render: (args) => <SliderWithState {...args} />,
+};
+
+export default meta;
+type Story = StoryObj<typeof Slider>;
+
+export const VolumeDefault: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 50,
+  },
+  play: sliderPlayFunction,
+};
+
+export const VolumeMuted: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 0,
+  },
+  play: sliderZeroValuePlayFunction,
+};
+
+export const VolumeMax: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 100,
+  },
+  play: sliderMaxValuePlayFunction,
+};
+
+export const BrightnessDefault: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 50,
+  },
+  play: sliderPlayFunction,
+};
+
+export const BrightnessLow: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 0,
+  },
+  play: sliderZeroValuePlayFunction,
+};
+
+export const BrightnessMax: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 100,
+  },
+  play: sliderMaxValuePlayFunction,
+};
+
+export const VolumeIconTest: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 75,
+  },
+  play: sliderVolumeIconPlayFunction,
+};
+
+export const BrightnessIconTest: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 75,
+  },
+  play: sliderBrightnessIconPlayFunction,
+};
+
+export const InteractionTest: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 50,
+  },
+  play: sliderInteractionPlayFunction,
+};
