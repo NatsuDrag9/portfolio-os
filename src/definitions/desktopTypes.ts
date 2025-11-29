@@ -56,3 +56,5 @@ export interface RightClickOption {
   // Whether this option is destructive (styled differently)
   destructive?: boolean;
 }
+
+export type SliderForType = 'volume' | 'brightness';

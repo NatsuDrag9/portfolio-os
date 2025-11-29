@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import { useState } from 'react';
 import Slider, { SliderProps } from './Slider';
+import { SliderForType } from '@definitions/desktopTypes';
 import sliderPlayFunction, {
   sliderVolumeIconPlayFunction,
   sliderBrightnessIconPlayFunction,
@@ -13,9 +14,9 @@ import sliderPlayFunction, {
 const SliderWithState = (args: SliderProps) => {
   const [value, setValue] = useState(args.sliderValue);
 
-  const handleChange = (newValue: number) => {
+  const handleChange = (newValue: number, sliderFor: SliderForType) => {
     setValue(newValue);
-    args.onSliderChange(newValue);
+    args.onSliderChange(newValue, sliderFor);
   };
 
   return <Slider {...args} sliderValue={value} onSliderChange={handleChange} />;
@@ -40,7 +41,7 @@ const meta: Meta<typeof Slider> = {
       options: ['volume', 'brightness'],
       description: 'Determines the slider type and associated icons',
       table: {
-        type: { summary: "'volume' | 'brightness'" },
+        type: { summary: 'SliderForType' },
         defaultValue: { summary: 'volume' },
       },
     },
@@ -54,9 +55,12 @@ const meta: Meta<typeof Slider> = {
     },
     onSliderChange: {
       action: 'sliderChanged',
-      description: 'Callback fired when slider value changes',
+      description:
+        'Callback fired when slider value changes. Receives the new value and slider type.',
       table: {
-        type: { summary: '(value: number) => void' },
+        type: {
+          summary: '(value: number, sliderFor: SliderForType) => void',
+        },
       },
     },
   },

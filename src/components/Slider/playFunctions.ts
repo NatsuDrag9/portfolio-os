@@ -16,6 +16,7 @@ const sliderPlayFunction = async ({
   // Verify label exists with correct htmlFor attribute
   const label = canvasElement.querySelector(`label[for="${args?.sliderFor}"]`);
   expect(label).toBeInTheDocument();
+  expect(label).toHaveClass('slider__label');
 
   // Verify slider has correct initial value
   expect(sliderInput).toHaveValue(String(args?.sliderValue));
@@ -27,6 +28,10 @@ const sliderPlayFunction = async ({
 
   // Verify slider has the correct class
   expect(sliderInput).toHaveClass('slider__range');
+
+  // Verify icon has correct class
+  const icon = label?.querySelector('.slider__fluent-icon');
+  expect(icon).toBeInTheDocument();
 };
 
 export const sliderVolumeIconPlayFunction = async ({
@@ -45,9 +50,10 @@ export const sliderVolumeIconPlayFunction = async ({
   // Check icon based on value
   const label = canvasElement.querySelector(`label[for="volume"]`);
   expect(label).toBeInTheDocument();
+  expect(label).toHaveClass('slider__label');
 
-  // Label should contain an SVG icon
-  const icon = label?.querySelector('svg');
+  // Label should contain an SVG icon with correct class
+  const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
 };
 
@@ -67,9 +73,10 @@ export const sliderBrightnessIconPlayFunction = async ({
   // Check icon based on value
   const label = canvasElement.querySelector(`label[for="brightness"]`);
   expect(label).toBeInTheDocument();
+  expect(label).toHaveClass('slider__label');
 
-  // Label should contain an SVG icon
-  const icon = label?.querySelector('svg');
+  // Label should contain an SVG icon with correct class
+  const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
 };
 
@@ -99,8 +106,8 @@ export const sliderInteractionPlayFunction = async ({
     expect(Number(sliderInput.value)).toBe(newValue);
   });
 
-  // Verify the spy was called
-  expect(args?.onSliderChange).toHaveBeenCalledWith(newValue);
+  // Verify the spy was called with value and sliderFor
+  expect(args?.onSliderChange).toHaveBeenCalledWith(newValue, args?.sliderFor);
 };
 
 export const sliderZeroValuePlayFunction = async ({
@@ -116,11 +123,11 @@ export const sliderZeroValuePlayFunction = async ({
   // Verify value is 0
   expect(sliderInput).toHaveValue('0');
 
-  // Verify label contains icon
+  // Verify label contains icon with correct class
   const label = canvasElement.querySelector(`label[for="${args?.sliderFor}"]`);
   expect(label).toBeInTheDocument();
 
-  const icon = label?.querySelector('svg');
+  const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
 };
 
@@ -137,11 +144,11 @@ export const sliderMaxValuePlayFunction = async ({
   // Verify value is 100
   expect(sliderInput).toHaveValue('100');
 
-  // Verify label contains icon
+  // Verify label contains icon with correct class
   const label = canvasElement.querySelector(`label[for="${args?.sliderFor}"]`);
   expect(label).toBeInTheDocument();
 
-  const icon = label?.querySelector('svg');
+  const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
 };
 

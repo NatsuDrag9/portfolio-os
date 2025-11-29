@@ -6,11 +6,12 @@ import {
 } from '@fluentui/react-icons';
 import './Slider.scss';
 import { ChangeEvent } from 'react';
+import { SliderForType } from '@definitions/desktopTypes';
 
 export interface SliderProps {
-  sliderFor: 'volume' | 'brightness';
+  sliderFor: SliderForType;
   sliderValue: number;
-  onSliderChange: (value: number) => void;
+  onSliderChange: (value: number, sliderFor: SliderForType) => void;
 }
 
 function Slider({ sliderFor, sliderValue, onSliderChange }: SliderProps) {
@@ -31,7 +32,7 @@ function Slider({ sliderFor, sliderValue, onSliderChange }: SliderProps) {
   };
 
   const handleSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onSliderChange(Number(event.target.value));
+    onSliderChange(Number(event.target.value), sliderFor);
   };
 
   return (
