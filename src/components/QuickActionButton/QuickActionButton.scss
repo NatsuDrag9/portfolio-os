@@ -1,0 +1,71 @@
+.qa-button {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xs);
+  align-items: center;
+
+  &__button {
+    @include disable-default-button-styles;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 7rem;
+    height: 5rem;
+    border-radius: var(--border-radius-medium);
+    background-color: var(--color-neutral-background3);
+    cursor: pointer;
+    transition:
+      background-color 0.1s ease,
+      box-shadow 0.1s ease;
+
+    &:hover {
+      background-color: var(--color-neutral-background4);
+    }
+
+    &:active {
+      background-color: var(--color-neutral-background5);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-brand-stroke1);
+      outline-offset: 2px;
+    }
+
+    // Active/clicked state (toggled on)
+    &--active {
+      background-color: var(--color-brand-background);
+
+      &:hover {
+        background-color: var(--color-brand-background-hover);
+      }
+
+      &:active {
+        background-color: var(--color-brand-background-pressed);
+      }
+    }
+  }
+
+  &__fluent-icon {
+    width: 1.8rem;
+    height: auto;
+    color: var(--color-neutral-foreground1);
+
+    &--default {
+      color: var(--color-neutral-foreground2);
+    }
+
+    // Icon color when button is active
+    .qa-button__button--active & {
+      color: var(--color-neutral-foreground-inverted);
+    }
+  }
+
+  &__name {
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base100);
+    font-weight: var(--font-weight-regular);
+    text-align: center;
+  }
+}
