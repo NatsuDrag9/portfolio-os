@@ -3,6 +3,17 @@ import Taskbar from './Taskbar';
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 import React from 'react';
 import { APP_REGISTRY } from '@constants/desktopConstants';
+import taskbarPlayFunction, {
+  taskbarBottomAlignedPlayFunction,
+  taskbarTopAlignedPlayFunction,
+  taskbarLeftAlignedPlayFunction,
+  taskbarRightAlignedPlayFunction,
+  taskbarSearchHiddenPlayFunction,
+  taskbarSearchInteractionPlayFunction,
+  taskbarStartButtonPlayFunction,
+  taskbarWithPinnedAppsPlayFunction,
+  taskbarQuickActionsPlayFunction,
+} from './playFunctions';
 
 const withStoreSetup = (
   systemUIState: Partial<ReturnType<typeof useSystemUIState.getState>>,
@@ -72,10 +83,12 @@ export const Default: Story = {
     withStoreSetup({
       taskbarAlignment: 'bottom',
       isSearchVisible: true,
+      showMoreIcons: true,
       volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarPlayFunction,
 };
 
 export const TopAligned: Story = {
@@ -83,10 +96,12 @@ export const TopAligned: Story = {
     withStoreSetup({
       taskbarAlignment: 'top',
       isSearchVisible: true,
+      showMoreIcons: true,
       volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarTopAlignedPlayFunction,
 };
 
 export const LeftAligned: Story = {
@@ -94,10 +109,12 @@ export const LeftAligned: Story = {
     withStoreSetup({
       taskbarAlignment: 'left',
       isSearchVisible: true,
+      showMoreIcons: true,
       volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarLeftAlignedPlayFunction,
 };
 
 export const RightAligned: Story = {
@@ -105,10 +122,12 @@ export const RightAligned: Story = {
     withStoreSetup({
       taskbarAlignment: 'right',
       isSearchVisible: true,
+      showMoreIcons: true,
       volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarRightAlignedPlayFunction,
 };
 
 export const SearchHidden: Story = {
@@ -116,10 +135,39 @@ export const SearchHidden: Story = {
     withStoreSetup({
       taskbarAlignment: 'bottom',
       isSearchVisible: false,
+      showMoreIcons: true,
       volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarSearchHiddenPlayFunction,
+};
+
+export const SearchInteraction: Story = {
+  decorators: [
+    withStoreSetup({
+      taskbarAlignment: 'bottom',
+      isSearchVisible: true,
+      showMoreIcons: true,
+      volumeLevel: 50,
+      brightnessLevel: 30,
+    }),
+  ],
+  play: taskbarSearchInteractionPlayFunction,
+};
+
+export const StartButtonInteraction: Story = {
+  decorators: [
+    withStoreSetup({
+      taskbarAlignment: 'bottom',
+      isSearchVisible: true,
+      showMoreIcons: true,
+      startMenuOpen: false,
+      volumeLevel: 50,
+      brightnessLevel: 30,
+    }),
+  ],
+  play: taskbarStartButtonPlayFunction,
 };
 
 export const WithPinnedApps: Story = {
@@ -128,6 +176,7 @@ export const WithPinnedApps: Story = {
       {
         taskbarAlignment: 'bottom',
         isSearchVisible: true,
+        showMoreIcons: true,
         volumeLevel: 50,
         brightnessLevel: 30,
       },
@@ -139,6 +188,7 @@ export const WithPinnedApps: Story = {
       }
     ),
   ],
+  play: taskbarWithPinnedAppsPlayFunction,
 };
 
 export const WithActiveWindows: Story = {
@@ -147,6 +197,7 @@ export const WithActiveWindows: Story = {
       {
         taskbarAlignment: 'bottom',
         isSearchVisible: true,
+        showMoreIcons: true,
         volumeLevel: 50,
         brightnessLevel: 30,
       },
@@ -173,24 +224,28 @@ export const WithActiveWindows: Story = {
   ],
 };
 
-export const VolumeMuted: Story = {
+export const QuickActionsPopup: Story = {
   decorators: [
     withStoreSetup({
       taskbarAlignment: 'bottom',
       isSearchVisible: true,
-      volumeLevel: 0,
+      showMoreIcons: true,
+      volumeLevel: 50,
       brightnessLevel: 30,
     }),
   ],
+  play: taskbarQuickActionsPlayFunction,
 };
 
-export const LowBrightness: Story = {
+export const BottomAligned: Story = {
   decorators: [
     withStoreSetup({
       taskbarAlignment: 'bottom',
       isSearchVisible: true,
+      showMoreIcons: true,
       volumeLevel: 50,
-      brightnessLevel: 10,
+      brightnessLevel: 30,
     }),
   ],
+  play: taskbarBottomAlignedPlayFunction,
 };

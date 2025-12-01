@@ -11,7 +11,6 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
 import { AppMetadata } from '@definitions/applicationTypes';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
-import { logInDev } from '@utils/logUtils';
 
 const formatTime = (date: Date): string => {
   return date.toLocaleTimeString('en-US', {
@@ -33,8 +32,13 @@ function Taskbar() {
   const [currentTime, setCurrentTime] = useState(() => formatTime(new Date()));
   const [currentDate, setCurrentDate] = useState(() => formatDate(new Date()));
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
-  const { taskbarAlignment, isSearchVisible, showMoreIcons } =
-    useSystemUIState();
+  const {
+    taskbarAlignment,
+    isSearchVisible,
+    showMoreIcons,
+    setStartMenuOpen,
+    startMenuOpen,
+  } = useSystemUIState();
   const {
     taskbarPinnedAppIds,
     addWindow,
@@ -120,7 +124,10 @@ function Taskbar() {
     setIsQuickActionsOpen(false);
   };
 
-  logInDev('Taskbar pinned apps: ', taskbarPinnedAppIds);
+  const handleStartMenuClick = () => {
+    // Toggle startMenuOpen state when windows-button is clicked
+    setStartMenuOpen(!startMenuOpen);
+  };
 
   return (
     <div
@@ -128,12 +135,18 @@ function Taskbar() {
       onContextMenu={handleRightClick}
     >
       {/* Windows icon for Start menu */}
-      <img
-        src={START_MENU_WINDOWS.desktopIcon} // Fallback when srcSet isn't supported
-        alt={START_MENU_WINDOWS.name}
-        srcSet={srcSet}
-        className="taskbar__windows"
-      />
+      <button
+        type="button"
+        className="taskbar__windows-button"
+        onClick={handleStartMenuClick}
+      >
+        <img
+          src={START_MENU_WINDOWS.desktopIcon} // Fallback when srcSet isn't supported
+          alt={START_MENU_WINDOWS.name}
+          srcSet={srcSet}
+          className="taskbar__windows-icon"
+        />
+      </button>
       {/* Search bar - hidden for vertical taskbar */}
       {isSearchVisible &&
         (taskbarAlignment === 'top' || taskbarAlignment === 'bottom') && (
@@ -153,8 +166,6 @@ function Taskbar() {
       {/* Taskbar apps container with pinned apps */}
       <div className={`taskbar__apps-container ${taskbarAlignment}`}>
         {taskbarPinnedAppIds.map((id) => {
-          logInDev('App id: ', id);
-
           return (
             <AppIcon
               appId={id}

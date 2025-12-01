@@ -66,13 +66,18 @@
   }
 
   // Windows 11 Start button
-  &__windows {
+  &__windows-button {
+    @include disable-default-button-styles;
+
     width: 4.2rem;
     height: 4.2rem;
     padding: var(--spacing-vertical-xs);
     border-radius: var(--border-radius-medium);
     object-fit: contain;
-    transition: background-color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      transform 0.2s ease;
+    transform: scale(1);
 
     &:hover {
       background-color: color-mix(
@@ -88,7 +93,13 @@
         var(--color-neutral-foreground1) 5%,
         transparent
       );
+      transform: scale(0.8);
     }
+  }
+
+  &__windows-icon {
+    width: 100%;
+    height: auto;
   }
 
   &__search-container {
