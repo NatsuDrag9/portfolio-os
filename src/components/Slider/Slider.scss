@@ -4,6 +4,14 @@
   gap: var(--spacing-horizontal-xs);
   align-items: center;
 
+  // Vertical alignment
+  &.vertical {
+    flex-direction: column-reverse;
+    gap: var(--spacing-vertical-xs);
+    width: fit-content;
+    height: 100%;
+  }
+
   &__label {
     display: flex;
     flex-direction: row;
@@ -127,6 +135,41 @@
     // Dark theme overrides
     .dark-theme & {
       --slider-thumb-inner: var(--color-static-black);
+    }
+
+    // Vertical alignment
+    &.vertical {
+      width: var(--slider-thumb-size);
+      height: 100%;
+      min-height: 12rem;
+      writing-mode: vertical-lr;
+      direction: rtl; // Makes slider go from bottom to top
+
+      // Track styles (WebKit) - vertical
+      &::-webkit-slider-runnable-track {
+        width: var(--slider-track-height);
+        height: 100%;
+      }
+
+      // Track styles (Firefox) - vertical
+      &::-moz-range-track {
+        width: var(--slider-track-height);
+        height: 100%;
+      }
+
+      // Filled portion of track (Firefox only) - vertical
+      &::-moz-range-progress {
+        width: var(--slider-track-height);
+        height: auto;
+      }
+
+      // Thumb styles (WebKit) - vertical
+      &::-webkit-slider-thumb {
+        margin-top: 0;
+        margin-left: calc(
+          (var(--slider-track-height) - var(--slider-thumb-size)) / 2
+        );
+      }
     }
   }
 }

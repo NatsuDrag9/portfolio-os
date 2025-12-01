@@ -12,9 +12,15 @@ export interface SliderProps {
   sliderFor: SliderForType;
   sliderValue: number;
   onSliderChange: (value: number, sliderFor: SliderForType) => void;
+  alignment?: 'horizontal' | 'vertical';
 }
 
-function Slider({ sliderFor, sliderValue, onSliderChange }: SliderProps) {
+function Slider({
+  sliderFor,
+  sliderValue,
+  onSliderChange,
+  alignment = 'horizontal',
+}: SliderProps) {
   const getIcon = () => {
     if (sliderFor === 'volume') {
       return sliderValue === 0 ? (
@@ -36,15 +42,15 @@ function Slider({ sliderFor, sliderValue, onSliderChange }: SliderProps) {
   };
 
   return (
-    <div className="slider">
-      <label htmlFor={sliderFor} className="slider__label">
+    <div className={`slider ${alignment}`}>
+      <label htmlFor={sliderFor} className={`slider__label ${alignment}`}>
         {getIcon()}
       </label>
       <input
         type="range"
         name={sliderFor}
         id={sliderFor}
-        className="slider__range"
+        className={`slider__range ${alignment}`}
         min={0}
         max={100}
         value={sliderValue}

@@ -53,6 +53,15 @@ const meta: Meta<typeof Slider> = {
         defaultValue: { summary: '50' },
       },
     },
+    alignment: {
+      control: 'radio',
+      options: ['horizontal', 'vertical'],
+      description: 'Orientation of the slider',
+      table: {
+        type: { summary: "'horizontal' | 'vertical'" },
+        defaultValue: { summary: 'horizontal' },
+      },
+    },
     onSliderChange: {
       action: 'sliderChanged',
       description:
@@ -143,4 +152,84 @@ export const InteractionTest: Story = {
     sliderValue: 50,
   },
   play: sliderInteractionPlayFunction,
+};
+
+// Vertical alignment stories
+export const VolumeVertical: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 50,
+    alignment: 'vertical',
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        story:
+          'Volume slider in vertical orientation for use in side-aligned taskbars.',
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ height: '20rem', display: 'flex', alignItems: 'center' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const BrightnessVertical: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 50,
+    alignment: 'vertical',
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        story:
+          'Brightness slider in vertical orientation for use in side-aligned taskbars.',
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ height: '20rem', display: 'flex', alignItems: 'center' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const VerticalSliders: Story = {
+  args: {
+    sliderFor: 'volume',
+    sliderValue: 50,
+    alignment: 'vertical',
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        story:
+          'Both sliders in vertical orientation, demonstrating the layout for vertical taskbar quick actions.',
+      },
+    },
+  },
+  render: (args) => (
+    <div
+      style={{
+        height: '20rem',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '2rem',
+        alignItems: 'center',
+      }}
+    >
+      <SliderWithState {...args} sliderFor="brightness" />
+      <SliderWithState {...args} sliderFor="volume" />
+    </div>
+  ),
 };
