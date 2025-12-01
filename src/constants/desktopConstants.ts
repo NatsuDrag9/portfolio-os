@@ -1,10 +1,17 @@
+import { QuickActionButtonProps } from '@components/QuickActionButton/QuickActionButton';
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
-import { RightClickOption } from '@definitions/desktopTypes';
+import { QuickActionsType, RightClickOption } from '@definitions/desktopTypes';
 import {
   PinRegular,
   PinOffRegular,
   DismissRegular,
   WrenchRegular,
+  WeatherMoonRegular,
+  WeatherSunnyRegular,
+  AirplaneRegular,
+  AirplaneFilled,
+  SettingsRegular,
+  SettingsFilled,
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
@@ -50,7 +57,6 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'github',
     appName: 'Github',
-    mobileIcon: '/apps/github-48.png',
     desktopIcon: '/apps/github-60.png',
     defaultPinned: true,
     windowName: 'GithubApp',
@@ -139,4 +145,34 @@ export const RIGHT_CLICK_OPTIONS: Record<AppIconVariant, RightClickOption[]> = {
       showWhen: 'pinned',
     },
   ],
+};
+
+export const QUICK_ACTION_BUTTONS: Record<
+  QuickActionsType,
+  QuickActionButtonProps
+> = {
+  'night-light': {
+    actionType: 'night-light',
+    components: {
+      default: WeatherMoonRegular,
+      clicked: WeatherSunnyRegular,
+    },
+    name: 'Night Light',
+  },
+  airplane: {
+    actionType: 'airplane',
+    name: 'Airplane mode',
+    components: {
+      default: AirplaneRegular,
+      clicked: AirplaneFilled,
+    },
+  },
+  settings: {
+    actionType: 'settings',
+    name: 'Settings',
+    components: {
+      default: SettingsRegular,
+      clicked: SettingsFilled,
+    },
+  },
 };

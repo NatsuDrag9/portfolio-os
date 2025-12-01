@@ -138,7 +138,7 @@ function AppIcon({
   // Build button class - add modifiers for taskbar states
   const getTaskbarModifiers = () => {
     if (iconVariant !== 'taskbar') return '';
-    const classes = [];
+    const classes = ['app-icon--taskbar'];
     if (hasMultipleWindows) classes.push('app-icon--multiple-windows');
     if (isThisAppFocused) classes.push('app-icon--taskbar-focused');
     return classes.join(' ');

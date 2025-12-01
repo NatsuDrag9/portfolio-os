@@ -12,6 +12,8 @@ beforeEach(() => {
     showMoreIcons: true,
     volumeLevel: 50,
     currentTheme: 'light',
+    brightnessLevel: 30,
+    selectedQuickAction: undefined,
   });
 });
 
@@ -27,6 +29,8 @@ describe('useSystemUIState', () => {
       expect(state.showMoreIcons).toBe(true);
       expect(state.volumeLevel).toBe(50);
       expect(state.currentTheme).toBe('light');
+      expect(state.brightnessLevel).toBe(30);
+      expect(state.selectedQuickAction).toBeUndefined();
     });
   });
 
@@ -214,6 +218,47 @@ describe('useSystemUIState', () => {
     });
   });
 
+  describe('Brightness Level', () => {
+    it('should set brightness to specific value', () => {
+      const { setBrightnessLevel } = useSystemUIState.getState();
+      setBrightnessLevel(75);
+
+      const state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(75);
+    });
+
+    it('should handle brightness at boundary: 0', () => {
+      const { setBrightnessLevel } = useSystemUIState.getState();
+      setBrightnessLevel(0);
+
+      const state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(0);
+    });
+
+    it('should handle brightness at boundary: 100', () => {
+      const { setBrightnessLevel } = useSystemUIState.getState();
+      setBrightnessLevel(100);
+
+      const state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(100);
+    });
+
+    it('should support incremental brightness changes', () => {
+      const { setBrightnessLevel } = useSystemUIState.getState();
+      setBrightnessLevel(30);
+      let state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(30);
+
+      setBrightnessLevel(state.brightnessLevel + 20);
+      state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(50);
+
+      setBrightnessLevel(state.brightnessLevel - 10);
+      state = useSystemUIState.getState();
+      expect(state.brightnessLevel).toBe(40);
+    });
+  });
+
   describe('Theme', () => {
     it('should set theme to dark', () => {
       const { setTheme } = useSystemUIState.getState();
@@ -249,19 +294,79 @@ describe('useSystemUIState', () => {
     });
   });
 
+  describe('Quick Actions', () => {
+    it('should set selected quick action to night-light', () => {
+      const { setSelectedQuickAction } = useSystemUIState.getState();
+      setSelectedQuickAction('night-light');
+
+      const state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('night-light');
+    });
+
+    it('should set selected quick action to airplane', () => {
+      const { setSelectedQuickAction } = useSystemUIState.getState();
+      setSelectedQuickAction('airplane');
+
+      const state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('airplane');
+    });
+
+    it('should set selected quick action to settings', () => {
+      const { setSelectedQuickAction } = useSystemUIState.getState();
+      setSelectedQuickAction('settings');
+
+      const state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('settings');
+    });
+
+    it('should clear selected quick action', () => {
+      const { setSelectedQuickAction } = useSystemUIState.getState();
+      setSelectedQuickAction('night-light');
+      setSelectedQuickAction(undefined);
+
+      const state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBeUndefined();
+    });
+
+    it('should switch between quick actions', () => {
+      const { setSelectedQuickAction } = useSystemUIState.getState();
+
+      setSelectedQuickAction('night-light');
+      let state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('night-light');
+
+      setSelectedQuickAction('airplane');
+      state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('airplane');
+
+      setSelectedQuickAction('settings');
+      state = useSystemUIState.getState();
+      expect(state.selectedQuickAction).toBe('settings');
+    });
+  });
+
   describe('Multiple State Changes', () => {
     it('should handle multiple independent state updates', () => {
-      const { updateTaskbarAlignment, setVolumeLevel, setTheme } =
-        useSystemUIState.getState();
+      const {
+        updateTaskbarAlignment,
+        setVolumeLevel,
+        setTheme,
+        setBrightnessLevel,
+        setSelectedQuickAction,
+      } = useSystemUIState.getState();
 
       updateTaskbarAlignment('left');
       setVolumeLevel(80);
       setTheme('dark');
+      setBrightnessLevel(60);
+      setSelectedQuickAction('night-light');
 
       const state = useSystemUIState.getState();
       expect(state.taskbarAlignment).toBe('left');
       expect(state.volumeLevel).toBe(80);
       expect(state.currentTheme).toBe('dark');
+      expect(state.brightnessLevel).toBe(60);
+      expect(state.selectedQuickAction).toBe('night-light');
     });
 
     it('should maintain unmodified state properties', () => {
@@ -270,12 +375,16 @@ describe('useSystemUIState', () => {
       const stateBefore = useSystemUIState.getState();
       const originalSearchVisibility = stateBefore.isSearchVisible;
       const originalStartMenuLayout = stateBefore.startMenuLayout;
+      const originalBrightnessLevel = stateBefore.brightnessLevel;
+      const originalSelectedQuickAction = stateBefore.selectedQuickAction;
 
       setTheme('dark');
 
       const stateAfter = useSystemUIState.getState();
       expect(stateAfter.isSearchVisible).toBe(originalSearchVisibility);
       expect(stateAfter.startMenuLayout).toBe(originalStartMenuLayout);
+      expect(stateAfter.brightnessLevel).toBe(originalBrightnessLevel);
+      expect(stateAfter.selectedQuickAction).toBe(originalSelectedQuickAction);
     });
   });
 });

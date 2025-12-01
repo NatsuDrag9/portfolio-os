@@ -1,0 +1,77 @@
+.taskbar {
+  &__qa-popup {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-m);
+    width: clamp(28rem, 90vw, 36rem);
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+    box-shadow: var(--shadow16);
+
+    @include acrylic-material-light(80%);
+
+    .dark-theme & {
+      box-shadow: var(--shadow28);
+    }
+
+    &.taskbar-bottom {
+      right: 0;
+      bottom: calc(100% + var(--spacing-vertical-s));
+    }
+
+    &.taskbar-top {
+      top: calc(100% + var(--spacing-vertical-s));
+      right: 0;
+    }
+
+    &.taskbar-left {
+      bottom: var(--spacing-vertical-m);
+      left: calc(100% + var(--spacing-horizontal-s));
+      flex-direction: row;
+      gap: var(--spacing-vertical-xl);
+      width: clamp(10rem, 90vw, 17rem);
+      height: clamp(20rem, 90vh, 25rem);
+    }
+
+    &.taskbar-right {
+      right: calc(100% + var(--spacing-horizontal-s));
+      bottom: var(--spacing-vertical-m);
+      flex-direction: row;
+      gap: var(--spacing-vertical-xl);
+      width: clamp(10rem, 90vw, 17rem);
+      height: clamp(20rem, 90vh, 25rem);
+    }
+  }
+
+  &__qa-buttons {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--spacing-horizontal-s);
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+
+    &.taskbar-left,
+    &.taskbar-right {
+      flex: 1;
+      flex-direction: column;
+
+      gap: var(--spacing-vertical-s);
+    }
+  }
+
+  &__qa-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-m);
+    width: 100%;
+
+    &.taskbar-left,
+    &.taskbar-right {
+      flex: 1;
+      flex-direction: row;
+      gap: var(--spacing-horizontal-m);
+    }
+  }
+}

@@ -94,6 +94,19 @@
     }
   }
 
+  // Taskbar variant - compact sizing for taskbar
+  &--taskbar {
+    gap: 0;
+    width: 4.4rem;
+    height: 4.4rem;
+    padding: var(--spacing-horizontal-xs);
+  }
+
+  &--taskbar &__image {
+    width: clamp(3rem, 4vw, 3.8rem);
+    height: clamp(3rem, 4vw, 3.8rem);
+  }
+
   // Square shape (Windows 11 default - slightly rounded)
   &.square &__image {
     border-radius: var(--border-radius-medium);
@@ -264,6 +277,17 @@
     &__name {
       font-size: var(--font-size-base200);
     }
+
+    // Taskbar variant - compact sizing for taskbar
+    &--taskbar {
+      width: 4.3rem;
+      height: 4.3rem;
+    }
+
+    &--taskbar &__image {
+      width: clamp(3rem, 4vw, 3.8rem);
+      height: clamp(3rem, 4vw, 3.8rem);
+    }
   }
 }
 
@@ -279,6 +303,17 @@
 
     &__name {
       font-size: var(--font-size-base100);
+    }
+
+    // Taskbar variant - compact sizing for taskbar
+    &--taskbar {
+      width: 4.3rem;
+      height: 4.3rem;
+    }
+
+    &--taskbar &__image {
+      width: clamp(3rem, 4vw, 3.8rem);
+      height: clamp(3rem, 4vw, 3.8rem);
     }
   }
 }
@@ -297,6 +332,17 @@
     &__name {
       font-size: var(--font-size-base100);
       -webkit-line-clamp: 1;
+    }
+
+    // Taskbar variant - compact sizing for taskbar
+    &--taskbar {
+      width: 4.3rem;
+      height: 4.3rem;
+    }
+
+    &--taskbar &__image {
+      width: clamp(3rem, 4vw, 3.8rem);
+      height: clamp(3rem, 4vw, 3.8rem);
     }
   }
 }

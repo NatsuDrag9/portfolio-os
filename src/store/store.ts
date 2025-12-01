@@ -10,6 +10,7 @@ import { create } from 'zustand';
 import { getOperationsArray } from './helperFunctions';
 import {
   CustomTheme,
+  QuickActionsType,
   SnapPositionType,
   StartMenuLayoutType,
   TaskbarAlignmentType,
@@ -52,6 +53,8 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   showMoreIcons: true,
   volumeLevel: 50,
   currentTheme: 'light',
+  selectedQuickAction: undefined,
+  brightnessLevel: 30,
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => {
     set({ taskbarAlignment: alignment });
@@ -76,6 +79,12 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   },
   setTheme: (theme: ThemeType) => {
     set({ currentTheme: theme });
+  },
+  setSelectedQuickAction: (action: QuickActionsType | undefined) => {
+    set({ selectedQuickAction: action });
+  },
+  setBrightnessLevel: (value: number) => {
+    set({ brightnessLevel: value });
   },
 }));
 

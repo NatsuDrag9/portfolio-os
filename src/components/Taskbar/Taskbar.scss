@@ -1,0 +1,324 @@
+.taskbar {
+  @include acrylic-material-light(80%);
+
+  position: absolute;
+  display: flex;
+  gap: var(--spacing-horizontal-s);
+  align-items: center;
+  padding: var(--spacing-vertical-s) var(--spacing-horizontal-m);
+  transition:
+    top 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease,
+    left 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease,
+    flex-direction 0.3s ease;
+
+  // Bottom alignment (default)
+  &.bottom {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 5rem;
+    border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+  }
+
+  // Top alignment
+  &.top {
+    top: 0;
+    right: 0;
+    left: 0;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 5rem;
+    border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+  }
+
+  // Left alignment
+  &.left {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 7rem;
+    height: 100%;
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-xs);
+    border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
+  }
+
+  // Right alignment
+  &.right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 7rem;
+    height: 100%;
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-xs);
+    border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
+  }
+
+  // Windows 11 Start button
+  &__windows {
+    width: 4.2rem;
+    height: 4.2rem;
+    padding: var(--spacing-vertical-xs);
+    border-radius: var(--border-radius-medium);
+    object-fit: contain;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 8%,
+        transparent
+      );
+    }
+
+    &:active {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 5%,
+        transparent
+      );
+    }
+  }
+
+  &__search-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+
+    .search-icon {
+      position: absolute;
+      left: var(--spacing-horizontal-s);
+      pointer-events: none;
+
+      .dark-theme & {
+        color: var(--color-neutral-foreground4);
+      }
+    }
+
+    &:focus-within .search-icon {
+      color: var(--color-brand-stroke1);
+    }
+  }
+
+  &__search {
+    width: clamp(16rem, 20vw, 24rem);
+    height: 100%;
+    padding: 0 var(--spacing-horizontal-s);
+    padding-left: var(--spacing-horizontal-xxxl);
+    border: 1px solid var(--color-neutral-stroke1);
+    border-radius: var(--border-radius-circular);
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-background1) 80%,
+      transparent
+    );
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-regular);
+    box-shadow: var(--shadow4);
+
+    &::placeholder {
+      color: var(--color-neutral-foreground3);
+    }
+
+    &:focus {
+      // border-bottom: 2px solid var(--color-neutral-stroke1);
+
+      outline: none;
+    }
+
+    .dark-theme & {
+      border-color: var(--color-neutral-stroke1);
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-background3) 60%,
+        transparent
+      );
+
+      &::placeholder {
+        color: var(--color-neutral-foreground4);
+      }
+
+      &:focus {
+        border-bottom-color: var(--color-brand-stroke1);
+      }
+    }
+  }
+
+  &__apps-container {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-xs);
+    align-items: center;
+    height: 100%;
+
+    &.left,
+    &.right {
+      flex: 1;
+      flex-direction: column;
+      gap: var(--spacing-vertical-s);
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  // Right side container for static apps and date-time
+  &__right-section {
+    position: absolute;
+    right: var(--spacing-horizontal-m);
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-xs);
+    align-items: center;
+    height: 85%;
+
+    &.left,
+    &.right {
+      position: static;
+      flex-direction: column;
+      gap: var(--spacing-vertical-xs);
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__static-apps {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-s);
+    align-items: center;
+    width: fit-content;
+    height: 100%;
+    padding: var(--spacing-vertical-xxs) var(--spacing-horizontal-s);
+    border-radius: var(--border-radius-medium);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 10%,
+        transparent
+      );
+    }
+
+    &:active {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 5%,
+        transparent
+      );
+    }
+
+    &.left,
+    &.right {
+      flex-direction: column;
+      gap: var(--spacing-vertical-xs);
+      width: 100%;
+      height: auto;
+      padding: var(--spacing-vertical-xs);
+    }
+  }
+
+  &__text {
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__fluent-icon {
+    width: 1.6rem;
+    height: auto;
+    color: var(--color-neutral-foreground1);
+  }
+
+  &__date-time {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    width: fit-content;
+    height: 100%;
+    padding: var(--spacing-vertical-xs) var(--spacing-horizontal-s);
+    border-radius: var(--border-radius-medium);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 10%,
+        transparent
+      );
+    }
+
+    &.left,
+    &.right {
+      align-items: center;
+      width: 100%;
+      height: auto;
+      padding: var(--spacing-vertical-xs);
+    }
+  }
+
+  &__time,
+  &__date {
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base100);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: $breakpoint-tablet-portrait) and (max-width: $breakpoint-tablet-landscape) {
+  .taskbar {
+    &.bottom {
+      justify-content: start;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .taskbar {
+    gap: var(--spacing-horizontal-xs);
+    padding: var(--spacing-vertical-xxs) var(--spacing-horizontal-xs);
+
+    &.bottom {
+      justify-content: start;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .taskbar {
+    &__windows {
+      width: 3.8rem;
+      height: 3.8rem;
+    }
+
+    &__search {
+      width: clamp(16rem, 55vw, 24rem);
+      height: 70%;
+    }
+
+    &__fluent-icon {
+      width: 1.4rem;
+    }
+
+    &__apps-container,
+    &__static-apps {
+      display: none;
+    }
+  }
+}

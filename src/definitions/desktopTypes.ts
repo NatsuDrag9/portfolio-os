@@ -56,5 +56,5 @@ export interface RightClickOption {
   // Whether this option is destructive (styled differently)
   destructive?: boolean;
 }
-
+export type QuickActionsType = 'night-light' | 'airplane' | 'settings';
 export type SliderForType = 'volume' | 'brightness';

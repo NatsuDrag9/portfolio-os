@@ -1,6 +1,7 @@
 import { AppMetadata, WindowData } from './applicationTypes';
 import {
   CustomTheme,
+  QuickActionsType,
   SnapPositionType,
   StartMenuLayoutType,
   TaskbarAlignmentType,
@@ -67,6 +68,8 @@ export interface SystemUIState {
   showMoreIcons: boolean; // Whether to show system icons (wifi, sound, etc) on taskbar
   volumeLevel: number; // Global system volume level (0-100)
   currentTheme: ThemeType;
+  selectedQuickAction?: QuickActionsType; // Perform task based on selected quick action
+  brightnessLevel: number; // Global brightness level
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => void;
   setIsSearchVisible: (isVisible: boolean) => void;
@@ -76,4 +79,6 @@ export interface SystemUIState {
   setShowMoreIcons: (show: boolean) => void;
   setVolumeLevel: (value: number) => void;
   setTheme: (theme: ThemeType) => void;
+  setSelectedQuickAction: (action: QuickActionsType | undefined) => void;
+  setBrightnessLevel: (value: number) => void;
 }
