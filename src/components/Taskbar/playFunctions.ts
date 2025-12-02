@@ -1,13 +1,11 @@
 import { expect, userEvent, within } from '@storybook/test';
 import { waitFor } from '@testing-library/dom';
-import { StoryContext } from '@storybook/react';
+
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useSystemUIState } from '@store/store';
+import { PlayFunctionType } from '@definitions/storybookTypes';
 
-// Taskbar uses Zustand store, so play functions use StoryContext directly
-type TaskbarPlayContext = Pick<StoryContext, 'canvasElement'>;
-
-const taskbarPlayFunction = async ({ canvasElement }: TaskbarPlayContext) => {
+const taskbarPlayFunction = async ({ canvasElement }: PlayFunctionType) => {
   const canvas = within(canvasElement);
 
   // Verify taskbar container exists
@@ -60,7 +58,7 @@ const taskbarPlayFunction = async ({ canvasElement }: TaskbarPlayContext) => {
 
 export const taskbarBottomAlignedPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
   expect(taskbar).toHaveClass('bottom');
@@ -81,7 +79,7 @@ export const taskbarBottomAlignedPlayFunction = async ({
 
 export const taskbarTopAlignedPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
   expect(taskbar).toHaveClass('top');
@@ -102,7 +100,7 @@ export const taskbarTopAlignedPlayFunction = async ({
 
 export const taskbarLeftAlignedPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
   expect(taskbar).toHaveClass('left');
@@ -127,7 +125,7 @@ export const taskbarLeftAlignedPlayFunction = async ({
 
 export const taskbarRightAlignedPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
   expect(taskbar).toHaveClass('right');
@@ -148,7 +146,7 @@ export const taskbarRightAlignedPlayFunction = async ({
 
 export const taskbarSearchHiddenPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
 
@@ -172,7 +170,7 @@ export const taskbarSearchHiddenPlayFunction = async ({
 
 export const taskbarSearchInteractionPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const canvas = within(canvasElement);
 
   // Verify search input exists
@@ -201,7 +199,7 @@ export const taskbarSearchInteractionPlayFunction = async ({
 
 export const taskbarStartButtonPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const canvas = within(canvasElement);
 
   // Verify Windows button exists
@@ -232,7 +230,7 @@ export const taskbarStartButtonPlayFunction = async ({
 
 export const taskbarWithPinnedAppsPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
 
@@ -249,7 +247,7 @@ export const taskbarWithPinnedAppsPlayFunction = async ({
 
 export const taskbarQuickActionsPlayFunction = async ({
   canvasElement,
-}: TaskbarPlayContext) => {
+}: PlayFunctionType) => {
   const taskbar = canvasElement.querySelector('.taskbar');
   expect(taskbar).toBeInTheDocument();
 
