@@ -7,12 +7,13 @@
   align-items: center;
   width: fit-content;
   min-width: 4rem;
-  height: 3.7rem;
+  height: 3rem;
   padding: var(--spacing-vertical-xs) var(--spacing-horizontal-m);
   border: 1px solid var(--color-neutral-stroke2);
   border-radius: var(--border-radius-medium);
   background-color: var(--color-neutral-background1);
-  box-shadow: var(--shadow2);
+
+  // box-shadow: var(--shadow2);
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,

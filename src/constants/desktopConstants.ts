@@ -12,6 +12,11 @@ import {
   AirplaneFilled,
   SettingsRegular,
   SettingsFilled,
+  HomePersonRegular,
+  ContactCardRegular,
+  LaptopPersonRegular,
+  HatGraduationSparkleRegular,
+  SlideLayoutRegular,
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
@@ -61,6 +66,49 @@ export const APP_REGISTRY: AppMetadata[] = [
     defaultPinned: true,
     windowName: 'GithubApp',
   },
+  // Default apps (portfolio pages)
+  {
+    id: 'about-me',
+    appName: 'About Me',
+    desktopIcon: HomePersonRegular,
+    defaultPinned: false,
+    windowName: 'AboutMeApp',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'contact-me',
+    appName: 'Contact Me',
+    desktopIcon: ContactCardRegular,
+    defaultPinned: false,
+    windowName: 'ContactMeApp',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'projects',
+    appName: 'Projects',
+    desktopIcon: LaptopPersonRegular,
+    defaultPinned: false,
+    windowName: 'ProjectsApp',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'skills',
+    appName: 'Skills',
+    desktopIcon: HatGraduationSparkleRegular,
+    defaultPinned: false,
+    windowName: 'SkillsApp',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'portfolio',
+    appName: 'Portfolio',
+    desktopIcon: SlideLayoutRegular,
+    defaultPinned: false,
+    windowName: 'PortfolioApp',
+    startMenuAppCategory: 'default',
+  },
+  // To Do: Recommended apps - github, vscode, browser, command prompt, notepad
+  // To Do: More apps - calculator, music player, calendar, settings
 ];
 
 export const START_MENU_WINDOWS = {

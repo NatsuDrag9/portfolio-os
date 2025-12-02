@@ -1,15 +1,19 @@
+import { ComponentType } from 'react';
 import { CustomTheme, SnapPositionType } from './desktopTypes';
 
 export interface AppMetadata {
   id: string;
   appName: string; // Display name used by Taskbar, Start Menu, Desktop Icons (for labels) and Window's Title Bar
-  desktopIcon: string;
-  mobileIcon?: string;
+  desktopIcon: string | ComponentType<{ className: string }>;
+  mobileIcon?: string | ComponentType<{ className: string }>;
   defaultPinned: boolean; // Static configuration: Should this app be pinned by default?
   windowName: string; // Component reference used to dynamically lookup and render the corresponding component (e.g., 'FileExplorerApp')
+  startMenuAppCategory?: StartMenuAppCategory;
 }
 
 export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu';
+
+export type StartMenuAppCategory = 'recommended' | 'default' | 'all';
 
 export interface WindowData {
   id: string | null; // Unique identifier for the Window Instance (e.g., browser)
