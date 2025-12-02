@@ -2,7 +2,13 @@ import { useAuth, useBootStatus, useSystemUIState } from '@store/store';
 import '@styles/main.scss';
 import { logInDev } from '@utils/logUtils';
 import { useEffect } from 'react';
-import { BootScreen, Desktop, LoginScreen, PowerOffScreen } from './screens';
+import {
+  BootScreen,
+  Desktop,
+  LoginScreen,
+  PowerOffScreen,
+  ShutdownScreen,
+} from './screens';
 
 function App() {
   const { bootStatus } = useBootStatus();
@@ -37,6 +43,10 @@ function App() {
 
     if (bootStatus === 'DISPLAY_LOGIN_SCREEN') {
       return <LoginScreen />;
+    }
+
+    if (bootStatus === 'DISPLAY_SHUTDOWN_SCREEN') {
+      return <ShutdownScreen />;
     }
 
     return <BootScreen />;

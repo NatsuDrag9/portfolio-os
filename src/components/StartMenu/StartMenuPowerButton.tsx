@@ -20,8 +20,7 @@ function StartMenuPowerButton() {
   };
 
   const handlePowerOffClick = () => {
-    // NOTE: Should display the "DISPLAY_SHUTDOWN_SCREEN" before transitioning to "OFF" screen - <PowerButton /> in screens/. Need to implement this
-    updateBootStatus('OFF');
+    updateBootStatus('DISPLAY_SHUTDOWN_SCREEN');
   };
 
   return (
