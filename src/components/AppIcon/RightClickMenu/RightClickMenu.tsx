@@ -92,13 +92,29 @@ function RightClickMenu({
               }}
             >
               <span className="rc-menu__item-icon">
-                {option.iconSource?.type === 'app-registry' && appMetaData && (
-                  <img
-                    src={appMetaData.mobileIcon || appMetaData.desktopIcon}
-                    alt=""
-                    className="rc-menu__item-app-icon"
-                  />
-                )}
+                {option.iconSource?.type === 'app-registry' &&
+                  appMetaData &&
+                  (() => {
+                    // Fluent UI icons are React.memo wrapped, so typeof is 'object', not 'function'
+                    const isFluentIcon =
+                      typeof appMetaData.desktopIcon !== 'string';
+                    if (isFluentIcon) {
+                      const AppFluentIcon = appMetaData.desktopIcon;
+                      return (
+                        <AppFluentIcon className="rc-menu__item-app-icon" />
+                      );
+                    }
+                    return (
+                      <img
+                        src={
+                          (appMetaData.mobileIcon as string | undefined) ||
+                          (appMetaData.desktopIcon as string)
+                        }
+                        alt=""
+                        className="rc-menu__item-app-icon"
+                      />
+                    );
+                  })()}
                 {IconComponent && (
                   <IconComponent className="rc-menu__item-fluent-icon" />
                 )}

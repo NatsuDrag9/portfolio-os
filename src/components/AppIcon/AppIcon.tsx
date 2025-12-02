@@ -122,10 +122,19 @@ function AppIcon({
     setShowContextMenu(false);
   };
 
-  // Build srcSet: use mobileIcon if available, otherwise use desktopIcon
-  const srcSet = appMetaData?.mobileIcon
-    ? `${appMetaData.mobileIcon} 1x, ${appMetaData.desktopIcon} 2x`
-    : appMetaData?.desktopIcon;
+  // Check if icon is a component (Fluent UI) or string (image path)
+  // Fluent UI icons are React.memo wrapped, so typeof is 'object', not 'function'
+  const isFluentIcon =
+    appMetaData && typeof appMetaData.desktopIcon !== 'string';
+  const FluentIconComponent = isFluentIcon ? appMetaData.desktopIcon : null;
+
+  // Build srcSet: use mobileIcon if available, otherwise use desktopIcon (only for string icons)
+  const srcSet =
+    !isFluentIcon && appMetaData?.mobileIcon
+      ? `${appMetaData.mobileIcon} 1x, ${appMetaData.desktopIcon} 2x`
+      : !isFluentIcon
+        ? (appMetaData?.desktopIcon as string)
+        : undefined;
 
   // Build dot class for taskbar indicator
   const getDotModifier = () => {
@@ -172,12 +181,16 @@ function AppIcon({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <img
-        srcSet={srcSet}
-        src={appMetaData.desktopIcon} // Fallback when srcSet isn't supported like in old browsers
-        className="app-icon__image"
-        alt={appMetaData.appName}
-      />
+      {FluentIconComponent ? (
+        <FluentIconComponent className="app-icon__image app-icon__image--fluent" />
+      ) : (
+        <img
+          srcSet={srcSet}
+          src={appMetaData.desktopIcon as string}
+          className="app-icon__image"
+          alt={appMetaData.appName}
+        />
+      )}
       {iconVariant !== 'taskbar' && (
         <span className="app-icon__name">{appMetaData.appName}</span>
       )}
