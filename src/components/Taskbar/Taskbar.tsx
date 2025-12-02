@@ -1,6 +1,6 @@
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 import './Taskbar.scss';
-import { APP_REGISTRY, START_MENU_WINDOWS } from '@constants/desktopConstants';
+import { START_MENU_WINDOWS } from '@constants/desktopConstants';
 import {
   Battery0Filled,
   Search12Filled,
@@ -9,8 +9,8 @@ import {
 } from '@fluentui/react-icons';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
-import { AppMetadata } from '@definitions/applicationTypes';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
+import { useWindowManager } from '@hooks/useWindowManager';
 
 const formatTime = (date: Date): string => {
   return date.toLocaleTimeString('en-US', {
@@ -39,14 +39,8 @@ function Taskbar() {
     setStartMenuOpen,
     startMenuOpen,
   } = useSystemUIState();
-  const {
-    taskbarPinnedAppIds,
-    addWindow,
-    removeWindow,
-    activeWindows,
-    updateWindowZIndex,
-    setWindowIsMaximized,
-  } = useWorkspaceState();
+  const { taskbarPinnedAppIds } = useWorkspaceState();
+  const { launchWindow, focusWindow, closeWindow } = useWindowManager();
 
   // Update time every minute
   useEffect(() => {
@@ -79,37 +73,6 @@ function Taskbar() {
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-
-  // Launch/add window handler
-  const handleWindowLaunch = useCallback(
-    (appId: string) => {
-      const appMetaData = APP_REGISTRY.find(
-        (app) => app.id === appId
-      ) as AppMetadata;
-      if (appMetaData) {
-        addWindow(appId, appMetaData);
-      }
-    },
-    [addWindow]
-  );
-
-  // Focus window handler - bring to front
-  const handleWindowFocus = useCallback(
-    (windowId: string) => {
-      const maxZIndex = Math.max(...activeWindows.map((w) => w.zIndex), 0);
-      updateWindowZIndex(windowId, maxZIndex + 1);
-      setWindowIsMaximized(windowId, true);
-    },
-    [activeWindows, updateWindowZIndex, setWindowIsMaximized]
-  );
-
-  // Close window handler
-  const handleWindowClose = useCallback(
-    (windowId: string) => {
-      removeWindow(windowId);
-    },
-    [removeWindow]
-  );
 
   // Right click handler (placeholder for future context menu)
   const handleRightClick = useCallback(() => {
@@ -171,9 +134,9 @@ function Taskbar() {
               appId={id}
               iconVariant="taskbar"
               key={id}
-              onSingleClick={handleWindowLaunch}
-              onWindowFocus={handleWindowFocus}
-              onWindowClose={handleWindowClose}
+              onSingleClick={launchWindow}
+              onWindowFocus={focusWindow}
+              onWindowClose={closeWindow}
             />
           );
         })}
