@@ -68,7 +68,7 @@ The taskbar supports multiple alignment positions:
   },
   decorators: [
     (Story) => (
-      <div style={{ height: '100vh', position: 'relative' }}>
+      <div style={{ height: '100vh', position: 'relative', width: '100vw' }}>
         <Story />
       </div>
     ),

@@ -256,7 +256,6 @@
 // Desktop XL (1400px+) - Larger icons for high-res displays
 @media (min-width: $breakpoint-desktop-xl) {
   .app-icon {
-    width: 9rem;
     padding: var(--spacing-horizontal-m);
 
     &__image {
@@ -271,6 +270,14 @@
 
     &__name {
       font-size: var(--font-size-base200);
+    }
+
+    // Taskbar variant - compact sizing for taskbar
+    &--taskbar {
+      gap: 0;
+      width: 4.4rem;
+      height: 4.4rem;
+      padding: var(--spacing-horizontal-xs);
     }
   }
 }
