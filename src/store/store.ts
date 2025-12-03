@@ -36,7 +36,7 @@ export const useBootStatus = create<BootStatusState>((set) => ({
 export const useAuth = create<AuthState>((set) => ({
   username: null, // Powered OFF
   isAdmin: false,
-  updateAuthState: (newUsername: string) => {
+  updateAuthState: (newUsername: string | null) => {
     set({
       username: newUsername,
       isAdmin: newUsername === ADMIN,

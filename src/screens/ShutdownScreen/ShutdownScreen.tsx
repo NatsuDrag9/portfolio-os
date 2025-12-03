@@ -1,4 +1,4 @@
-import { useBootStatus } from '@store/store';
+import { useAuth, useBootStatus } from '@store/store';
 import './ShutdownScreen.scss';
 import { useEffect } from 'react';
 
@@ -6,6 +6,7 @@ const OPERATION_DURATION = 1500; // milliseconds per operation
 
 function ShutdownScreen() {
   const { allOperations, updateBootStatus } = useBootStatus();
+  const { updateAuthState } = useAuth();
 
   useEffect(() => {
     if (allOperations.length === 0) return;
@@ -14,12 +15,14 @@ function ShutdownScreen() {
     const totalDuration = allOperations.length * OPERATION_DURATION;
 
     const timer = setTimeout(() => {
+      // Logout the user
+      updateAuthState(null);
       // All operations displayed, transition to OFF screen
       updateBootStatus('OFF');
     }, totalDuration);
 
     return () => clearTimeout(timer);
-  }, [allOperations, updateBootStatus]);
+  }, [allOperations, updateAuthState, updateBootStatus]);
 
   // Calculate progress (0 to 100)
   const progress =

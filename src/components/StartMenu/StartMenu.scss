@@ -269,6 +269,11 @@
     width: 4.8rem;
     height: 4.8rem;
     color: var(--color-brand-foreground1);
+
+    &.image {
+      border-radius: 50%;
+      object-fit: cover;
+    }
   }
 
   &__user-details {

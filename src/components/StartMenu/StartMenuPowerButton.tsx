@@ -1,5 +1,5 @@
 import { PowerRegular } from '@fluentui/react-icons';
-import { useBootStatus } from '@store/store';
+import { useAuth, useBootStatus } from '@store/store';
 import { RefObject, useRef, useState } from 'react';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
 
@@ -7,6 +7,7 @@ function StartMenuPowerButton() {
   const startMenuPowerOffRef = useRef<HTMLDivElement>(null);
   const [showPopup, setShowPopup] = useState(false);
   const { updateBootStatus } = useBootStatus();
+  const { updateAuthState } = useAuth();
 
   // Close power options popup when clicking outside
   useClickOutsideModal(
@@ -16,6 +17,8 @@ function StartMenuPowerButton() {
   );
 
   const handleSignoutClick = () => {
+    // Logout the user
+    updateAuthState(null);
     updateBootStatus('DISPLAY_LOGIN_SCREEN');
   };
 
