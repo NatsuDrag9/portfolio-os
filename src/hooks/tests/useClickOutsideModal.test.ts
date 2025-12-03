@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import useClickOutsideModal from '../useClickOutsideModal';
+import React from 'react';
 
 describe('useClickOutsideModal', () => {
   let containerElement: HTMLDivElement;
@@ -383,6 +384,236 @@ describe('useClickOutsideModal', () => {
       document.dispatchEvent(clickEvent);
 
       expect(onCloseMock).toHaveBeenCalled();
+    });
+  });
+
+  describe('Ignore refs behavior', () => {
+    it('should not call onClose when clicking on an element in ignoreRefs', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement = document.createElement('div');
+      ignoreElement.id = 'ignore-element';
+      document.body.appendChild(ignoreElement);
+      const ignoreRef = { current: ignoreElement };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [ignoreRef])
+      );
+
+      // Simulate click on ignore element
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: ignoreElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).not.toHaveBeenCalled();
+    });
+
+    it('should call onClose when clicking outside both container and ignoreRefs', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement = document.createElement('div');
+      ignoreElement.id = 'ignore-element';
+      document.body.appendChild(ignoreElement);
+      const ignoreRef = { current: ignoreElement };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [ignoreRef])
+      );
+
+      // Simulate click outside both container and ignoreRef
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: externalElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle multiple ignoreRefs elements', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement1 = document.createElement('div');
+      ignoreElement1.id = 'ignore-element-1';
+      const ignoreElement2 = document.createElement('div');
+      ignoreElement2.id = 'ignore-element-2';
+      document.body.appendChild(ignoreElement1);
+      document.body.appendChild(ignoreElement2);
+      const ignoreRef1 = { current: ignoreElement1 };
+      const ignoreRef2 = { current: ignoreElement2 };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [
+          ignoreRef1,
+          ignoreRef2,
+        ])
+      );
+
+      // Click on first ignore element
+      const clickEvent1 = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent1, 'target', {
+        value: ignoreElement1,
+        enumerable: true,
+      });
+      document.dispatchEvent(clickEvent1);
+
+      // Click on second ignore element
+      const clickEvent2 = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent2, 'target', {
+        value: ignoreElement2,
+        enumerable: true,
+      });
+      document.dispatchEvent(clickEvent2);
+
+      expect(onCloseMock).not.toHaveBeenCalled();
+    });
+
+    it('should not call onClose when clicking on child of ignoreRef', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement = document.createElement('div');
+      ignoreElement.id = 'ignore-element';
+      const ignoreChild = document.createElement('button');
+      ignoreChild.id = 'ignore-child';
+      ignoreElement.appendChild(ignoreChild);
+      document.body.appendChild(ignoreElement);
+      const ignoreRef = { current: ignoreElement };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [ignoreRef])
+      );
+
+      // Simulate click on child of ignore element
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: ignoreChild,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).not.toHaveBeenCalled();
+    });
+
+    it('should work correctly when ignoreRefs is undefined', () => {
+      const containerRef = { current: containerElement };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, undefined)
+      );
+
+      // Click outside
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: externalElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle ignoreRef with null current value', () => {
+      const containerRef = { current: containerElement };
+      const ignoreRef = { current: null };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [
+          ignoreRef as unknown as React.RefObject<HTMLElement>,
+        ])
+      );
+
+      // Click outside
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: externalElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should prioritize ignoreRefs over container clicks', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement = document.createElement('div');
+      ignoreElement.id = 'ignore-element';
+      containerElement.appendChild(ignoreElement);
+      const ignoreRef = { current: ignoreElement };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [ignoreRef])
+      );
+
+      // Click on element that's both inside container and in ignoreRefs
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: ignoreElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      // Should not close because ignoreRefs takes precedence
+      expect(onCloseMock).not.toHaveBeenCalled();
+    });
+
+    it('should handle mixed ignoreRefs - some valid, some null', () => {
+      const containerRef = { current: containerElement };
+      const ignoreElement = document.createElement('div');
+      ignoreElement.id = 'ignore-element';
+      document.body.appendChild(ignoreElement);
+      const validIgnoreRef = { current: ignoreElement };
+      const nullIgnoreRef = { current: null };
+
+      renderHook(() =>
+        useClickOutsideModal(true, onCloseMock, containerRef, [
+          validIgnoreRef,
+          nullIgnoreRef as unknown as React.RefObject<HTMLElement>,
+        ])
+      );
+
+      // Click on valid ignore element
+      const clickEvent = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      });
+      Object.defineProperty(clickEvent, 'target', {
+        value: ignoreElement,
+        enumerable: true,
+      });
+
+      document.dispatchEvent(clickEvent);
+
+      expect(onCloseMock).not.toHaveBeenCalled();
     });
   });
 });

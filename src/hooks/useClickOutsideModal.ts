@@ -3,14 +3,22 @@ import { RefObject, useEffect } from 'react';
 function useClickOutsideModal(
   isOpen: boolean,
   onClose: () => void,
-  containerRef: RefObject<HTMLElement> | null
+  containerRef: RefObject<HTMLElement> | null,
+  ignoreRefs?: RefObject<HTMLElement>[]
 ): void {
   const handleClickOutside = (event: MouseEvent) => {
     if (containerRef === null) return;
 
+    // Check if click is inside an element matching the ignore selector
+    const target = event.target as Node;
+
+    if (ignoreRefs?.some((ref) => ref.current?.contains(target))) {
+      return;
+    }
+
     if (
       containerRef.current &&
-      !containerRef.current.contains(event.target as Node)
+      !containerRef.current.contains(target as Node)
     ) {
       onClose();
     }

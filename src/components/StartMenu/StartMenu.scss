@@ -13,15 +13,23 @@
   @include acrylic-material-light(85%);
 
   box-shadow: var(--shadow28);
-  transform: translateX(-50%);
 
-  // Open/close animations
+  // Initial hidden state
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.25s ease-out,
+    visibility 0.25s ease-out;
+  transform: translateX(-50%) translateY(2rem);
+
+  // Open state
   &.open {
-    animation: slide-up 0.25s ease-out forwards;
-  }
-
-  &.close {
-    animation: slide-down 0.2s ease-in forwards;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
   }
 
   // Panel carousel container
@@ -267,6 +275,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-vertical-xxs);
+    align-items: start;
   }
 
   &__user-details-title {
@@ -346,30 +355,5 @@
     width: 2.4rem;
     height: 2.4rem;
     color: var(--color-neutral-foreground3);
-  }
-}
-
-// Keyframe animations
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(2rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-@keyframes slide-down {
-  from {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(2rem);
   }
 }

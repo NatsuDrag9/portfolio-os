@@ -1,3 +1,5 @@
 .desktop {
   @include screen-layout;
+
+  position: relative;
 }

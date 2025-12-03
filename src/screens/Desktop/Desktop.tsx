@@ -1,5 +1,6 @@
 import { useAuth } from '@store/store';
 import './Desktop.scss';
+import { StartMenu, Taskbar } from '@components/index';
 
 function Desktop() {
   const { username } = useAuth();
@@ -7,6 +8,8 @@ function Desktop() {
   return (
     <div className="desktop">
       <h4 className="desktop__title"> Hello, {username}</h4>
+      <StartMenu />
+      <Taskbar />
     </div>
   );
 }

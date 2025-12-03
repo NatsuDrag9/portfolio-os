@@ -7,7 +7,7 @@ import {
   Speaker0Regular,
   Wifi1Regular,
 } from '@fluentui/react-icons';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
 import { useWindowManager } from '@hooks/useWindowManager';
@@ -66,6 +66,20 @@ function Taskbar() {
     return () => clearTimeout(initialTimeout);
   }, []);
 
+  // Global Windows key handler
+  useEffect(() => {
+    const handleWindowsKeyPress = (event: KeyboardEvent) => {
+      // Windows/Meta key press
+      if (event.key === 'Meta') {
+        event.preventDefault();
+        setStartMenuOpen(!setStartMenuOpen);
+      }
+    };
+
+    window.addEventListener('keydown', handleWindowsKeyPress);
+    return () => window.removeEventListener('keydown', handleWindowsKeyPress);
+  }, [setStartMenuOpen]);
+
   const srcSet = START_MENU_WINDOWS.mobileIcon
     ? `${START_MENU_WINDOWS.mobileIcon} 1x, ${START_MENU_WINDOWS.desktopIcon} 2x`
     : START_MENU_WINDOWS.desktopIcon;
@@ -87,8 +101,10 @@ function Taskbar() {
     setIsQuickActionsOpen(false);
   };
 
-  const handleStartMenuClick = () => {
+  const handleStartMenuClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     // Toggle startMenuOpen state when windows-button is clicked
+    // Prevent the click from bubbling to useClickOutsideModal
+    e.preventDefault();
     setStartMenuOpen(!startMenuOpen);
   };
 
@@ -102,6 +118,8 @@ function Taskbar() {
         type="button"
         className="taskbar__windows-button"
         onClick={handleStartMenuClick}
+        data-start-menu-trigger
+        aria-label="Start menu"
       >
         <img
           src={START_MENU_WINDOWS.desktopIcon} // Fallback when srcSet isn't supported
