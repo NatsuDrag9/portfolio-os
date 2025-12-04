@@ -1,0 +1,118 @@
+.window-container {
+  // Note: position, size, and visibility are controlled by react-rnd inline styles
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--border-radius-large);
+  background-color: var(--color-neutral-background1);
+  box-shadow: var(--shadow16);
+
+  // Maximized state - fullscreen minus taskbar
+  // Using !important to override react-rnd inline styles
+  &--maximized {
+    // stylelint-disable-next-line declaration-no-important
+    width: 100%;
+    // stylelint-disable-next-line declaration-no-important
+    height: calc(100% - 5.5rem);
+    border-radius: 0;
+    // stylelint-disable-next-line declaration-no-important
+    transform: translate(0, 0);
+  }
+
+  &__top {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+    padding: 0 0 0 var(--spacing-horizontal-m);
+    background-color: var(--color-neutral-background5);
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 100%;
+    margin: 0;
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base200);
+  }
+
+  &__window-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    height: 100%;
+  }
+
+  &__fluent-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+    color: var(--color-neutral-foreground2);
+    transition: color 0.1s ease;
+  }
+
+  &__button {
+    @include disable-default-button-styles;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 100%;
+    transition: background-color 0.1s ease;
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-background3) 90%,
+        black
+      );
+    }
+
+    &:active {
+      background-color: var(--color-neutral-background5);
+    }
+
+    // Close button has special red styling
+    &.close {
+      &:hover {
+        background-color: var(--color-palette-red-background3);
+
+        .window-container__fluent-icon {
+          color: var(--color-static-white);
+        }
+      }
+
+      &:active {
+        background-color: color-mix(
+          in srgb,
+          var(--color-palette-red-background3) 80%,
+          black
+        );
+
+        .window-container__fluent-icon {
+          color: var(--color-static-white);
+        }
+      }
+    }
+  }
+
+  &__paint {
+    flex: 1;
+    width: 100%;
+    min-height: 0; // Allows flex child to shrink properly
+    overflow-y: hidden;
+  }
+}

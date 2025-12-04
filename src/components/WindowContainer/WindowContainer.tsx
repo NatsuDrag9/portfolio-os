@@ -1,0 +1,123 @@
+import { ReactNode, useMemo } from 'react';
+import './WindowContainer.scss';
+import { useWorkspaceState } from '@store/store';
+import { WindowDisplayType } from '@definitions/applicationTypes';
+import {
+  DismissRegular,
+  SquareMultipleRegular,
+  SubtractRegular,
+} from '@fluentui/react-icons';
+import { Rnd } from 'react-rnd';
+
+export interface WindowContainerProps {
+  children: ReactNode;
+  windowId: string;
+}
+
+function WindowContainer({ children, windowId }: WindowContainerProps) {
+  const {
+    activeWindows,
+    setWindowIsMaximized,
+    removeWindow,
+    updateWindowPosition,
+    updateWindowSize,
+  } = useWorkspaceState();
+
+  const windowData = useMemo(
+    () => activeWindows.find((w) => w.id === windowId),
+    [activeWindows, windowId]
+  );
+
+  const handleWindowDisplayClick = (displayType: WindowDisplayType) => {
+    if (displayType === 'maximized') {
+      const newState =
+        windowData?.isMaximized === 'maximized' ? 'normal' : 'maximized';
+      setWindowIsMaximized(windowId, newState);
+      return;
+    }
+    // For minimized and normal
+    setWindowIsMaximized(windowId, displayType);
+  };
+
+  const handleCloseClick = () => {
+    removeWindow(windowId);
+  };
+
+  const isMaximized = windowData?.isMaximized === 'maximized';
+  const isMinimized = windowData?.isMaximized === 'minimized';
+
+  // Default position centered in viewport
+  const defaultX = windowData?.position?.x ?? 50;
+  const defaultY = windowData?.position?.y ?? 50;
+  const defaultWidth = windowData?.size?.width ?? 450;
+  const defaultHeight = windowData?.size?.height ?? 300;
+
+  // Taskbar height in pixels (5.5rem = 55px at 10px base)
+  const TASKBAR_HEIGHT = 55;
+
+  return (
+    <Rnd
+      position={{
+        x: isMaximized ? 0 : defaultX,
+        y: isMaximized ? 0 : defaultY,
+      }}
+      size={{
+        width: isMaximized ? '100%' : defaultWidth,
+        height: isMaximized
+          ? `calc(100% - ${TASKBAR_HEIGHT}px)`
+          : defaultHeight,
+      }}
+      onDragStop={(_e, d) => {
+        updateWindowPosition(windowId, d.x, d.y);
+      }}
+      onResizeStop={(_e, _direction, ref, _delta, position) => {
+        updateWindowSize(windowId, ref.offsetWidth, ref.offsetHeight);
+        updateWindowPosition(windowId, position.x, position.y);
+      }}
+      disableDragging={isMaximized}
+      enableResizing={!isMaximized}
+      enableUserSelectHack={false}
+      dragHandleClassName="window-container__top"
+      className={`window-container window-container--${windowData?.isMaximized}`}
+      style={{
+        zIndex: windowData?.zIndex,
+        visibility: isMinimized ? 'hidden' : 'visible',
+        // For maximized, override react-rnd's inline height with CSS
+        ...(isMaximized && { height: `calc(100% - ${TASKBAR_HEIGHT}px)` }),
+      }}
+    >
+      <div className="window-container__top">
+        <h5 className="window-container__title">
+          {windowData?.title ?? 'Untitled'}
+        </h5>
+        <div className="window-container__window-buttons">
+          <button
+            type="button"
+            className="window-container__button minimize"
+            onClick={() => handleWindowDisplayClick('minimized')}
+          >
+            <SubtractRegular className="window-container__fluent-icon" />
+          </button>
+          <button
+            type="button"
+            className="window-container__button maximize"
+            onClick={() => handleWindowDisplayClick('maximized')}
+          >
+            <SquareMultipleRegular className="window-container__fluent-icon" />
+          </button>
+          <button
+            type="button"
+            className="window-container__button close"
+            onClick={handleCloseClick}
+          >
+            <DismissRegular className="window-container__fluent-icon" />
+          </button>
+        </div>
+      </div>
+
+      <div className="window-container__paint">{children}</div>
+    </Rnd>
+  );
+}
+
+export default WindowContainer;
