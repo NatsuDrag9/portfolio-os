@@ -112,6 +112,7 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
         title: appMetadata.appName,
         windowName: appMetadata.windowName,
         isMaximized: 'normal',
+        previousDisplayState: 'normal',
         position: { x: 100, y: 100 },
         zIndex: state.activeWindows.length + 1,
         size: { width: 45, height: 35 },
@@ -162,9 +163,20 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
 
   setWindowIsMaximized: (windowId: string, isMaximized: WindowDisplayType) => {
     set((state) => ({
-      activeWindows: state.activeWindows.map((w) =>
-        w.id === windowId ? { ...w, isMaximized } : w
-      ),
+      activeWindows: state.activeWindows.map((w) => {
+        if (w.id !== windowId) return w;
+
+        // When minimizing, save current state (if not already minimized)
+        if (isMaximized === 'minimized' && w.isMaximized !== 'minimized') {
+          return {
+            ...w,
+            isMaximized,
+            previousDisplayState: w.isMaximized,
+          };
+        }
+
+        return { ...w, isMaximized };
+      }),
     }));
   },
 

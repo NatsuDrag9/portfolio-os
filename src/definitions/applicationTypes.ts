@@ -22,6 +22,7 @@ export interface WindowData {
   title: string | null; // Title displayed on window's title bar
   windowName: string | null; // Identifies specific React component to render inside the window frame (e.g., 'BrowserApp', 'Notepad')
   isMaximized: WindowDisplayType;
+  previousDisplayState: Exclude<WindowDisplayType, 'minimized'>; // State before minimizing (for restore)
   position: { x: number; y: number } | undefined; // x,y co-ordinates
   zIndex: number; // For stacking
   size: { width: number; height: number }; // Width of the window and height of the window

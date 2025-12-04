@@ -20,9 +20,24 @@ describe('useWindowManager', () => {
     updateWindowZIndex: mockUpdateWindowZIndex,
     setWindowIsMaximized: mockSetWindowIsMaximized,
     activeWindows: [
-      { id: 'window1', zIndex: 1 },
-      { id: 'window2', zIndex: 2 },
-      { id: 'window3', zIndex: 3 },
+      {
+        id: 'window1',
+        zIndex: 1,
+        isMaximized: 'normal',
+        previousDisplayState: 'normal',
+      },
+      {
+        id: 'window2',
+        zIndex: 2,
+        isMaximized: 'normal',
+        previousDisplayState: 'normal',
+      },
+      {
+        id: 'window3',
+        zIndex: 3,
+        isMaximized: 'normal',
+        previousDisplayState: 'normal',
+      },
     ],
   };
 
@@ -83,7 +98,7 @@ describe('useWindowManager', () => {
   });
 
   describe('focusWindow', () => {
-    it('should update z-index to max + 1', () => {
+    it('should update z-index to max + 1 for existing window', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
@@ -93,14 +108,75 @@ describe('useWindowManager', () => {
       expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('window1', 4);
     });
 
-    it('should set window as maximized', () => {
+    it('should not call setWindowIsMaximized for non-minimized window', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
         result.current.focusWindow('window1');
       });
 
-      expect(mockSetWindowIsMaximized).toHaveBeenCalledWith('window1', true);
+      expect(mockSetWindowIsMaximized).not.toHaveBeenCalled();
+    });
+
+    it('should restore minimized window to previous state', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'window1',
+            zIndex: 1,
+            isMaximized: 'minimized',
+            previousDisplayState: 'maximized',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.focusWindow('window1');
+      });
+
+      expect(mockSetWindowIsMaximized).toHaveBeenCalledWith(
+        'window1',
+        'maximized'
+      );
+    });
+
+    it('should restore minimized window to normal state', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'window1',
+            zIndex: 1,
+            isMaximized: 'minimized',
+            previousDisplayState: 'normal',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.focusWindow('window1');
+      });
+
+      expect(mockSetWindowIsMaximized).toHaveBeenCalledWith(
+        'window1',
+        'normal'
+      );
+    });
+
+    it('should do nothing for non-existent window', () => {
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.focusWindow('nonexistent-window');
+      });
+
+      expect(mockUpdateWindowZIndex).not.toHaveBeenCalled();
+      expect(mockSetWindowIsMaximized).not.toHaveBeenCalled();
     });
 
     it('should handle focus when activeWindows is empty', () => {
@@ -115,22 +191,30 @@ describe('useWindowManager', () => {
         result.current.focusWindow('newWindow');
       });
 
-      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('newWindow', 1);
+      // Window doesn't exist, so nothing should happen
+      expect(mockUpdateWindowZIndex).not.toHaveBeenCalled();
     });
 
     it('should calculate correct z-index with single window', () => {
       vi.mocked(useWorkspaceState).mockReturnValue({
         ...mockWorkspaceState,
-        activeWindows: [{ id: 'window1', zIndex: 5 }],
+        activeWindows: [
+          {
+            id: 'window1',
+            zIndex: 5,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+        ],
       });
 
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.focusWindow('window2');
+        result.current.focusWindow('window1');
       });
 
-      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('window2', 6);
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('window1', 6);
     });
 
     it('should focus the same window multiple times', () => {
@@ -142,7 +226,6 @@ describe('useWindowManager', () => {
       });
 
       expect(mockUpdateWindowZIndex).toHaveBeenCalledTimes(2);
-      expect(mockSetWindowIsMaximized).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -174,13 +257,136 @@ describe('useWindowManager', () => {
     });
   });
 
+  describe('restoreOrFocusApp', () => {
+    it('should launch new window when no windows exist for app', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.restoreOrFocusApp('file-explorer');
+      });
+
+      expect(mockAddWindow).toHaveBeenCalledOnce();
+    });
+
+    it('should focus single window when one window exists for app', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'file-explorer-1',
+            zIndex: 1,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.restoreOrFocusApp('file-explorer');
+      });
+
+      expect(mockAddWindow).not.toHaveBeenCalled();
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('file-explorer-1', 2);
+    });
+
+    it('should restore minimized single window', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'file-explorer-1',
+            zIndex: 1,
+            isMaximized: 'minimized',
+            previousDisplayState: 'maximized',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.restoreOrFocusApp('file-explorer');
+      });
+
+      expect(mockSetWindowIsMaximized).toHaveBeenCalledWith(
+        'file-explorer-1',
+        'maximized'
+      );
+    });
+
+    it('should do nothing when multiple windows exist (popup handles it)', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'file-explorer-1',
+            zIndex: 1,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+          {
+            id: 'file-explorer-2',
+            zIndex: 2,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.restoreOrFocusApp('file-explorer');
+      });
+
+      expect(mockAddWindow).not.toHaveBeenCalled();
+      expect(mockUpdateWindowZIndex).not.toHaveBeenCalled();
+    });
+
+    it('should only focus windows belonging to the specified app', () => {
+      vi.mocked(useWorkspaceState).mockReturnValue({
+        ...mockWorkspaceState,
+        activeWindows: [
+          {
+            id: 'vscode-1',
+            zIndex: 1,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+          {
+            id: 'file-explorer-1',
+            zIndex: 2,
+            isMaximized: 'normal',
+            previousDisplayState: 'normal',
+          },
+        ],
+      });
+
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.restoreOrFocusApp('file-explorer');
+      });
+
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('file-explorer-1', 3);
+    });
+  });
+
   describe('hook integration', () => {
-    it('should return all three functions', () => {
+    it('should return all four functions', () => {
       const { result } = renderHook(() => useWindowManager());
 
       expect(result.current).toHaveProperty('launchWindow');
       expect(result.current).toHaveProperty('focusWindow');
       expect(result.current).toHaveProperty('closeWindow');
+      expect(result.current).toHaveProperty('restoreOrFocusApp');
     });
 
     it('should return functions that are memoized (same reference across renders)', () => {
@@ -190,6 +396,7 @@ describe('useWindowManager', () => {
         launchWindow: launch1,
         focusWindow: focus1,
         closeWindow: close1,
+        restoreOrFocusApp: restore1,
       } = result.current;
 
       rerender();
@@ -198,11 +405,13 @@ describe('useWindowManager', () => {
         launchWindow: launch2,
         focusWindow: focus2,
         closeWindow: close2,
+        restoreOrFocusApp: restore2,
       } = result.current;
 
       expect(launch1).toBe(launch2);
       expect(focus1).toBe(focus2);
       expect(close1).toBe(close2);
+      expect(restore1).toBe(restore2);
     });
 
     it('should handle mixed operations in sequence', () => {
@@ -231,10 +440,8 @@ describe('useWindowManager', () => {
         });
       }).not.toThrow();
 
-      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith(
-        'nonexistent-window',
-        4
-      );
+      // focusWindow returns early for non-existent windows
+      expect(mockUpdateWindowZIndex).not.toHaveBeenCalled();
     });
 
     it('should not crash when closing a non-existent window', () => {

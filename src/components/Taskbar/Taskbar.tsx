@@ -40,7 +40,7 @@ function Taskbar() {
     startMenuOpen,
   } = useSystemUIState();
   const { taskbarPinnedAppIds } = useWorkspaceState();
-  const { launchWindow, focusWindow, closeWindow } = useWindowManager();
+  const { focusWindow, closeWindow, restoreOrFocusApp } = useWindowManager();
 
   // Update time every minute
   useEffect(() => {
@@ -152,7 +152,7 @@ function Taskbar() {
               appId={id}
               iconVariant="taskbar"
               key={id}
-              onSingleClick={launchWindow}
+              onSingleClick={restoreOrFocusApp}
               onWindowFocus={focusWindow}
               onWindowClose={closeWindow}
             />
