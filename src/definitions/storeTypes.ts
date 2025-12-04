@@ -1,4 +1,4 @@
-import { AppMetadata, WindowData } from './applicationTypes';
+import { AppMetadata, WindowData, WindowDisplayType } from './applicationTypes';
 import {
   CustomTheme,
   QuickActionsType,
@@ -40,7 +40,10 @@ export interface WorkspaceState {
 
   // Window property updates (all at WorkspaceState level)
   setWindowTitle: (windowId: string, title: string) => void;
-  setWindowIsMaximized: (windowId: string, isMaximized: boolean) => void;
+  setWindowIsMaximized: (
+    windowId: string,
+    isMaximized: WindowDisplayType
+  ) => void;
   updateWindowPosition: (windowId: string, x: number, y: number) => void;
   updateWindowZIndex: (windowId: string, zIndex: number) => void;
   updateWindowSize: (windowId: string, width: number, height: number) => void;

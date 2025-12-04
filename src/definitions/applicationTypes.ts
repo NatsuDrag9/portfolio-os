@@ -15,11 +15,13 @@ export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu';
 
 export type StartMenuAppCategory = 'recommended' | 'default' | 'all';
 
+export type WindowDisplayType = 'minimized' | 'maximized' | 'normal';
+
 export interface WindowData {
   id: string | null; // Unique identifier for the Window Instance (e.g., browser)
   title: string | null; // Title displayed on window's title bar
   windowName: string | null; // Identifies specific React component to render inside the window frame (e.g., 'BrowserApp', 'Notepad')
-  isMaximized: boolean;
+  isMaximized: WindowDisplayType;
   position: { x: number; y: number } | undefined; // x,y co-ordinates
   zIndex: number; // For stacking
   size: { width: number; height: number }; // Width of the window and height of the window

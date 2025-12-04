@@ -17,7 +17,11 @@ import {
   ThemeType,
 } from '@definitions/desktopTypes';
 import { DefaultWallpaper } from '@assets/images/specifics';
-import { AppMetadata } from '@definitions/applicationTypes';
+import {
+  AppMetadata,
+  WindowData,
+  WindowDisplayType,
+} from '@definitions/applicationTypes';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
@@ -103,16 +107,16 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
       const windowId = `${appId}-${instanceCount}`;
 
       // Create new window data
-      const newWindow = {
+      const newWindow: WindowData = {
         id: windowId,
         title: appMetadata.appName,
         windowName: appMetadata.windowName,
-        isMaximized: false,
+        isMaximized: 'normal',
         position: { x: 100, y: 100 },
         zIndex: state.activeWindows.length + 1,
         size: { width: 45, height: 35 },
         customTheme: undefined,
-        snapPosition: 'fullscreen' as SnapPositionType,
+        snapPosition: 'fullscreen',
       };
 
       return {
@@ -156,7 +160,7 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
     }));
   },
 
-  setWindowIsMaximized: (windowId: string, isMaximized: boolean) => {
+  setWindowIsMaximized: (windowId: string, isMaximized: WindowDisplayType) => {
     set((state) => ({
       activeWindows: state.activeWindows.map((w) =>
         w.id === windowId ? { ...w, isMaximized } : w

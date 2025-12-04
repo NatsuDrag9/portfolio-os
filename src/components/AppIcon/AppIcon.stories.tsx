@@ -357,7 +357,7 @@ export const TaskbarWithFocusedWindow: Story = {
       const lastWindow = state.activeWindows[state.activeWindows.length - 1];
       if (lastWindow.id) {
         updateWindowZIndex(lastWindow.id, 9999); // Set highest zIndex
-        setWindowIsMaximized(lastWindow.id, true); // Set isMaximized
+        setWindowIsMaximized(lastWindow.id, 'normal'); // Set isMaximized
       }
 
       return <Story />;
@@ -438,7 +438,7 @@ export const TaskbarWithMultipleWindows: Story = {
       const lastWindow = state.activeWindows[state.activeWindows.length - 1];
       if (lastWindow.id) {
         updateWindowZIndex(lastWindow.id, 9999);
-        setWindowIsMaximized(lastWindow.id, true); // Set isMaximized
+        setWindowIsMaximized(lastWindow.id, 'normal'); // Set isMaximized
       }
 
       return <Story />;

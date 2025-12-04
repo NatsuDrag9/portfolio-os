@@ -255,7 +255,7 @@ describe('useWorkspaceState', () => {
       expect(window.id).toBe('browser-1');
       expect(window.title).toBe('Chrome');
       expect(window.windowName).toBe('ChromeApp');
-      expect(window.isMaximized).toBe(false);
+      expect(window.isMaximized).toBe('normal');
       expect(window.position).toStrictEqual({ x: 100, y: 100 });
       expect(window.size).toStrictEqual({ width: 45, height: 35 });
       expect(window.customTheme).toBeUndefined();
@@ -408,10 +408,10 @@ describe('useWorkspaceState', () => {
       const appMetadata = createMockAppMetadata();
 
       addWindow('vscode', appMetadata);
-      setWindowIsMaximized('vscode-1', true);
+      setWindowIsMaximized('vscode-1', 'normal');
 
       const state = useWorkspaceState.getState();
-      expect(state.activeWindows[0].isMaximized).toBe(true);
+      expect(state.activeWindows[0].isMaximized).toBe('normal');
     });
 
     it('should update window position', () => {
@@ -573,7 +573,7 @@ describe('useWorkspaceState', () => {
       addWindow('app', appMetadata);
 
       setWindowTitle('app-1', 'My App');
-      setWindowIsMaximized('app-1', true);
+      setWindowIsMaximized('app-1', 'normal');
       updateWindowPosition('app-1', 100, 100);
       updateWindowSize('app-1', 80, 70);
       updateWindowZIndex('app-1', 10);
@@ -582,7 +582,7 @@ describe('useWorkspaceState', () => {
       const window = state.activeWindows[0];
       expect(window.id).toBe('app-1');
       expect(window.title).toBe('My App');
-      expect(window.isMaximized).toBe(true);
+      expect(window.isMaximized).toBe('normal');
       expect(window.position).toStrictEqual({ x: 100, y: 100 });
       expect(window.size).toStrictEqual({ width: 80, height: 70 });
       expect(window.zIndex).toBe(10);
