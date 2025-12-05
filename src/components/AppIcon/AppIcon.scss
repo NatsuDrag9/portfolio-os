@@ -251,6 +251,36 @@
       animation: popup-slide-out 0.3s ease-in forwards;
     }
   }
+
+  // Desktop variant - specific styling (must come after __image and __name)
+  &--desktop {
+    justify-content: center;
+    width: 100%; // Fill the wrapper
+    height: 100%;
+
+    // Remove focus outline (handled by wrapper)
+    &:focus-visible {
+      outline: none;
+    }
+
+    // Disable scale on click for desktop variant
+    &:active {
+      transform: none;
+    }
+  }
+
+  &--desktop &__image--fluent {
+    // Fluent icons need to match regular icon sizes in desktop
+    width: clamp(5rem, 4vw, 6rem);
+    height: clamp(5rem, 4vw, 6rem);
+  }
+
+  &--desktop &__name {
+    // Name should have fixed max-width for ellipsis
+    max-width: 8rem;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
 }
 
 // Desktop XL (1400px+) - Larger icons for high-res displays

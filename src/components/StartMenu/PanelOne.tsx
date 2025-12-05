@@ -3,7 +3,7 @@ import StartMenuCategory from './StartMenuCategory';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import AppIcon from '@components/AppIcon/AppIcon';
 import { useWorkspaceState } from '@store/store';
-import { RightClickActionType } from '@definitions/desktopTypes';
+import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
 import { logInDev } from '@utils/logUtils';
 import { useWindowManager } from '@hooks/useWindowManager';
@@ -18,7 +18,7 @@ function PanelOne({ onButtonClick }: PanelOneProps) {
 
   const handleContextMenuClick = (
     appId: string,
-    action: RightClickActionType,
+    action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => {
     logInDev(

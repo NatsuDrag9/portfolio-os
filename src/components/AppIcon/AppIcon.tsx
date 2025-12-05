@@ -2,7 +2,10 @@ import { AppIconVariant } from '@definitions/applicationTypes';
 import './AppIcon.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
-import { IconShapeType, RightClickActionType } from '@definitions/desktopTypes';
+import {
+  IconShapeType,
+  AppIconRightClickActionType,
+} from '@definitions/desktopTypes';
 import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
 import ActiveWindowsPopup from './ActiveWindowsPopup/ActiveWindowsPopup';
 import RightClickMenu from './RightClickMenu/RightClickMenu';
@@ -23,7 +26,7 @@ export interface AppIconProps {
   isPinned?: boolean;
   onContextMenuItemClick?: (
     appId: string,
-    action: RightClickActionType,
+    action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => void;
 }
@@ -144,12 +147,18 @@ function AppIcon({
       : 'app-icon__dot--unfocused';
   };
 
-  // Build button class - add modifiers for taskbar states
-  const getTaskbarModifiers = () => {
-    if (iconVariant !== 'taskbar') return '';
-    const classes = ['app-icon--taskbar'];
-    if (hasMultipleWindows) classes.push('app-icon--multiple-windows');
-    if (isThisAppFocused) classes.push('app-icon--taskbar-focused');
+  // Build button class - add modifiers for variant states
+  const getVariantModifiers = () => {
+    const classes: string[] = [];
+
+    if (iconVariant === 'taskbar') {
+      classes.push('app-icon--taskbar');
+      if (hasMultipleWindows) classes.push('app-icon--multiple-windows');
+      if (isThisAppFocused) classes.push('app-icon--taskbar-focused');
+    } else if (iconVariant === 'desktop') {
+      classes.push('app-icon--desktop');
+    }
+
     return classes.join(' ');
   };
 
@@ -170,7 +179,7 @@ function AppIcon({
 
   return (
     <div
-      className={`app-icon ${shape} ${getTaskbarModifiers()}`}
+      className={`app-icon ${shape} ${getVariantModifiers()}`}
       role="button"
       tabIndex={0}
       onDoubleClick={handleDoubleClick}
@@ -226,7 +235,7 @@ function AppIcon({
           isPinned={isPinned}
           onClick={(
             appId: string,
-            action: RightClickActionType,
+            action: AppIconRightClickActionType,
             variant: AppIconVariant
           ) => {
             if (onContextMenuItemClick) {

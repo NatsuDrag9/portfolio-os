@@ -27,7 +27,8 @@ export interface CustomTheme {
   bgColor: string; // rgba
 }
 
-export type RightClickActionType =
+// AppIcon right-click menu types
+export type AppIconRightClickActionType =
   | 'new-window'
   | 'pin-to-taskbar'
   | 'unpin-from-taskbar'
@@ -35,26 +36,39 @@ export type RightClickActionType =
   | 'close-all-windows'
   | 'properties';
 
-export type RightClickCondition =
+export type AppIconRightClickCondition =
   | 'always'
   | 'pinned'
   | 'unpinned'
   | 'has-windows'
   | 'has-multiple-windows';
 
-export type RightClickIconSource =
+export type AppIconRightClickIconSource =
   | { type: 'fluent'; icon: ComponentType<{ className?: string }> }
   | { type: 'app-registry' }; // Uses app's icon from APP_REGISTRY
 
-export interface RightClickOption {
-  id: RightClickActionType;
+export interface AppIconRightClickOption {
+  id: AppIconRightClickActionType;
   label: string;
   // Icon source - Fluent UI icon or app's icon from registry
-  iconSource?: RightClickIconSource;
+  iconSource?: AppIconRightClickIconSource;
   // Condition to show/hide based on app state
-  showWhen?: RightClickCondition;
+  showWhen?: AppIconRightClickCondition;
   // Whether this option is destructive (styled differently)
   destructive?: boolean;
+}
+
+// Desktop right-click menu types
+export type DesktopMenuAction =
+  | 'settings'
+  | 'personalize'
+  | 'terminal'
+  | 'refresh';
+
+export interface DesktopMenuItem {
+  id: DesktopMenuAction;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
 }
 export type QuickActionsType = 'night-light' | 'airplane' | 'settings';
 export type SliderForType = 'volume' | 'brightness';

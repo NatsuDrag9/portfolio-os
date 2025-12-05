@@ -1,8 +1,8 @@
 import { AppIconVariant } from '@definitions/applicationTypes';
 import './RightClickMenu.scss';
 import {
-  RightClickActionType,
-  RightClickCondition,
+  AppIconRightClickActionType,
+  AppIconRightClickCondition,
 } from '@definitions/desktopTypes';
 import { APP_REGISTRY, RIGHT_CLICK_OPTIONS } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
@@ -17,7 +17,7 @@ export interface RightClickMenuProps {
   onClose?: () => void;
   onClick?: (
     appId: string,
-    action: RightClickActionType,
+    action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => void;
 }
@@ -45,7 +45,9 @@ function RightClickMenu({
     menuRef as RefObject<HTMLElement>
   );
 
-  const shouldShowOption = (condition?: RightClickCondition): boolean => {
+  const shouldShowOption = (
+    condition?: AppIconRightClickCondition
+  ): boolean => {
     if (!condition || condition === 'always') return true;
     if (condition === 'pinned') return isPinned;
     if (condition === 'unpinned') return !isPinned;
@@ -54,7 +56,7 @@ function RightClickMenu({
     return true;
   };
 
-  const handleMenuItemClick = (action: RightClickActionType) => {
+  const handleMenuItemClick = (action: AppIconRightClickActionType) => {
     if (onClick) {
       onClick(appId, action, iconVariant);
     }

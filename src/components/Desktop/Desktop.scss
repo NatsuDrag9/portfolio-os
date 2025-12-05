@@ -1,0 +1,109 @@
+.desktop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+
+  // Wallpaper background
+  background-color: var(--color-neutral-background3);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // Remove focus outline on desktop container
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  // Icons container - positioned for grid layout
+  &__icons-container {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 4.8rem); // Leave space for taskbar
+    padding: var(--spacing-vertical-s) var(--spacing-horizontal-s);
+    cursor: default;
+  }
+
+  // Icon wrapper - Rnd container styles
+  &__icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 9rem; // Fixed width to match GRID_CELL_WIDTH
+    border-radius: var(--border-radius-medium);
+    cursor: default !important; // Override Rnd's default move cursor
+    transition: background-color 0.15s ease;
+
+    // Remove focus outline from wrapper - handled by selected/focused states
+    &:focus,
+    &:focus-visible {
+      outline: none;
+    }
+
+    // Selected state - Windows 11 selection highlight
+    &--selected {
+      background-color: color-mix(
+        in srgb,
+        var(--color-brand-background) 20%,
+        transparent
+      );
+
+      // Selection border
+      &::after {
+        position: absolute;
+        inset: 0;
+        border: 1px solid
+          color-mix(in srgb, var(--color-brand-stroke1) 50%, transparent);
+        border-radius: var(--border-radius-medium);
+        pointer-events: none;
+        content: '';
+      }
+
+      .dark-theme & {
+        background-color: color-mix(
+          in srgb,
+          var(--color-brand-foreground1) 25%,
+          transparent
+        );
+
+        &::after {
+          border-color: color-mix(
+            in srgb,
+            var(--color-brand-foreground1) 60%,
+            transparent
+          );
+        }
+      }
+    }
+
+    // Focused state for keyboard navigation
+    &--focused:not(&--selected) {
+      outline: 1px solid var(--color-brand-stroke1);
+
+      //   outline: none;
+      outline-offset: -2px;
+
+      .dark-theme & {
+        outline-color: var(--color-brand-foreground1);
+      }
+    }
+  }
+}
+
+// Responsive adjustments for grid cell sizes
+@media (min-width: $breakpoint-desktop-xl) {
+  .desktop__icons-container {
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+  }
+}
+
+@media (max-width: #{$breakpoint-tablet-portrait - 1}) {
+  .desktop__icons-container {
+    height: calc(100% - 5.6rem); // Larger taskbar on mobile
+    padding: var(--spacing-vertical-xs) var(--spacing-horizontal-xs);
+  }
+}

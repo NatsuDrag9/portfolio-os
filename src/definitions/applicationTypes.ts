@@ -13,7 +13,7 @@ export interface AppMetadata {
 
 export type AppIconVariant = 'desktop' | 'taskbar' | 'start-menu';
 
-export type StartMenuAppCategory = 'recommended' | 'default' | 'all';
+export type StartMenuAppCategory = 'recommended' | 'default' | 'all' | 'more';
 
 export type WindowDisplayType = 'minimized' | 'maximized' | 'normal';
 

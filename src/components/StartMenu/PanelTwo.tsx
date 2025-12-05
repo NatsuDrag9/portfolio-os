@@ -4,7 +4,7 @@ import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
 import AppIcon from '@components/AppIcon/AppIcon';
 import { useWindowManager } from '@hooks/useWindowManager';
-import { RightClickActionType } from '@definitions/desktopTypes';
+import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
 import { logInDev } from '@utils/logUtils';
 import { useMemo } from 'react';
@@ -19,7 +19,7 @@ function PanelTwo({ onButtonClick }: PanelTwoProps) {
 
   const handleContextMenuClick = (
     appId: string,
-    action: RightClickActionType,
+    action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => {
     logInDev(

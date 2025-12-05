@@ -1,6 +1,10 @@
 import { QuickActionButtonProps } from '@components/QuickActionButton/QuickActionButton';
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
-import { QuickActionsType, RightClickOption } from '@definitions/desktopTypes';
+import {
+  QuickActionsType,
+  AppIconRightClickOption,
+  DesktopMenuItem,
+} from '@definitions/desktopTypes';
 import {
   PinRegular,
   PinOffRegular,
@@ -17,6 +21,9 @@ import {
   LaptopPersonRegular,
   HatGraduationSparkleRegular,
   SlideLayoutRegular,
+  ArrowClockwiseRegular,
+  WindowConsoleFilled,
+  WindowBrushRegular,
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
@@ -118,7 +125,10 @@ export const START_MENU_WINDOWS = {
   desktopIcon: '/apps/windows-11-96.png',
 };
 
-export const RIGHT_CLICK_OPTIONS: Record<AppIconVariant, RightClickOption[]> = {
+export const RIGHT_CLICK_OPTIONS: Record<
+  AppIconVariant,
+  AppIconRightClickOption[]
+> = {
   taskbar: [
     {
       id: 'new-window',
@@ -195,6 +205,29 @@ export const RIGHT_CLICK_OPTIONS: Record<AppIconVariant, RightClickOption[]> = {
   ],
 };
 
+export const DESKTOP_MENU_OPTIONS: DesktopMenuItem[] = [
+  {
+    id: 'refresh',
+    label: 'Refresh',
+    icon: ArrowClockwiseRegular,
+  },
+  {
+    id: 'terminal',
+    label: 'Open in Terminal',
+    icon: WindowConsoleFilled,
+  },
+  {
+    id: 'personalize',
+    label: 'Personalize',
+    icon: WindowBrushRegular,
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: SettingsRegular,
+  },
+];
+
 export const QUICK_ACTION_BUTTONS: Record<
   QuickActionsType,
   QuickActionButtonProps
@@ -224,3 +257,8 @@ export const QUICK_ACTION_BUTTONS: Record<
     },
   },
 };
+
+// Grid configuration - Windows 11 uses a 5-row grid by default
+export const GRID_ROWS = 6;
+export const GRID_CELL_WIDTH = 90; // pixels
+export const GRID_CELL_HEIGHT = 100; // pixels

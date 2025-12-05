@@ -1,6 +1,6 @@
 import { useAuth } from '@store/store';
-import './Desktop.scss';
-import { StartMenu, Taskbar } from '@components/index';
+import './Workspace.scss';
+import { Desktop, StartMenu, Taskbar } from '@components/index';
 
 function Workspace() {
   const { username } = useAuth();
@@ -8,6 +8,7 @@ function Workspace() {
   return (
     <div className="workspace">
       <h4 className="workspace__title"> Hello, {username}</h4>
+      <Desktop />
       <StartMenu />
       <Taskbar />
     </div>
