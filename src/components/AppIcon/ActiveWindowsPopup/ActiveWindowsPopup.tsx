@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import { useCallback, type MouseEvent } from 'react';
 import './ActiveWindowsPopup.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata, WindowData } from '@definitions/applicationTypes';
@@ -22,9 +22,15 @@ function ActiveWindowsPopup({
   ) as AppMetadata;
 
   // Build srcSet: use mobileIcon if available, otherwise use desktopIcon
-  const srcSet = appMetaData?.mobileIcon
-    ? `${appMetaData.mobileIcon} 1x, ${appMetaData.desktopIcon} 2x`
-    : appMetaData?.desktopIcon;
+  const getSrcSet = useCallback(() => {
+    if (typeof appMetaData?.desktopIcon === 'string') {
+      return appMetaData?.mobileIcon &&
+        typeof appMetaData.mobileIcon === 'string'
+        ? `${appMetaData.mobileIcon} 1x, ${appMetaData.desktopIcon} 2x`
+        : appMetaData.desktopIcon;
+    }
+    return undefined;
+  }, [appMetaData.desktopIcon, appMetaData.mobileIcon]);
 
   // Use window title from windowData, fallback to app name
   const displayTitle = windowData.title || appMetaData?.appName || 'Window';
@@ -44,6 +50,23 @@ function ActiveWindowsPopup({
     }
   };
 
+  const renderFluentIconOrImage = () => {
+    const isFluentIcon = typeof appMetaData.desktopIcon !== 'string';
+    if (isFluentIcon) {
+      const AppFluentIcon = appMetaData.desktopIcon;
+      return <AppFluentIcon className="active-windows-popup__fluent-icon" />;
+    }
+
+    return (
+      <img
+        src={appMetaData?.desktopIcon as string | undefined}
+        className="active-windows-popup__applogo"
+        alt={displayTitle}
+        srcSet={getSrcSet()}
+      />
+    );
+  };
+
   return (
     <div
       className="active-windows-popup"
@@ -56,13 +79,10 @@ function ActiveWindowsPopup({
       }}
       role="button"
       tabIndex={0}
+      title={displayTitle}
     >
-      <img
-        srcSet={srcSet}
-        src={appMetaData?.desktopIcon}
-        className="active-windows-popup__applogo"
-        alt={displayTitle}
-      />
+      {renderFluentIconOrImage()}
+
       <p className="active-windows-popup__appname">{displayTitle}</p>
       <button
         type="button"

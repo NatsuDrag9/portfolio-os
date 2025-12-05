@@ -90,6 +90,7 @@ function RightClickMenu({
                   handleMenuItemClick(option.id);
                 }
               }}
+              title={option.label}
             >
               <span className="rc-menu__item-icon">
                 {option.iconSource?.type === 'app-registry' &&
