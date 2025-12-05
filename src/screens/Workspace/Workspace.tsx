@@ -2,16 +2,16 @@ import { useAuth } from '@store/store';
 import './Desktop.scss';
 import { StartMenu, Taskbar } from '@components/index';
 
-function Desktop() {
+function Workspace() {
   const { username } = useAuth();
 
   return (
-    <div className="desktop">
-      <h4 className="desktop__title"> Hello, {username}</h4>
+    <div className="workspace">
+      <h4 className="workspace__title"> Hello, {username}</h4>
       <StartMenu />
       <Taskbar />
     </div>
   );
 }
 
-export default Desktop;
+export default Workspace;

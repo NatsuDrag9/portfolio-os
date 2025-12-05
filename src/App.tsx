@@ -4,7 +4,7 @@ import { logInDev } from '@utils/logUtils';
 import { useEffect } from 'react';
 import {
   BootScreen,
-  Desktop,
+  Workspace,
   LoginScreen,
   PowerOffScreen,
   ShutdownScreen,
@@ -35,7 +35,7 @@ function App() {
 
   const renderScreen = () => {
     if (bootStatus === 'ON') {
-      return <Desktop />;
+      return <Workspace />;
     }
     if (bootStatus === 'OFF') {
       return <PowerOffScreen />;
