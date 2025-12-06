@@ -8,7 +8,6 @@
   flex-direction: column;
   gap: var(--spacing-vertical-xs);
   align-items: center;
-  width: clamp(5rem, 8vw, 7rem);
   padding: var(--spacing-horizontal-s);
   border-radius: var(--border-radius-medium);
   font-family: var(--font-family-base);
@@ -69,15 +68,12 @@
     &--fluent {
       width: clamp(2.5rem, 4vw, 3.5rem);
       height: clamp(2.5rem, 4vw, 3.5rem);
-      color: var(--color-neutral-foreground3);
+      color: var(--color-neutral-foreground2);
     }
   }
 
   &__name {
-    // Text overflow handling - Windows 11 shows 2 lines max
-    display: -webkit-box;
-    max-width: 100%;
-    overflow: hidden;
+    min-width: 100%;
 
     // Fluent typography: Caption 1 style (12px/16px)
     color: var(--color-neutral-foreground1);
@@ -88,10 +84,6 @@
     text-shadow: 0 1px 2px
       color-mix(in srgb, var(--color-static-white) 80%, transparent);
     overflow-wrap: break-word;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    line-clamp: 2;
 
     .dark-theme & {
       color: var(--color-static-white);
@@ -111,6 +103,21 @@
   &--taskbar &__image {
     width: clamp(3rem, 4vw, 3.8rem);
     height: clamp(3rem, 4vw, 3.8rem);
+  }
+
+  &--start-menu {
+    width: clamp(8rem, 4vw, 10rem);
+    height: clamp(8rem, 4vw, 10rem);
+  }
+
+  &--start-menu &__image {
+    width: clamp(3rem, 4vw, 4rem);
+    height: clamp(3rem, 4vw, 4rem);
+  }
+
+  &--start-menu &__image--fluent {
+    width: clamp(5rem, 4vw, 6rem);
+    height: clamp(5rem, 4vw, 6rem);
   }
 
   // Square shape (Windows 11 default - slightly rounded)
@@ -276,17 +283,14 @@
   }
 
   &--desktop &__name {
-    // Name should have fixed max-width for ellipsis
-    max-width: 8rem;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    max-width: 10rem;
   }
 }
 
 // Desktop XL (1400px+) - Larger icons for high-res displays
 @media (min-width: $breakpoint-desktop-xl) {
   .app-icon {
-    padding: var(--spacing-horizontal-m);
+    padding: var(--spacing-horizontal-xs);
 
     &__image {
       width: 5.6rem;
@@ -394,7 +398,6 @@
 
     &__name {
       font-size: var(--font-size-base100);
-      -webkit-line-clamp: 1;
     }
 
     // Taskbar variant - compact sizing for taskbar
@@ -428,7 +431,6 @@
 
     &__name {
       font-size: var(--font-size-base100);
-      -webkit-line-clamp: 1;
     }
   }
 }
@@ -446,7 +448,6 @@
 
     &__name {
       font-size: var(--font-size-base100);
-      -webkit-line-clamp: 1;
     }
   }
 }
@@ -469,7 +470,6 @@
 
     &__name {
       font-size: var(--font-size-base100);
-      -webkit-line-clamp: 1;
     }
   }
 }

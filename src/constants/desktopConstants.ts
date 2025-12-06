@@ -27,21 +27,15 @@ import {
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
-  {
-    id: 'file-explorer',
-    appName: 'File Explorer',
-    mobileIcon: '/apps/file-explorer-48.png',
-    desktopIcon: '/apps/file-explorer-96.png',
-    defaultPinned: true,
-    windowName: 'FileExplorerApp',
-  },
+  // To Do: Recommended apps - github, vscode, browser, command prompt, notepad
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
     mobileIcon: '/apps/chrome-48.png',
     desktopIcon: '/apps/chrome-96.png',
     defaultPinned: true,
-    windowName: 'GoogleChromApp',
+    windowName: 'GoogleChrome',
+    startMenuAppCategory: 'recommended',
   },
   {
     id: 'vscode',
@@ -49,14 +43,23 @@ export const APP_REGISTRY: AppMetadata[] = [
     mobileIcon: '/apps/vscode-48.png',
     desktopIcon: '/apps/vscode-96.png',
     defaultPinned: true,
-    windowName: 'VSCodeApp',
+    windowName: 'VSCode',
   },
   {
     id: 'firefox',
     appName: 'Firefox',
     desktopIcon: '/apps/firefox.png',
     defaultPinned: true,
-    windowName: 'FirefoxApp',
+    windowName: 'Firefox',
+    startMenuAppCategory: 'recommended',
+  },
+  {
+    id: 'github',
+    appName: 'Github',
+    desktopIcon: '/apps/github-60.png',
+    defaultPinned: true,
+    windowName: 'Github',
+    startMenuAppCategory: 'recommended',
   },
   {
     id: 'notepad',
@@ -64,22 +67,32 @@ export const APP_REGISTRY: AppMetadata[] = [
     mobileIcon: '/apps/notepad-48.png',
     desktopIcon: '/apps/notepad-96.png',
     defaultPinned: true,
-    windowName: 'NotepadApp',
+    windowName: 'Notepad',
+    startMenuAppCategory: 'recommended',
   },
   {
-    id: 'github',
-    appName: 'Github',
-    desktopIcon: '/apps/github-60.png',
-    defaultPinned: true,
-    windowName: 'GithubApp',
+    id: 'command-prompt',
+    appName: 'Command Prompt',
+    desktopIcon: WindowConsoleFilled,
+    defaultPinned: false,
+    windowName: 'Notepad',
+    startMenuAppCategory: 'recommended',
   },
-  // Default apps (portfolio pages)
+  {
+    id: 'settings',
+    appName: 'Settings',
+    desktopIcon: SettingsRegular,
+    defaultPinned: false,
+    windowName: 'Settings',
+    startMenuAppCategory: 'recommended',
+  },
+  // Default apps appearing on taskbar (portfolio pages)
   {
     id: 'about-me',
     appName: 'About Me',
     desktopIcon: HomePersonRegular,
     defaultPinned: false,
-    windowName: 'AboutMeApp',
+    windowName: 'AboutMe',
     startMenuAppCategory: 'default',
   },
   {
@@ -87,7 +100,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     appName: 'Contact Me',
     desktopIcon: ContactCardRegular,
     defaultPinned: false,
-    windowName: 'ContactMeApp',
+    windowName: 'ContactMe',
     startMenuAppCategory: 'default',
   },
   {
@@ -95,7 +108,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     appName: 'Projects',
     desktopIcon: LaptopPersonRegular,
     defaultPinned: false,
-    windowName: 'ProjectsApp',
+    windowName: 'Projects',
     startMenuAppCategory: 'default',
   },
   {
@@ -103,7 +116,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     appName: 'Skills',
     desktopIcon: HatGraduationSparkleRegular,
     defaultPinned: false,
-    windowName: 'SkillsApp',
+    windowName: 'Skills',
     startMenuAppCategory: 'default',
   },
   {
@@ -111,10 +124,19 @@ export const APP_REGISTRY: AppMetadata[] = [
     appName: 'Portfolio',
     desktopIcon: SlideLayoutRegular,
     defaultPinned: false,
-    windowName: 'PortfolioApp',
+    windowName: 'Portfolio',
     startMenuAppCategory: 'default',
   },
-  // To Do: Recommended apps - github, vscode, browser, command prompt, notepad
+  {
+    id: 'file-explorer',
+    appName: 'File Explorer',
+    mobileIcon: '/apps/file-explorer-48.png',
+    desktopIcon: '/apps/file-explorer-96.png',
+    defaultPinned: true,
+    windowName: 'FileExplorer',
+    startMenuAppCategory: 'default',
+  },
+
   // To Do: More apps - calculator, music player, calendar, settings
 ];
 

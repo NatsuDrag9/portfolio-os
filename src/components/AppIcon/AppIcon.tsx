@@ -9,6 +9,11 @@ import {
 import { useState, useEffect, useRef, type KeyboardEvent } from 'react';
 import ActiveWindowsPopup from './ActiveWindowsPopup/ActiveWindowsPopup';
 import RightClickMenu from './RightClickMenu/RightClickMenu';
+import {
+  getDotModifier,
+  getVariantModifiers,
+  truncateAppName,
+} from './helperFunctions';
 
 const POPUP_UNMOUNT_DELAY = 600; // 0.6s total before unmount
 
@@ -139,29 +144,6 @@ function AppIcon({
         ? (appMetaData?.desktopIcon as string)
         : undefined;
 
-  // Build dot class for taskbar indicator
-  const getDotModifier = () => {
-    if (!hasOpenWindows) return 'app-icon__dot--hidden';
-    return isThisAppFocused
-      ? 'app-icon__dot--focused'
-      : 'app-icon__dot--unfocused';
-  };
-
-  // Build button class - add modifiers for variant states
-  const getVariantModifiers = () => {
-    const classes: string[] = [];
-
-    if (iconVariant === 'taskbar') {
-      classes.push('app-icon--taskbar');
-      if (hasMultipleWindows) classes.push('app-icon--multiple-windows');
-      if (isThisAppFocused) classes.push('app-icon--taskbar-focused');
-    } else if (iconVariant === 'desktop') {
-      classes.push('app-icon--desktop');
-    }
-
-    return classes.join(' ');
-  };
-
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -179,7 +161,7 @@ function AppIcon({
 
   return (
     <div
-      className={`app-icon ${shape} ${getVariantModifiers()}`}
+      className={`app-icon ${shape} ${getVariantModifiers(iconVariant, hasMultipleWindows, Boolean(isThisAppFocused))}`}
       role="button"
       tabIndex={0}
       onDoubleClick={handleDoubleClick}
@@ -201,12 +183,16 @@ function AppIcon({
         />
       )}
       {iconVariant !== 'taskbar' && (
-        <span className="app-icon__name">{appMetaData.appName}</span>
+        <span className="app-icon__name">
+          {truncateAppName(appMetaData.appName, iconVariant)}
+        </span>
       )}
 
       {iconVariant === 'taskbar' && (
         <>
-          <span className={`app-icon__dot ${getDotModifier()}`}></span>
+          <span
+            className={`app-icon__dot ${getDotModifier(hasOpenWindows, Boolean(isThisAppFocused))}`}
+          ></span>
 
           {showPopup && hasOpenWindows && !showContextMenu && (
             <div

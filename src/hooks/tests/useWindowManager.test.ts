@@ -60,7 +60,7 @@ describe('useWindowManager', () => {
         expect.objectContaining({
           id: 'file-explorer',
           appName: 'File Explorer',
-          windowName: 'FileExplorerApp',
+          windowName: 'FileExplorer',
         })
       );
     });
