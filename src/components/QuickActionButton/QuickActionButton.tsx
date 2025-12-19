@@ -1,4 +1,4 @@
-import { ComponentType, useState } from 'react';
+import { ComponentType } from 'react';
 import './QuickActionButton.scss';
 import { QuickActionsType } from '@definitions/desktopTypes';
 
@@ -9,6 +9,7 @@ export interface QuickActionButtonProps {
   };
   actionType: QuickActionsType;
   name: string;
+  isActive?: boolean;
   onButtonClick?: (actionType: QuickActionsType) => void;
 }
 
@@ -16,18 +17,17 @@ function QuickActionButton({
   actionType,
   components,
   name,
+  isActive = false,
   onButtonClick,
 }: QuickActionButtonProps) {
-  const [clicked, setClicked] = useState(false);
   const handleButtonClick = () => {
-    setClicked((prev) => !prev);
     if (onButtonClick) {
       onButtonClick(actionType);
     }
   };
 
   const getImage = () => {
-    if (clicked) {
+    if (isActive) {
       const ClickedIcon = components.clicked;
       return <ClickedIcon className="qa-button__fluent-icon" />;
     }
@@ -42,7 +42,7 @@ function QuickActionButton({
     <div className="qa-button">
       <button
         type="button"
-        className={`qa-button__button${clicked ? ' qa-button__button--active' : ''}`}
+        className={`qa-button__button${isActive ? ' qa-button__button--active' : ''}`}
         onClick={handleButtonClick}
       >
         {getImage()}

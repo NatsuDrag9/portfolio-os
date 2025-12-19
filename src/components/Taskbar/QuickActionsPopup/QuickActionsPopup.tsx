@@ -18,7 +18,8 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
 
   useClickOutsideModal(isOpen, onClose, popupRef as RefObject<HTMLElement>);
   const {
-    setSelectedQuickAction,
+    activeQuickActions,
+    toggleQuickAction,
     brightnessLevel,
     setBrightnessLevel,
     setVolumeLevel,
@@ -27,9 +28,9 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
 
   const handleQAButtonClick = useCallback(
     (action: QuickActionsType) => {
-      setSelectedQuickAction(action);
+      toggleQuickAction(action);
     },
-    [setSelectedQuickAction]
+    [toggleQuickAction]
   );
 
   const handleSliderChange = useCallback(
@@ -55,6 +56,7 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
             actionType={button.actionType}
             components={button.components}
             name={button.name}
+            isActive={activeQuickActions.includes(button.actionType)}
             onButtonClick={handleQAButtonClick}
           />
         ))}

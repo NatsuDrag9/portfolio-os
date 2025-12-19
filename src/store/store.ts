@@ -57,7 +57,7 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   showMoreIcons: true,
   volumeLevel: 50,
   currentTheme: 'light',
-  selectedQuickAction: undefined,
+  activeQuickActions: [],
   brightnessLevel: 30,
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => {
@@ -84,8 +84,15 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   setTheme: (theme: ThemeType) => {
     set({ currentTheme: theme });
   },
-  setSelectedQuickAction: (action: QuickActionsType | undefined) => {
-    set({ selectedQuickAction: action });
+  toggleQuickAction: (action: QuickActionsType) => {
+    set((state) => {
+      const isActive = state.activeQuickActions.includes(action);
+      return {
+        activeQuickActions: isActive
+          ? state.activeQuickActions.filter((a) => a !== action)
+          : [...state.activeQuickActions, action],
+      };
+    });
   },
   setBrightnessLevel: (value: number) => {
     set({ brightnessLevel: value });

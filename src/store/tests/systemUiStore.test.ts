@@ -13,7 +13,7 @@ beforeEach(() => {
     volumeLevel: 50,
     currentTheme: 'light',
     brightnessLevel: 30,
-    selectedQuickAction: undefined,
+    activeQuickActions: [],
   });
 });
 
@@ -30,7 +30,7 @@ describe('useSystemUIState', () => {
       expect(state.volumeLevel).toBe(50);
       expect(state.currentTheme).toBe('light');
       expect(state.brightnessLevel).toBe(30);
-      expect(state.selectedQuickAction).toBeUndefined();
+      expect(state.activeQuickActions).toEqual([]);
     });
   });
 
@@ -295,53 +295,49 @@ describe('useSystemUIState', () => {
   });
 
   describe('Quick Actions', () => {
-    it('should set selected quick action to night-light', () => {
-      const { setSelectedQuickAction } = useSystemUIState.getState();
-      setSelectedQuickAction('night-light');
+    it('should toggle night-light action on', () => {
+      const { toggleQuickAction } = useSystemUIState.getState();
+      toggleQuickAction('night-light');
 
       const state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('night-light');
+      expect(state.activeQuickActions).toContain('night-light');
     });
 
-    it('should set selected quick action to airplane', () => {
-      const { setSelectedQuickAction } = useSystemUIState.getState();
-      setSelectedQuickAction('airplane');
+    it('should toggle night-light action off', () => {
+      const { toggleQuickAction } = useSystemUIState.getState();
+      toggleQuickAction('night-light');
+      toggleQuickAction('night-light');
 
       const state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('airplane');
+      expect(state.activeQuickActions).not.toContain('night-light');
     });
 
-    it('should set selected quick action to settings', () => {
-      const { setSelectedQuickAction } = useSystemUIState.getState();
-      setSelectedQuickAction('settings');
+    it('should allow multiple quick actions to be active', () => {
+      const { toggleQuickAction } = useSystemUIState.getState();
+      toggleQuickAction('night-light');
+      toggleQuickAction('airplane');
 
       const state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('settings');
+      expect(state.activeQuickActions).toContain('night-light');
+      expect(state.activeQuickActions).toContain('airplane');
+      expect(state.activeQuickActions).toHaveLength(2);
     });
 
-    it('should clear selected quick action', () => {
-      const { setSelectedQuickAction } = useSystemUIState.getState();
-      setSelectedQuickAction('night-light');
-      setSelectedQuickAction(undefined);
+    it('should toggle individual actions independently', () => {
+      const { toggleQuickAction } = useSystemUIState.getState();
+      toggleQuickAction('night-light');
+      toggleQuickAction('airplane');
+      toggleQuickAction('settings');
 
-      const state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBeUndefined();
-    });
-
-    it('should switch between quick actions', () => {
-      const { setSelectedQuickAction } = useSystemUIState.getState();
-
-      setSelectedQuickAction('night-light');
       let state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('night-light');
+      expect(state.activeQuickActions).toHaveLength(3);
 
-      setSelectedQuickAction('airplane');
+      // Toggle off night-light, others should remain
+      toggleQuickAction('night-light');
       state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('airplane');
-
-      setSelectedQuickAction('settings');
-      state = useSystemUIState.getState();
-      expect(state.selectedQuickAction).toBe('settings');
+      expect(state.activeQuickActions).not.toContain('night-light');
+      expect(state.activeQuickActions).toContain('airplane');
+      expect(state.activeQuickActions).toContain('settings');
     });
   });
 
@@ -352,21 +348,21 @@ describe('useSystemUIState', () => {
         setVolumeLevel,
         setTheme,
         setBrightnessLevel,
-        setSelectedQuickAction,
+        toggleQuickAction,
       } = useSystemUIState.getState();
 
       updateTaskbarAlignment('left');
       setVolumeLevel(80);
       setTheme('dark');
       setBrightnessLevel(60);
-      setSelectedQuickAction('night-light');
+      toggleQuickAction('night-light');
 
       const state = useSystemUIState.getState();
       expect(state.taskbarAlignment).toBe('left');
       expect(state.volumeLevel).toBe(80);
       expect(state.currentTheme).toBe('dark');
       expect(state.brightnessLevel).toBe(60);
-      expect(state.selectedQuickAction).toBe('night-light');
+      expect(state.activeQuickActions).toContain('night-light');
     });
 
     it('should maintain unmodified state properties', () => {
@@ -376,7 +372,7 @@ describe('useSystemUIState', () => {
       const originalSearchVisibility = stateBefore.isSearchVisible;
       const originalStartMenuLayout = stateBefore.startMenuLayout;
       const originalBrightnessLevel = stateBefore.brightnessLevel;
-      const originalSelectedQuickAction = stateBefore.selectedQuickAction;
+      const originalActiveQuickActions = [...stateBefore.activeQuickActions];
 
       setTheme('dark');
 
@@ -384,7 +380,7 @@ describe('useSystemUIState', () => {
       expect(stateAfter.isSearchVisible).toBe(originalSearchVisibility);
       expect(stateAfter.startMenuLayout).toBe(originalStartMenuLayout);
       expect(stateAfter.brightnessLevel).toBe(originalBrightnessLevel);
-      expect(stateAfter.selectedQuickAction).toBe(originalSelectedQuickAction);
+      expect(stateAfter.activeQuickActions).toEqual(originalActiveQuickActions);
     });
   });
 });

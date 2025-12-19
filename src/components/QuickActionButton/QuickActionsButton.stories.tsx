@@ -11,6 +11,7 @@ import {
 } from '@fluentui/react-icons';
 import QuickActionButton from './QuickActionButton';
 import quickActionButtonPlayFunction, {
+  quickActionButtonActivePlayFunction,
   quickActionButtonClickPlayFunction,
   quickActionButtonKeyboardPlayFunction,
   quickActionButtonNoCallbackPlayFunction,
@@ -25,7 +26,7 @@ const meta: Meta<typeof QuickActionButton> = {
     docs: {
       description: {
         component:
-          'A toggleable quick action button used in the Windows 11 Action Center. Displays an icon that changes state on click, with a label underneath.',
+          'A toggleable quick action button used in the Windows 11 Action Center. Displays an icon that changes based on the isActive prop, with a label underneath.',
       },
     },
   },
@@ -53,6 +54,14 @@ const meta: Meta<typeof QuickActionButton> = {
         type: { summary: 'string' },
       },
     },
+    isActive: {
+      control: 'boolean',
+      description: 'Whether the button is in active state',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
     onButtonClick: {
       action: 'buttonClicked',
       description: 'Callback fired when button is clicked, receives actionType',
@@ -63,6 +72,7 @@ const meta: Meta<typeof QuickActionButton> = {
   },
   args: {
     onButtonClick: fn(),
+    isActive: false,
   },
 };
 
@@ -73,6 +83,7 @@ export const NightLight: Story = {
   args: {
     actionType: 'night-light',
     name: 'Night light',
+    isActive: false,
     components: {
       default: WeatherMoonRegular,
       clicked: WeatherSunnyRegular,
@@ -85,6 +96,7 @@ export const AirplaneMode: Story = {
   args: {
     actionType: 'airplane',
     name: 'Airplane mode',
+    isActive: false,
     components: {
       default: AirplaneRegular,
       clicked: AirplaneFilled,
@@ -97,6 +109,7 @@ export const Settings: Story = {
   args: {
     actionType: 'settings',
     name: 'Settings',
+    isActive: false,
     components: {
       default: SettingsRegular,
       clicked: SettingsFilled,
@@ -105,10 +118,24 @@ export const Settings: Story = {
   play: quickActionButtonPlayFunction,
 };
 
+export const ActiveState: Story = {
+  args: {
+    actionType: 'night-light',
+    name: 'Night light',
+    isActive: true,
+    components: {
+      default: WeatherMoonRegular,
+      clicked: WeatherSunnyRegular,
+    },
+  },
+  play: quickActionButtonActivePlayFunction,
+};
+
 export const ClickToggleTest: Story = {
   args: {
     actionType: 'night-light',
     name: 'Night light',
+    isActive: false,
     components: {
       default: WeatherMoonRegular,
       clicked: WeatherMoonFilled,
@@ -121,6 +148,7 @@ export const KeyboardAccessibilityTest: Story = {
   args: {
     actionType: 'airplane',
     name: 'Airplane mode',
+    isActive: false,
     components: {
       default: AirplaneRegular,
       clicked: AirplaneFilled,
@@ -133,6 +161,7 @@ export const NoCallbackTest: Story = {
   args: {
     actionType: 'settings',
     name: 'Settings',
+    isActive: false,
     components: {
       default: SettingsRegular,
       clicked: SettingsFilled,
