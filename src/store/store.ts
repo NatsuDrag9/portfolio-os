@@ -51,6 +51,7 @@ export const useAuth = create<AuthState>((set) => ({
 export const useSystemUIState = create<SystemUIState>((set) => ({
   taskbarAlignment: 'bottom',
   isSearchVisible: true,
+  searchValue: '',
   startMenuOpen: false,
   startMenuLayout: 'grid',
   showRecommendedApps: true,
@@ -65,6 +66,9 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   },
   setIsSearchVisible: (isVisible: boolean) => {
     set({ isSearchVisible: isVisible });
+  },
+  setSearchValue: (value: string) => {
+    set({ searchValue: value });
   },
   setStartMenuOpen: (isOpen: boolean) => {
     set({ startMenuOpen: isOpen });

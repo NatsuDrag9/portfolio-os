@@ -28,7 +28,6 @@ const formatDate = (date: Date): string => {
 };
 
 function Taskbar() {
-  const [searchValue, setSearchValue] = useState('');
   const [currentTime, setCurrentTime] = useState(() => formatTime(new Date()));
   const [currentDate, setCurrentDate] = useState(() => formatDate(new Date()));
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
@@ -38,6 +37,8 @@ function Taskbar() {
     showMoreIcons,
     setStartMenuOpen,
     startMenuOpen,
+    searchValue,
+    setSearchValue,
   } = useSystemUIState();
   const { taskbarPinnedAppIds } = useWorkspaceState();
   const { focusWindow, closeWindow, restoreOrFocusApp } = useWindowManager();
@@ -85,7 +86,20 @@ function Taskbar() {
     : START_MENU_WINDOWS.desktopIcon;
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    const value = e.target.value;
+    setSearchValue(value);
+
+    // Open Start Menu when user starts typing
+    if (value.trim() && !startMenuOpen) {
+      setStartMenuOpen(true);
+    }
+  };
+
+  const handleSearchFocus = () => {
+    // Open Start Menu when search is focused with content
+    if (!startMenuOpen) {
+      setStartMenuOpen(true);
+    }
   };
 
   // Right click handler (placeholder for future context menu)
@@ -138,6 +152,7 @@ function Taskbar() {
               name="taskbar-search"
               id="taskbar-search"
               onChange={handleSearchChange}
+              onFocus={handleSearchFocus}
               placeholder="Search"
               value={searchValue}
               className="taskbar__search"

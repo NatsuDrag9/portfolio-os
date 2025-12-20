@@ -7,6 +7,7 @@ import startMenuPlayFunction, {
   startMenuUserCardPlayFunction,
   startMenuPowerOptionsPlayFunction,
   startMenuAppsPlayFunction,
+  startMenuSearchResultsPlayFunction,
 } from './playFunctions';
 
 /**
@@ -147,6 +148,27 @@ export const UserCardInteraction: Story = {
     ),
   ],
   play: startMenuUserCardPlayFunction,
+};
+
+export const SearchResults: Story = {
+  decorators: [
+    withStoreSetup(
+      {
+        startMenuOpen: true,
+        startMenuLayout: 'grid',
+        showRecommendedApps: true,
+        searchValue: '', // Will be set in play function
+      },
+      {
+        taskbarPinnedAppIds: ['file-explorer', 'edge', 'vscode'],
+        activeWindows: [],
+      },
+      {
+        username: 'Natsu',
+      }
+    ),
+  ],
+  play: startMenuSearchResultsPlayFunction,
 };
 
 export const PowerOptionsInteraction: Story = {

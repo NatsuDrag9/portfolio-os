@@ -65,6 +65,7 @@ export interface WorkspaceState {
 export interface SystemUIState {
   taskbarAlignment: TaskbarAlignmentType; // Position of taskbar: "top", "right", "bottom", "left"
   isSearchVisible: boolean; // Whether the search bar is visible in the taskbar
+  searchValue: string; // Current search query from taskbar search input
   startMenuOpen: boolean; // Whether the Start Menu is currently open
   startMenuLayout: StartMenuLayoutType; // Layout style of Start Menu: "grid" or "list"
   showRecommendedApps: boolean; // Whether to display recommended apps in the Start Menu
@@ -76,6 +77,7 @@ export interface SystemUIState {
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => void;
   setIsSearchVisible: (isVisible: boolean) => void;
+  setSearchValue: (value: string) => void;
   setStartMenuOpen: (isOpen: boolean) => void;
   updateStartMenuLayout: (layout: StartMenuLayoutType) => void;
   setShowRecommendedApps: (show: boolean) => void;

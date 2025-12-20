@@ -1,4 +1,5 @@
 import { PlayFunctionType } from '@definitions/storybookTypes';
+import { useSystemUIState } from '@store/store';
 import { expect, userEvent, within, waitFor } from '@storybook/test';
 
 const startMenuPlayFunction = async ({ canvasElement }: PlayFunctionType) => {
@@ -42,7 +43,7 @@ export const startMenuPanelNavigationPlayFunction = async ({
   });
 
   // Find and click "Back" button to return to panel-one
-  const backButton = canvas.getByRole('button', { name: /back/i });
+  const backButton = canvas.getAllByRole('button', { name: /back/i })[0];
   expect(backButton).toBeInTheDocument();
   await userEvent.click(backButton);
 
@@ -84,6 +85,85 @@ export const startMenuUserCardPlayFunction = async ({
     '.start-menu__user-details-text'
   );
   expect(localAccountText).toBeInTheDocument();
+};
+
+export const startMenuSearchResultsPlayFunction = async ({
+  canvasElement,
+}: PlayFunctionType) => {
+  const canvas = within(canvasElement);
+
+  // Verify start menu is on panel-one initially
+  const startMenu = canvasElement.querySelector('.start-menu');
+  expect(startMenu).toHaveClass('panel-one');
+
+  // Simulate typing in search (using Zustand store directly)
+  // In a real app, this would come from a search input in the Taskbar
+  useSystemUIState.setState({ searchValue: 'edge' });
+
+  // Wait for search results panel to appear
+  await waitFor(
+    () => {
+      expect(startMenu).toHaveClass('search-results');
+    },
+    { timeout: 1000 }
+  );
+
+  // Verify search results panel is visible
+  const searchResultsPanel = canvasElement.querySelector(
+    '.start-menu__search-results'
+  );
+  expect(searchResultsPanel).toBeInTheDocument();
+
+  // Verify "Best Match" or "Search Results" title is displayed
+  const categoryTitle = canvas.getByText(/Best Match|Search Results/i);
+  expect(categoryTitle).toBeInTheDocument();
+
+  // Verify results container exists
+  const resultsContainer = canvasElement.querySelector(
+    '.start-menu__results-container'
+  );
+  expect(resultsContainer).toBeInTheDocument();
+
+  // Verify back button exists
+  const backButton = canvas.getByRole('button', { name: /back to main menu/i });
+  expect(backButton).toBeInTheDocument();
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Test no results state
+  useSystemUIState.setState({ searchValue: 'nonexistentapp123' });
+
+  await waitFor(
+    () => {
+      const noResultsText = canvas.queryByText(/No apps found for/i);
+      expect(noResultsText).toBeInTheDocument();
+    },
+    { timeout: 1000 }
+  );
+
+  // Verify no results hint exists
+  const noResultsHint = canvas.getByText(
+    /Try searching with a different term/i
+  );
+  expect(noResultsHint).toBeInTheDocument();
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Click back button to return to panel-one
+  await userEvent.click(backButton);
+
+  await waitFor(
+    () => {
+      expect(startMenu).toHaveClass('panel-one');
+    },
+    { timeout: 1000 }
+  );
+
+  // Verify search value was cleared
+  await waitFor(() => {
+    const { searchValue } = useSystemUIState.getState();
+    expect(searchValue).toBe('');
+  });
 };
 
 export const startMenuPowerOptionsPlayFunction = async ({

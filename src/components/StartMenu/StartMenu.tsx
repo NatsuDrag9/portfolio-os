@@ -6,15 +6,17 @@ import PanelTwo from './PanelTwo';
 import StartMenuPowerButton from './StartMenuPowerButton';
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
+import PanelSearchResults from './PanelSearchResults';
 
-type StartMenuPanelType = 'panel-one' | 'panel-two';
+type StartMenuPanelType = 'panel-one' | 'panel-two' | 'search-results';
 
 function StartMenu() {
   const startMenuRef = useRef<HTMLDivElement>(null);
   const windowsButtonRef = useRef<HTMLElement | null>(null);
   const [changePanel, setChangePanel] =
     useState<StartMenuPanelType>('panel-one');
-  const { startMenuOpen, setStartMenuOpen } = useSystemUIState();
+  const { startMenuOpen, setStartMenuOpen, searchValue, setSearchValue } =
+    useSystemUIState();
   const { activeWindows } = useWorkspaceState();
 
   // Get reference to Windows button in Taskbar via data attribute
@@ -28,7 +30,12 @@ function StartMenu() {
   // Close start menu when clicking outside
   useClickOutsideModal(
     startMenuOpen,
-    () => setStartMenuOpen(false),
+    () => {
+      if (searchValue) {
+        setSearchValue('');
+      }
+      setStartMenuOpen(false);
+    },
     startMenuRef as RefObject<HTMLElement>,
     [windowsButtonRef as RefObject<HTMLElement>]
   );
@@ -40,9 +47,22 @@ function StartMenu() {
     return maxZIndex + 1;
   }, [activeWindows]);
 
+  // Determine active panel based on search value
+  const activePanel = useMemo<StartMenuPanelType>(() => {
+    if (searchValue.trim()) {
+      return 'search-results';
+    }
+    return changePanel === 'search-results' ? 'panel-one' : changePanel;
+  }, [searchValue, changePanel]);
+
+  const handleBackToMain = () => {
+    setSearchValue('');
+    setChangePanel('panel-one');
+  };
+
   return (
     <div
-      className={`start-menu ${changePanel} ${startMenuOpen ? 'open' : ''}`}
+      className={`start-menu ${activePanel} ${startMenuOpen ? 'open' : ''}`}
       style={{ zIndex: startMenuZIndex }}
       ref={startMenuRef}
     >
@@ -56,6 +76,11 @@ function StartMenu() {
         onButtonClick={() => {
           setChangePanel('panel-one');
         }}
+      />
+
+      <PanelSearchResults
+        searchValue={searchValue}
+        onButtonClick={handleBackToMain}
       />
 
       <div className="start-menu__bottom">

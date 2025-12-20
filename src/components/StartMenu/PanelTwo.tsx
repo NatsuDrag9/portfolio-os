@@ -22,6 +22,7 @@ function PanelTwo({ onButtonClick }: PanelTwoProps) {
     action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => {
+    // To Do: Add functionality
     logInDev(
       'Right click: ',
       'appId: ',
