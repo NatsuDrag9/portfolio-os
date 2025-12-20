@@ -11,6 +11,16 @@ import {
   SnowScenaryWallpaperMobile,
 } from '@assets/images/specifics';
 import { BackgroundImageMap } from '@definitions/settingsTypes';
+import {
+  GlobeClockRegular,
+  HomeRegular,
+  LaptopRegular,
+  PersonAccountsRegular,
+  SpeakerEditRegular,
+  SystemRegular,
+  WindowBrushRegular,
+} from '@fluentui/react-icons';
+import { ComponentType } from 'react';
 
 export const BACKGROUND_IMAGE_MAP: Record<string, BackgroundImageMap> = {
   WALLPAPER_NATSU: {
@@ -53,4 +63,17 @@ export const BACKGROUND_IMAGE_MAP: Record<string, BackgroundImageMap> = {
     name: 'Scenary Snow (Mobile)',
     image: SnowScenaryWallpaperMobile,
   },
+};
+
+export const SETTINGS_ICON_MAP: Record<
+  string,
+  ComponentType<{ className?: string }>
+> = {
+  home: HomeRegular,
+  system: SystemRegular,
+  personalization: WindowBrushRegular,
+  display: LaptopRegular,
+  volume: SpeakerEditRegular,
+  dateAndTime: GlobeClockRegular,
+  accounts: PersonAccountsRegular,
 };

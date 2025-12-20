@@ -1,0 +1,105 @@
+.sidebar-menubutton {
+  @include disable-default-button-styles;
+
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-horizontal-m);
+  align-items: center;
+  width: 100%;
+  min-width: 15rem;
+  height: 6rem;
+  padding: var(--spacing-vertical-m) var(--spacing-horizontal-l);
+  border-radius: var(--border-radius-medium);
+  color: var(--color-neutral-foreground1);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
+
+  &__fluent-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--color-neutral-foreground2);
+    transition: color 0.15s ease;
+  }
+
+  &__name {
+    margin: 0;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base300);
+  }
+
+  &--active &__fluent-icon {
+    color: var(--color-brand-foreground1);
+  }
+
+  &--active &__name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-foreground1) 6%,
+      transparent
+    );
+  }
+
+  &:hover &__fluent-icon {
+    color: var(--color-neutral-foreground1);
+  }
+
+  &:active {
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-foreground1) 10%,
+      transparent
+    );
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-stroke1);
+    outline-offset: 2px;
+  }
+
+  &--active {
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-foreground1) 8%,
+      transparent
+    );
+
+    &::before {
+      position: absolute;
+      left: 0;
+      width: 0.3rem;
+      height: 60%;
+      border-radius: 0 var(--border-radius-medium) var(--border-radius-medium) 0;
+      background-color: var(--color-brand-background);
+      content: '';
+    }
+
+    &:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--color-neutral-foreground1) 10%,
+        transparent
+      );
+    }
+  }
+
+  // Dark theme adjustments
+  .dark-theme &--active {
+    &::before {
+      background-color: var(--color-brand-foreground1);
+    }
+  }
+
+  .dark-theme &--active &__fluent-icon {
+    color: var(--color-brand-foreground1);
+  }
+}
