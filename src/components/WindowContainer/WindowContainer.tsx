@@ -67,6 +67,8 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
           ? `calc(100% - ${TASKBAR_HEIGHT}px)`
           : defaultHeight,
       }}
+      minWidth={400}
+      minHeight={300}
       onDragStop={(_e, d) => {
         updateWindowPosition(windowId, d.x, d.y);
       }}

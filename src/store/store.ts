@@ -3,6 +3,7 @@ import {
   AuthState,
   BootStatusState,
   BootStatusType,
+  SettingsState,
   SystemUIState,
   WorkspaceState,
 } from '@definitions/storeTypes';
@@ -126,7 +127,7 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
         previousDisplayState: 'normal',
         position: { x: 100, y: 100 },
         zIndex: state.activeWindows.length + 1,
-        size: { width: 45, height: 35 },
+        size: { width: 800, height: 600 },
         customTheme: undefined,
         snapPosition: 'fullscreen',
       };
@@ -253,6 +254,15 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
           ? state.taskbarPinnedAppIds.filter((id) => id !== appId)
           : [...state.taskbarPinnedAppIds, appId],
       };
+    });
+  },
+}));
+
+export const useSettingsState = create<SettingsState>((set) => ({
+  activeSettingButton: 'home',
+  setActiveSettingButton: (settingsButton: string) => {
+    set({
+      activeSettingButton: settingsButton,
     });
   },
 }));

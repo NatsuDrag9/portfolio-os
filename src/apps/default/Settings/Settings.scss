@@ -1,0 +1,93 @@
+.settings {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-neutral-background1);
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xl);
+    width: 30%;
+    min-width: 20rem;
+    height: 100%;
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-m);
+
+    // border-right: 1px solid var(--color-neutral-stroke2);
+
+    .user-card {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing-horizontal-m);
+      align-items: center;
+      width: 100%;
+      height: fit-content;
+      min-height: 6rem;
+      padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+      border-radius: var(--border-radius-large);
+      background-color: var(--color-neutral-background2);
+
+      &__content-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-vertical-xxs);
+        align-items: flex-start;
+      }
+
+      &__fluent-icon {
+        width: 5.5rem;
+        height: 5.5rem;
+        color: var(--color-neutral-foreground4);
+      }
+
+      &__title {
+        margin: 0;
+        color: var(--color-neutral-foreground1);
+        font-family: var(--font-family-base);
+        font-size: var(--font-size-base400);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--line-height-base400);
+      }
+
+      &__description {
+        margin: 0;
+        color: var(--color-neutral-foreground3);
+        font-family: var(--font-family-base);
+        font-size: var(--font-size-base200);
+        font-weight: var(--font-weight-regular);
+        line-height: var(--line-height-base200);
+      }
+    }
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    overflow-y: auto;
+  }
+
+  &-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xxs);
+    width: 100%;
+    height: 100%;
+  }
+
+  // Dark theme adjustments
+  .dark-theme & {
+    background-color: var(--color-neutral-background2);
+
+    &__left {
+      border-right-color: var(--color-neutral-stroke1);
+
+      .user-card {
+        background-color: var(--color-neutral-background3);
+      }
+    }
+  }
+}

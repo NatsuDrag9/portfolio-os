@@ -34,7 +34,8 @@
       "@utils/*": ["src/utils/*"],
       "@definitions/*": ["src/definitions/*"],
       "@constants/*": ["src/constants/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@apps/*": ["src/apps/*"]
     },
 
     /* Linting */

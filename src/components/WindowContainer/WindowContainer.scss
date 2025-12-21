@@ -113,6 +113,6 @@
     flex: 1;
     width: 100%;
     min-height: 0; // Allows flex child to shrink properly
-    overflow-y: hidden;
+    overflow: hidden;
   }
 }

@@ -87,3 +87,8 @@ export interface SystemUIState {
   toggleQuickAction: (action: QuickActionsType) => void;
   setBrightnessLevel: (value: number) => void;
 }
+
+export interface SettingsState {
+  activeSettingButton: string;
+  setActiveSettingButton: (value: string) => void;
+}

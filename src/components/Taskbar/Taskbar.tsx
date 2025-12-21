@@ -40,8 +40,18 @@ function Taskbar() {
     searchValue,
     setSearchValue,
   } = useSystemUIState();
-  const { taskbarPinnedAppIds } = useWorkspaceState();
+  const { taskbarPinnedAppIds, windowInstanceCounters } = useWorkspaceState();
   const { focusWindow, closeWindow, restoreOrFocusApp } = useWindowManager();
+
+  // Combine pinned apps and apps with open windows
+  // Use Set to avoid duplicates
+  const taskbarAppIds = React.useMemo(() => {
+    const appsWithOpenWindows = Object.keys(windowInstanceCounters).filter(
+      (appId) => windowInstanceCounters[appId] > 0
+    );
+    const combined = new Set([...taskbarPinnedAppIds, ...appsWithOpenWindows]);
+    return Array.from(combined);
+  }, [taskbarPinnedAppIds, windowInstanceCounters]);
 
   // Update time every minute
   useEffect(() => {
@@ -159,14 +169,16 @@ function Taskbar() {
             />
           </div>
         )}
-      {/* Taskbar apps container with pinned apps */}
+      {/* Taskbar apps container with pinned apps and open windows */}
       <div className={`taskbar__apps-container ${taskbarAlignment}`}>
-        {taskbarPinnedAppIds.map((id) => {
+        {taskbarAppIds.map((id) => {
+          const isPinned = taskbarPinnedAppIds.includes(id);
           return (
             <AppIcon
               appId={id}
               iconVariant="taskbar"
               key={id}
+              isPinned={isPinned}
               onSingleClick={restoreOrFocusApp}
               onWindowFocus={focusWindow}
               onWindowClose={closeWindow}

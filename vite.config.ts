@@ -25,6 +25,7 @@ const viteConfig = defineConfig({
       '@definitions': '/src/definitions',
       '@constants': '/src/constants',
       '@config': '/src/config',
+      '@apps': '/src/apps',
     },
   },
   css: {
