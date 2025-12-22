@@ -7,7 +7,7 @@ import { Natsu } from '@assets/images/specifics';
 function StartMenuUser() {
   const startMenuUserRef = useRef<HTMLDivElement>(null);
   const [showUserCard, setShowUserCard] = useState(false);
-  const { username, isAdmin } = useAuth();
+  const { username, isAdmin, uploadedUserAvatar } = useAuth();
 
   // Close user card popup when clicking outside
   useClickOutsideModal(
@@ -25,7 +25,15 @@ function StartMenuUser() {
       type="button"
       onClick={handleButtonClick}
     >
-      <PersonCircleRegular className="start-menu__fluent-icon" />
+      {uploadedUserAvatar ? (
+        <img
+          src={uploadedUserAvatar}
+          alt="user avatar"
+          className="start-menu__user-avatar"
+        />
+      ) : (
+        <PersonCircleRegular className="start-menu__fluent-icon" />
+      )}
       <p className="start-menu__user-name">
         {username?.toUpperCase() ?? 'N/A'}
       </p>

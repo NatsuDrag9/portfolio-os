@@ -5,6 +5,7 @@ export interface PrimaryButtonProps {
   onButtonClick?: () => void;
   buttonType?: 'button' | 'submit';
   formId?: string;
+  isDisabled?: boolean;
 }
 
 function PrimaryButton({
@@ -12,6 +13,7 @@ function PrimaryButton({
   onButtonClick,
   buttonType = 'button',
   formId = undefined,
+  isDisabled = false,
 }: PrimaryButtonProps) {
   const handleButtonClick = () => {
     if (onButtonClick) {
@@ -25,6 +27,7 @@ function PrimaryButton({
       type={buttonType}
       onClick={handleButtonClick}
       form={formId}
+      disabled={isDisabled}
     >
       {name}
     </button>

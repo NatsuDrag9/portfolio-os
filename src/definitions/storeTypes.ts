@@ -25,7 +25,9 @@ export interface BootStatusState {
 export interface AuthState {
   username: string | null;
   isAdmin: boolean;
+  uploadedUserAvatar?: string;
   updateAuthState: (newUsername: string | null) => void;
+  updateUserAvatar: (imgUrl: string) => void;
 }
 
 export interface WorkspaceState {

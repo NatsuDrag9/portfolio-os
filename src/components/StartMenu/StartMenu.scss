@@ -367,6 +367,12 @@
     }
   }
 
+  &__user-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--border-radius-circular);
+  }
+
   // Fluent icon base styles
   &__fluent-icon {
     width: 2.4rem;

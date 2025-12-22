@@ -8,7 +8,7 @@ import Accounts from './Panels/Accounts/Accounts';
 import Personalization from './Panels/Personalization/Personalization';
 
 function Settings() {
-  const { username, isAdmin } = useAuth();
+  const { username, isAdmin, uploadedUserAvatar } = useAuth();
   const { activeSettingButton } = useSettingsState();
 
   const renderSettingsPanel = () => {
@@ -30,7 +30,15 @@ function Settings() {
     <div className="settings">
       <div className="settings__left">
         <div className="user-card">
-          <PersonCircleRegular className="user-card__fluent-icon" />
+          {uploadedUserAvatar ? (
+            <img
+              src={uploadedUserAvatar}
+              alt="user avatar"
+              className="user-card__avatar"
+            />
+          ) : (
+            <PersonCircleRegular className="user-card__fluent-icon" />
+          )}
           <div className="user-card__content-container">
             <h6 className="user-card__title">{username}</h6>
             <p className="user-card__description">
