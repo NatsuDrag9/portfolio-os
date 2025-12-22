@@ -1,0 +1,353 @@
+.home {
+  container-type: inline-size;
+  container-name: home;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xl);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  &__section-one {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-xl);
+    align-items: center;
+    width: 100%;
+    min-height: fit-content;
+  }
+
+  &__section-two {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-l);
+    justify-content: center;
+    width: 100%;
+    min-height: fit-content;
+  }
+
+  .user-card {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-l);
+    align-items: center;
+    min-width: fit-content;
+    max-width: 40rem;
+    height: fit-content;
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    border-radius: var(--border-radius-large);
+
+    // background-color: var(--color-neutral-background2);
+    // box-shadow: var(--shadow2);
+    // transition:
+    //   box-shadow 0.2s ease,
+    //   background-color 0.2s ease;
+
+    // &:hover {
+    //   background-color: var(--color-neutral-background3);
+    //   box-shadow: var(--shadow4);
+    // }
+
+    &__image {
+      width: 8rem;
+      height: 8rem;
+      border-radius: var(--border-radius-medium);
+      filter: blur(2px);
+      object-fit: cover;
+    }
+
+    &__user-details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-vertical-xs);
+    }
+
+    &__title {
+      margin: 0;
+      color: var(--color-neutral-foreground1);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base300);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-base300);
+    }
+
+    &__content {
+      margin: 0;
+      color: var(--color-neutral-foreground3);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base200);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--line-height-base200);
+    }
+  }
+
+  &__info-cards {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: start;
+    width: 70%;
+    height: 100%;
+  }
+
+  .info-card {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-m);
+    align-items: center;
+    width: fit-content;
+    min-width: 18rem;
+    height: fit-content;
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    border-radius: var(--border-radius-large);
+
+    // background-color: var(--color-neutral-background2);
+    // box-shadow: var(--shadow2);
+    // transition:
+    //   box-shadow 0.2s ease,
+    //   background-color 0.2s ease;
+
+    // &:hover {
+    //   background-color: var(--color-neutral-background3);
+    //   box-shadow: var(--shadow4);
+    // }
+
+    &__fluent-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      color: var(--color-brand-foreground1);
+    }
+
+    &__details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-vertical-xxs);
+    }
+
+    &__title {
+      margin: 0;
+      color: var(--color-neutral-foreground1);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base300);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-base300);
+    }
+
+    &__content {
+      margin: 0;
+      color: var(--color-neutral-foreground3);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base200);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--line-height-base200);
+    }
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-neutral-foreground1);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base500);
+  }
+
+  &__content {
+    margin: 0;
+    color: var(--color-neutral-foreground2);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base300);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xs);
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+  }
+
+  &__info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-horizontal-l) var(--spacing-vertical-l);
+    width: 100%;
+  }
+
+  .system-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xxs);
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--color-neutral-background2);
+    transition: background-color 0.2s ease;
+
+    // &:hover {
+    //   background-color: var(--color-neutral-background3);
+    // }
+
+    &__label {
+      margin: 0;
+      color: var(--color-neutral-foreground3);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base100);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--line-height-base100);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    &__value {
+      margin: 0;
+      color: var(--color-neutral-foreground1);
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-base300);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-base300);
+    }
+  }
+
+  // Dark theme adjustments
+  .dark-theme & {
+    .user-card {
+      background-color: var(--color-neutral-background3);
+
+      &:hover {
+        background-color: var(--color-neutral-background4);
+      }
+    }
+
+    .info-card {
+      background-color: var(--color-neutral-background3);
+
+      &:hover {
+        background-color: var(--color-neutral-background4);
+      }
+    }
+
+    .system-info-item {
+      background-color: var(--color-neutral-background3);
+
+      &:hover {
+        background-color: var(--color-neutral-background4);
+      }
+    }
+  }
+}
+
+// Container Queries
+// NOTE: These are based on the .home container size, not viewport
+// Settings right panel is 70% of WindowContainer width
+// WindowContainer default: 800px × 600px, min: 400px × 300px
+// So Settings right panel: ~560px default, ~280px minimum
+
+// When container is very small (< 450px - near minimum WindowContainer)
+@container home (max-width: 450px) {
+  .home {
+    &__section-one {
+      flex-direction: column;
+      gap: var(--spacing-vertical-l);
+      align-items: flex-start;
+      height: auto;
+    }
+
+    &__info-cards {
+      flex-direction: column;
+      gap: var(--spacing-vertical-m);
+      width: 100%;
+    }
+
+    .user-card {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      max-width: none;
+
+      &__image {
+        width: 100%;
+        height: 12rem;
+      }
+    }
+
+    .info-card {
+      width: 100%;
+      min-width: auto;
+    }
+
+    &__info-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-vertical-m);
+    }
+  }
+}
+
+// When container is medium (450px - 600px)
+@container home (min-width: 450px) and (max-width: 600px) {
+  .home {
+    &__section-one {
+      flex-direction: column;
+      gap: var(--spacing-vertical-l);
+      height: auto;
+    }
+
+    &__info-cards {
+      flex-flow: row wrap;
+      gap: var(--spacing-horizontal-m) var(--spacing-vertical-m);
+      width: 100%;
+    }
+
+    .user-card {
+      gap: var(--spacing-horizontal-xl);
+
+      &__image {
+        width: 40%;
+        height: auto;
+      }
+    }
+
+    .info-card {
+      flex: 1 1 calc(50% - var(--spacing-horizontal-m));
+      min-width: 15rem;
+    }
+
+    &__info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+// When container is large enough (> 600px) but still constrained
+@container home (min-width: 600px) and (max-width: 700px) {
+  .home {
+    &__section-one {
+      flex-direction: column;
+      gap: var(--spacing-vertical-m);
+      align-items: start;
+      width: 100%;
+    }
+
+    .user-card {
+      gap: var(--spacing-horizontal-xl);
+
+      &__image {
+        width: 40%;
+        height: auto;
+      }
+    }
+
+    &__info-cards {
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-horizontal-l) var(--spacing-vertical-l);
+    }
+
+    &__info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
