@@ -1,0 +1,75 @@
+.primary-button {
+  @include disable-default-button-styles;
+
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-horizontal-s);
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  min-width: 9.6rem;
+  height: 3.2rem;
+  padding: var(--spacing-vertical-xs) var(--spacing-horizontal-l);
+  border: 1px solid var(--color-brand-background);
+  border-radius: var(--border-radius-medium);
+  background-color: var(--color-brand-background);
+  color: var(--color-static-white);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base300);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-base300);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.05s ease;
+
+  &:hover {
+    border-color: var(--color-brand-background-hover);
+    background-color: var(--color-brand-background-hover);
+    box-shadow: var(--shadow4);
+  }
+
+  &:active {
+    border-color: var(--color-brand-background-pressed);
+    background-color: var(--color-brand-background-pressed);
+    box-shadow: var(--shadow2);
+    transform: scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-stroke1);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    border-color: var(--color-neutral-background5);
+    background-color: var(--color-neutral-background5);
+    color: var(--color-neutral-foreground-disabled);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Dark theme adjustments
+  .dark-theme & {
+    border-color: var(--color-brand-background);
+    background-color: var(--color-brand-background);
+
+    &:hover {
+      border-color: var(--color-brand-background-hover);
+      background-color: var(--color-brand-background-hover);
+    }
+
+    &:active {
+      border-color: var(--color-brand-background-pressed);
+      background-color: var(--color-brand-background-pressed);
+    }
+
+    &:disabled {
+      border-color: var(--color-neutral-background4);
+      background-color: var(--color-neutral-background4);
+      color: var(--color-neutral-foreground-disabled);
+    }
+  }
+}
