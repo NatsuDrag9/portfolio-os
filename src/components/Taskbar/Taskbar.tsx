@@ -11,26 +11,42 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
 import { useWindowManager } from '@hooks/useWindowManager';
+import { DateFormat, TimeFormat } from '@definitions/settingsTypes';
 
-const formatTime = (date: Date): string => {
+const formatTime = (
+  date: Date,
+  timeFormat: TimeFormat,
+  timezone?: string
+): string => {
   return date.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
-    hour12: true,
+    hour12: timeFormat === '12h',
+    timeZone: timezone,
   });
 };
 
-const formatDate = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+const formatDate = (
+  date: Date,
+  dateFormat: DateFormat,
+  timezone?: string
+): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: timezone,
+  };
+
+  const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(date);
+  const [day, month, year] = formattedDate.split('/');
+
+  return dateFormat === 'DD/MM/YYYY'
+    ? `${day}-${month}-${year}`
+    : `${month}-${day}-${year}`;
 };
 
 function Taskbar() {
-  const [currentTime, setCurrentTime] = useState(() => formatTime(new Date()));
-  const [currentDate, setCurrentDate] = useState(() => formatDate(new Date()));
-  const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   const {
     taskbarAlignment,
     isSearchVisible,
@@ -39,7 +55,16 @@ function Taskbar() {
     startMenuOpen,
     searchValue,
     setSearchValue,
+    timeFormat,
+    dateFormat,
+    autoSyncDateTime,
+    timezone,
   } = useSystemUIState();
+
+  const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+
   const { taskbarPinnedAppIds, windowInstanceCounters } = useWorkspaceState();
   const { focusWindow, closeWindow, restoreOrFocusApp } = useWindowManager();
 
@@ -53,13 +78,17 @@ function Taskbar() {
     return Array.from(combined);
   }, [taskbarPinnedAppIds, windowInstanceCounters]);
 
-  // Update time every minute
+  // Update time every minute and when format/timezone changes
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
-      setCurrentTime(formatTime(now));
-      setCurrentDate(formatDate(now));
+      const tz = autoSyncDateTime ? undefined : timezone;
+      setCurrentTime(formatTime(now, timeFormat, tz));
+      setCurrentDate(formatDate(now, dateFormat, tz));
     };
+
+    // Update immediately when format changes
+    updateDateTime();
 
     // Calculate ms until next minute
     const now = new Date();
@@ -75,7 +104,7 @@ function Taskbar() {
     }, msUntilNextMinute);
 
     return () => clearTimeout(initialTimeout);
-  }, []);
+  }, [timeFormat, dateFormat, autoSyncDateTime, timezone]);
 
   // Global Windows key handler
   useEffect(() => {

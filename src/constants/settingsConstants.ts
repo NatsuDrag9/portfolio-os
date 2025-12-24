@@ -77,3 +77,17 @@ export const SETTINGS_ICON_MAP: Record<
   dateAndTime: GlobeClockRegular,
   accounts: PersonAccountsRegular,
 };
+
+export const COMMON_TIMEZONES = [
+  { displayName: 'New York (EST/EDT)', value: 'America/New_York' },
+  { displayName: 'Chicago (CST/CDT)', value: 'America/Chicago' },
+  { displayName: 'Denver (MST/MDT)', value: 'America/Denver' },
+  { displayName: 'Los Angeles (PST/PDT)', value: 'America/Los_Angeles' },
+  { displayName: 'London (GMT/BST)', value: 'Europe/London' },
+  { displayName: 'Paris (CET/CEST)', value: 'Europe/Paris' },
+  { displayName: 'Tokyo (JST)', value: 'Asia/Tokyo' },
+  { displayName: 'Shanghai (CST)', value: 'Asia/Shanghai' },
+  { displayName: 'India (IST)', value: 'Asia/Kolkata' },
+  { displayName: 'Sydney (AEDT/AEST)', value: 'Australia/Sydney' },
+  { displayName: 'Auckland (NZDT/NZST)', value: 'Pacific/Auckland' },
+];

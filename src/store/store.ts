@@ -24,6 +24,7 @@ import {
   WindowDisplayType,
 } from '@definitions/applicationTypes';
 import { APP_REGISTRY } from '@constants/desktopConstants';
+import { DateFormat, TimeFormat } from '@definitions/settingsTypes';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
   bootStatus: 'OFF',
@@ -67,6 +68,11 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   currentTheme: 'light',
   activeQuickActions: [],
   brightnessLevel: 30,
+  isNightLightActive: false,
+  timeFormat: '12h',
+  dateFormat: 'DD/MM/YYYY',
+  autoSyncDateTime: true,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => {
     set({ taskbarAlignment: alignment });
@@ -96,17 +102,56 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
     set({ currentTheme: theme });
   },
   toggleQuickAction: (action: QuickActionsType) => {
-    set((state) => {
+    set((state: SystemUIState) => {
       const isActive = state.activeQuickActions.includes(action);
+      const newActiveQuickActions = isActive
+        ? state.activeQuickActions.filter((a: QuickActionsType) => a !== action)
+        : [...state.activeQuickActions, action];
+
+      // Sync night-light state when toggling from Quick Actions
+      if (action === 'night-light') {
+        return {
+          activeQuickActions: newActiveQuickActions,
+          isNightLightActive: !isActive,
+        };
+      }
+
       return {
-        activeQuickActions: isActive
-          ? state.activeQuickActions.filter((a) => a !== action)
-          : [...state.activeQuickActions, action],
+        activeQuickActions: newActiveQuickActions,
       };
     });
   },
   setBrightnessLevel: (value: number) => {
     set({ brightnessLevel: value });
+  },
+  setNightLight: (active: boolean) => {
+    set((state: SystemUIState) => {
+      // Sync quick action state when setting night light
+      const activeQuickActions: QuickActionsType[] = active
+        ? state.activeQuickActions.includes('night-light')
+          ? state.activeQuickActions
+          : [...state.activeQuickActions, 'night-light']
+        : state.activeQuickActions.filter(
+            (a: QuickActionsType) => a !== 'night-light'
+          );
+
+      return {
+        isNightLightActive: active,
+        activeQuickActions,
+      };
+    });
+  },
+  setTimeFormat: (format: TimeFormat) => {
+    set({ timeFormat: format });
+  },
+  setDateFormat: (format: DateFormat) => {
+    set({ dateFormat: format });
+  },
+  setAutoSyncDateTime: (autoSync: boolean) => {
+    set({ autoSyncDateTime: autoSync });
+  },
+  setTimezone: (timezone: string) => {
+    set({ timezone });
   },
 }));
 

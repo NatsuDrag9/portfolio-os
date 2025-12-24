@@ -245,8 +245,8 @@
 // WindowContainer default: 800px × 600px, min: 400px × 300px
 // So Settings right panel: ~560px default, ~280px minimum
 
-// When container is very small (< 450px - near minimum WindowContainer)
-@container home (max-width: 450px) {
+// When container is very small (< mobile breakpoint)
+@container home (max-width: #{$breakpoint-mobile}) {
   .home {
     &__section-one {
       flex-direction: column;
@@ -285,8 +285,8 @@
   }
 }
 
-// When container is medium (450px - 600px)
-@container home (min-width: 450px) and (max-width: 600px) {
+// When container is medium (mobile to large mobile)
+@container home (min-width: #{$breakpoint-mobile}) and (max-width: #{$breakpoint-mobile-lg}) {
   .home {
     &__section-one {
       flex-direction: column;
@@ -320,8 +320,8 @@
   }
 }
 
-// When container is large enough (> 600px) but still constrained
-@container home (min-width: 600px) and (max-width: 700px) {
+// When container is large mobile to tablet portrait
+@container home (min-width: #{$breakpoint-mobile-lg}) and (max-width: #{$breakpoint-tablet-portrait}) {
   .home {
     &__section-one {
       flex-direction: column;

@@ -2,4 +2,16 @@
   @include screen-layout;
 
   position: relative;
+
+  &__night-light-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(255 140 60 / 15%);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
 }

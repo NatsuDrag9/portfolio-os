@@ -7,6 +7,7 @@ import {
   TaskbarAlignmentType,
   ThemeType,
 } from './desktopTypes';
+import { DateFormat, TimeFormat } from './settingsTypes';
 
 export type BootStatusType =
   | 'ON'
@@ -76,6 +77,11 @@ export interface SystemUIState {
   currentTheme: ThemeType;
   activeQuickActions: QuickActionsType[]; // List of currently active quick actions
   brightnessLevel: number; // Global brightness level
+  isNightLightActive: boolean; // Night light mode toggle
+  timeFormat: TimeFormat; // Time format preference
+  dateFormat: DateFormat; // Date format preference
+  autoSyncDateTime: boolean; // Auto-sync date/time with system
+  timezone: string; // User's timezone
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => void;
   setIsSearchVisible: (isVisible: boolean) => void;
@@ -88,6 +94,11 @@ export interface SystemUIState {
   setTheme: (theme: ThemeType) => void;
   toggleQuickAction: (action: QuickActionsType) => void;
   setBrightnessLevel: (value: number) => void;
+  setNightLight: (active: boolean) => void;
+  setTimeFormat: (format: TimeFormat) => void;
+  setDateFormat: (format: DateFormat) => void;
+  setAutoSyncDateTime: (autoSync: boolean) => void;
+  setTimezone: (timezone: string) => void;
 }
 
 export interface SettingsState {
