@@ -3,8 +3,12 @@ import './System.scss';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSystemUIState } from '@store/store';
 import Slider from '@components/Slider/Slider';
-import { PrimaryButton, ToggleButton } from '@components/index';
-import GenericDropdown from '@components/GenericDropdown/GenericDropdown';
+import {
+  GenericDropdown,
+  PrimaryButton,
+  ToggleButton,
+} from '@components/index';
+
 import { COMMON_TIMEZONES } from '@constants/settingsConstants';
 import { DropdownType } from '@definitions/utlityTypes';
 

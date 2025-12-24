@@ -191,3 +191,60 @@
     }
   }
 }
+
+// Container Queries
+
+// When container is large (large mobile to tablet portrait)
+@container accounts (min-width: #{$breakpoint-mobile-lg}) and (max-width: #{$breakpoint-tablet-portrait}) {
+  .accounts {
+    &__form {
+      max-width: 50rem;
+    }
+  }
+}
+
+// When container is medium (mobile to large mobile)
+@container accounts (min-width: #{$breakpoint-mobile}) and (max-width: #{$breakpoint-mobile-lg}) {
+  .accounts {
+    &__form {
+      max-width: 100%;
+    }
+
+    &__preview-avatar {
+      width: 13rem;
+      height: 13rem;
+    }
+  }
+}
+
+// When container is very small (< mobile breakpoint)
+@container accounts (max-width: #{$breakpoint-mobile}) {
+  .accounts {
+    gap: var(--spacing-vertical-l);
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+
+    &__preview-avatar {
+      width: 12rem;
+      height: 12rem;
+    }
+
+    &__form {
+      flex-direction: column;
+      gap: var(--spacing-vertical-m);
+      align-items: flex-start;
+    }
+
+    &__form-label {
+      min-width: 100%;
+    }
+
+    &__username-input {
+      width: 100%;
+    }
+
+    &__upload-label {
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+}
