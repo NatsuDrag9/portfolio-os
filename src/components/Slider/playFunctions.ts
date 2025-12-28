@@ -32,6 +32,37 @@ const sliderPlayFunction = async ({
   // Verify icon has correct class
   const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
+
+  // Verify input container exists
+  const inputContainer = canvasElement.querySelector(
+    '.slider__input-container'
+  );
+  expect(inputContainer).toBeInTheDocument();
+
+  // Verify tooltip is hidden initially
+  let tooltip = canvasElement.querySelector('.slider__tooltip');
+  expect(tooltip).not.toBeInTheDocument();
+
+  // Hover over slider to show tooltip
+  await userEvent.hover(sliderInput);
+
+  // Wait for tooltip to appear
+  await waitFor(() => {
+    tooltip = canvasElement.querySelector('.slider__tooltip');
+    expect(tooltip).toBeInTheDocument();
+  });
+
+  // Verify tooltip displays correct value
+  expect(tooltip?.textContent).toBe(String(args?.sliderValue));
+
+  // Unhover to hide tooltip
+  await userEvent.unhover(sliderInput);
+
+  // Wait for tooltip to disappear
+  await waitFor(() => {
+    tooltip = canvasElement.querySelector('.slider__tooltip');
+    expect(tooltip).not.toBeInTheDocument();
+  });
 };
 
 export const sliderVolumeIconPlayFunction = async ({
@@ -150,6 +181,40 @@ export const sliderMaxValuePlayFunction = async ({
 
   const icon = label?.querySelector('.slider__fluent-icon');
   expect(icon).toBeInTheDocument();
+};
+
+export const sliderTooltipPlayFunction = async ({
+  canvasElement,
+  args,
+}: PlayFunctionProps<SliderProps>) => {
+  const canvas = within(canvasElement);
+
+  // Verify slider exists
+  const sliderInput = canvas.getByRole('slider') as HTMLInputElement;
+  expect(sliderInput).toBeInTheDocument();
+
+  // Verify tooltip is hidden initially
+  let tooltip = canvasElement.querySelector('.slider__tooltip');
+  expect(tooltip).not.toBeInTheDocument();
+
+  // Test mouseEnter - tooltip should appear
+  userEvent.hover(sliderInput);
+
+  await waitFor(() => {
+    tooltip = canvasElement.querySelector('.slider__tooltip');
+    expect(tooltip).toBeInTheDocument();
+  });
+
+  // Verify tooltip shows correct value
+  expect(tooltip?.textContent).toBe(String(args?.sliderValue));
+
+  // Test mouseLeave - tooltip should disappear
+  userEvent.unhover(sliderInput);
+
+  await waitFor(() => {
+    tooltip = canvasElement.querySelector('.slider__tooltip');
+    expect(tooltip).not.toBeInTheDocument();
+  });
 };
 
 export default sliderPlayFunction;

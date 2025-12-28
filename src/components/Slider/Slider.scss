@@ -41,6 +41,7 @@
     appearance: none;
     background: transparent;
     cursor: pointer;
+    transition: transform 0.3s ease-in;
 
     // Track styles (WebKit)
     &::-webkit-slider-runnable-track {
@@ -78,8 +79,9 @@
       background: var(--slider-thumb-bg);
       box-shadow: var(--shadow4);
       transition:
-        transform 0.1s ease,
-        box-shadow 0.1s ease;
+        background-color 0.35s ease,
+        transform 0.25s ease,
+        box-shadow 0.35s ease;
     }
 
     // Thumb styles (Firefox)
@@ -91,19 +93,22 @@
       background: var(--slider-thumb-bg);
       box-shadow: var(--shadow4);
       transition:
-        transform 0.1s ease,
-        box-shadow 0.1s ease;
+        background-color 0.35s ease,
+        transform 0.25s ease,
+        box-shadow 0.35s ease;
     }
 
     // Hover states
     &:hover::-webkit-slider-thumb {
       background: var(--color-brand-background-hover);
       box-shadow: var(--shadow8);
+      transform: scale(1.05);
     }
 
     &:hover::-moz-range-thumb {
       background: var(--color-brand-background-hover);
       box-shadow: var(--shadow8);
+      transform: scale(1.05);
     }
 
     // Active/pressed states
@@ -169,6 +174,84 @@
         margin-left: calc(
           (var(--slider-track-height) - var(--slider-thumb-size)) / 2
         );
+      }
+    }
+  }
+
+  &__input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    &.vertical {
+      width: fit-content;
+      height: 100%;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    z-index: 1000;
+    padding: var(--spacing-vertical-xs) var(--spacing-horizontal-s);
+    border-radius: var(--border-radius-medium);
+    background-color: var(--color-neutral-background1);
+    box-shadow: var(--shadow8);
+    color: var(--color-neutral-foreground1);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base200);
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateX(-50%);
+
+    // Position above the slider thumb for horizontal orientation
+    &:not(.vertical) {
+      bottom: calc(100% + var(--spacing-vertical-s));
+    }
+
+    // Position to the side for vertical orientation
+    &.vertical {
+      bottom: auto;
+      left: calc(100% + var(--spacing-horizontal-s));
+
+      transform: translateY(50%);
+    }
+
+    // Arrow pointing down for horizontal tooltips
+    &:not(.vertical)::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      border: 0.4rem solid transparent;
+      border-top-color: var(--color-neutral-background1);
+      content: '';
+      transform: translateX(-50%);
+    }
+
+    // Arrow pointing left for vertical tooltips
+    &.vertical::after {
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      border: 0.4rem solid transparent;
+      border-right-color: var(--color-neutral-background1);
+      content: '';
+      transform: translateY(-50%);
+    }
+
+    // Dark theme adjustments
+    .dark-theme & {
+      background-color: var(--color-neutral-background3);
+      box-shadow: var(--shadow16);
+
+      &:not(.vertical)::after {
+        border-top-color: var(--color-neutral-background3);
+      }
+
+      &.vertical::after {
+        border-right-color: var(--color-neutral-background3);
       }
     }
   }

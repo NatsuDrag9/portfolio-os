@@ -9,6 +9,7 @@ import sliderPlayFunction, {
   sliderInteractionPlayFunction,
   sliderZeroValuePlayFunction,
   sliderMaxValuePlayFunction,
+  sliderTooltipPlayFunction,
 } from './playFunctions';
 
 const SliderWithState = (args: SliderProps) => {
@@ -152,6 +153,23 @@ export const InteractionTest: Story = {
     sliderValue: 50,
   },
   play: sliderInteractionPlayFunction,
+};
+
+export const TooltipTest: Story = {
+  args: {
+    sliderFor: 'brightness',
+    sliderValue: 65,
+  },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        story:
+          'Tests the tooltip functionality on hover and during drag interactions. The tooltip displays the current slider value.',
+      },
+    },
+  },
+  play: sliderTooltipPlayFunction,
 };
 
 // Vertical alignment stories
