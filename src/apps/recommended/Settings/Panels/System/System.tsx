@@ -186,23 +186,32 @@ function System() {
         />
 
         <div className="system__toggle-container">
-          <p className="system__label">
-            Time Format: {timeFormat === '12h' ? '12-hour' : '24-hour'}
-          </p>
+          <div className="system__toggle-content">
+            <p className="system__toggle-title">Use 24-hour time format</p>
+            <p className="system__toggle-description">
+              Currently:{' '}
+              {timeFormat === '24h' ? '14:30 (24-hour)' : '2:30 PM (12-hour)'}
+            </p>
+          </div>
           <ToggleButton
-            name="time-format"
+            name=""
             onToggleClick={handleTimeFormatToggle}
             isActive={timeFormat === '24h'}
           />
         </div>
 
         <div className="system__toggle-container">
-          <p className="system__label">
-            Date Format:{' '}
-            {dateFormat === 'DD/MM/YYYY' ? 'DD/MM/YYYY' : 'MM/DD/YYYY'}
-          </p>
+          <div className="system__toggle-content">
+            <p className="system__toggle-title">Use DD/MM/YYYY date format</p>
+            <p className="system__toggle-description">
+              Currently:{' '}
+              {dateFormat === 'DD/MM/YYYY'
+                ? '28/12/2025 (DD/MM/YYYY)'
+                : '12/28/2025 (MM/DD/YYYY)'}
+            </p>
+          </div>
           <ToggleButton
-            name="date-format"
+            name=""
             onToggleClick={handleDateFormatToggle}
             isActive={dateFormat === 'DD/MM/YYYY'}
           />

@@ -65,6 +65,30 @@
     line-height: var(--line-height-base300);
   }
 
+  &__toggle-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xxs);
+  }
+
+  &__toggle-title {
+    margin: 0;
+    color: var(--color-neutral-foreground1);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base300);
+  }
+
+  &__toggle-description {
+    margin: 0;
+    color: var(--color-neutral-foreground3);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base200);
+  }
+
   &__actions {
     display: flex;
     justify-content: flex-end;
