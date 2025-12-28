@@ -2,6 +2,7 @@
   @include acrylic-material-light(70%);
 
   position: absolute;
+  z-index: 9999;
   display: flex;
   gap: var(--spacing-horizontal-s);
   align-items: center;
