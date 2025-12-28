@@ -69,6 +69,7 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
       }}
       minWidth={400}
       minHeight={300}
+      bounds="parent"
       onDragStop={(_e, d) => {
         updateWindowPosition(windowId, d.x, d.y);
       }}

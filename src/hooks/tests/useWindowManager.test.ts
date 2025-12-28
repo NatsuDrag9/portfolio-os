@@ -41,9 +41,15 @@ describe('useWindowManager', () => {
     ],
   };
 
+  // Mock window.open
+  const mockWindowOpen = vi.fn();
+
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useWorkspaceState).mockReturnValue(mockWorkspaceState);
+
+    // Setup window.open mock
+    global.window.open = mockWindowOpen;
   });
 
   describe('launchWindow', () => {
@@ -94,6 +100,67 @@ describe('useWindowManager', () => {
         'vscode',
         expect.objectContaining({ id: 'vscode' })
       );
+    });
+
+    describe('browser apps (open in new tab)', () => {
+      it('should open Google Chrome in new tab instead of launching window', () => {
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.launchWindow('google-chrome');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://www.google.com/',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+
+      it('should open Firefox in new tab instead of launching window', () => {
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.launchWindow('firefox');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://duckduckgo.com/',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+
+      it('should open GitHub in new tab instead of launching window', () => {
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.launchWindow('github');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://github.com/NatsuDrag9',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+
+      it('should handle mixed browser and regular apps', () => {
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.launchWindow('file-explorer');
+          result.current.launchWindow('google-chrome');
+          result.current.launchWindow('vscode');
+          result.current.launchWindow('firefox');
+        });
+
+        expect(mockAddWindow).toHaveBeenCalledTimes(2);
+        expect(mockWindowOpen).toHaveBeenCalledTimes(2);
+      });
     });
   });
 
@@ -377,6 +444,68 @@ describe('useWindowManager', () => {
 
       expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('file-explorer-1', 3);
     });
+
+    describe('browser apps behavior', () => {
+      it('should open new tab for google-chrome when no windows exist', () => {
+        vi.mocked(useWorkspaceState).mockReturnValue({
+          ...mockWorkspaceState,
+          activeWindows: [],
+        });
+
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.restoreOrFocusApp('google-chrome');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://www.google.com/',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+
+      it('should open new tab for firefox when no windows exist', () => {
+        vi.mocked(useWorkspaceState).mockReturnValue({
+          ...mockWorkspaceState,
+          activeWindows: [],
+        });
+
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.restoreOrFocusApp('firefox');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://duckduckgo.com/',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+
+      it('should open new tab for github when no windows exist', () => {
+        vi.mocked(useWorkspaceState).mockReturnValue({
+          ...mockWorkspaceState,
+          activeWindows: [],
+        });
+
+        const { result } = renderHook(() => useWindowManager());
+
+        act(() => {
+          result.current.restoreOrFocusApp('github');
+        });
+
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+          'https://github.com/NatsuDrag9',
+          '_blank',
+          'noopener,noreferrer'
+        );
+        expect(mockAddWindow).not.toHaveBeenCalled();
+      });
+    });
   });
 
   describe('hook integration', () => {
@@ -427,6 +556,21 @@ describe('useWindowManager', () => {
       expect(mockAddWindow).toHaveBeenCalledTimes(2);
       expect(mockUpdateWindowZIndex).toHaveBeenCalledTimes(1);
       expect(mockRemoveWindow).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle mixed browser and regular operations', () => {
+      const { result } = renderHook(() => useWindowManager());
+
+      act(() => {
+        result.current.launchWindow('file-explorer');
+        result.current.launchWindow('google-chrome');
+        result.current.focusWindow('window1');
+        result.current.launchWindow('github');
+      });
+
+      expect(mockAddWindow).toHaveBeenCalledTimes(1);
+      expect(mockWindowOpen).toHaveBeenCalledTimes(2);
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledTimes(1);
     });
   });
 

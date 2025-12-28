@@ -137,7 +137,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     startMenuAppCategory: 'default',
   },
 
-  // To Do: More apps - calculator, music player, calendar, settings
+  // To Do: More apps - calculator, music player, calendar
 ];
 
 export const START_MENU_WINDOWS = {

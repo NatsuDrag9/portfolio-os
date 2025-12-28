@@ -1,3 +1,8 @@
+import {
+  FIREFOX_LINK,
+  GITHUB_LINK,
+  GOOGLE_CHROME_LINK,
+} from '@constants/appConstants';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata } from '@definitions/applicationTypes';
 import { useWorkspaceState } from '@store/store';
@@ -14,6 +19,20 @@ export const useWindowManager = () => {
 
   const launchWindow = useCallback(
     (appId: string) => {
+      // Handle apps that should open in new tabs instead of windows
+      if (appId === 'google-chrome') {
+        window.open(GOOGLE_CHROME_LINK, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (appId === 'firefox') {
+        window.open(FIREFOX_LINK, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (appId === 'github') {
+        window.open(GITHUB_LINK, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
       const appMetaData = APP_REGISTRY.find(
         (app) => app.id === appId
       ) as AppMetadata;

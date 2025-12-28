@@ -1,6 +1,7 @@
 import { useWorkspaceState } from '@store/store';
 import WindowContainer from '@components/WindowContainer/WindowContainer';
 import { Settings } from '@apps/default';
+import { VSCode } from '@apps/recommended/';
 
 function WindowManager() {
   const { activeWindows } = useWorkspaceState();
@@ -9,7 +10,8 @@ function WindowManager() {
     switch (windowName) {
       case 'Settings':
         return <Settings key={windowId} />;
-      // Add more window mappings here as needed
+      case 'VSCode':
+        return <VSCode key={windowId} />;
       default:
         return null;
     }
