@@ -27,7 +27,7 @@ import {
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
-  // To Do: Recommended apps - github, vscode, browser, command prompt, notepad
+  // To Do: Recommended apps - vscode, browser, command prompt, notepad
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
@@ -44,6 +44,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     desktopIcon: '/apps/vscode-96.png',
     defaultPinned: true,
     windowName: 'VSCode',
+    startMenuAppCategory: 'recommended',
   },
   {
     id: 'firefox',
@@ -51,14 +52,6 @@ export const APP_REGISTRY: AppMetadata[] = [
     desktopIcon: '/apps/firefox.png',
     defaultPinned: true,
     windowName: 'Firefox',
-    startMenuAppCategory: 'recommended',
-  },
-  {
-    id: 'github',
-    appName: 'Github',
-    desktopIcon: '/apps/github-60.png',
-    defaultPinned: true,
-    windowName: 'Github',
     startMenuAppCategory: 'recommended',
   },
   {
@@ -75,7 +68,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     appName: 'Command Prompt',
     desktopIcon: WindowConsoleFilled,
     defaultPinned: false,
-    windowName: 'Notepad',
+    windowName: 'Terminal',
     startMenuAppCategory: 'recommended',
   },
   {
@@ -86,7 +79,7 @@ export const APP_REGISTRY: AppMetadata[] = [
     windowName: 'Settings',
     startMenuAppCategory: 'recommended',
   },
-  // Default apps appearing on taskbar (portfolio pages)
+  // Default apps appearing on taskbar (portfolio pages) - github, about me, contact me, skills, portfolio, file-explorer, projects
   {
     id: 'about-me',
     appName: 'About Me',
@@ -134,6 +127,14 @@ export const APP_REGISTRY: AppMetadata[] = [
     desktopIcon: '/apps/file-explorer-96.png',
     defaultPinned: true,
     windowName: 'FileExplorer',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'github',
+    appName: 'Github',
+    desktopIcon: '/apps/github-60.png',
+    defaultPinned: true,
+    windowName: 'Github',
     startMenuAppCategory: 'default',
   },
 

@@ -1,7 +1,6 @@
 import { useWorkspaceState } from '@store/store';
 import WindowContainer from '@components/WindowContainer/WindowContainer';
-import { Settings } from '@apps/default';
-import { VSCode } from '@apps/recommended/';
+import { VSCode, Settings } from '@apps/recommended/';
 
 function WindowManager() {
   const { activeWindows } = useWorkspaceState();
