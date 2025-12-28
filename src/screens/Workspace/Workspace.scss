@@ -14,4 +14,16 @@
     pointer-events: none;
     mix-blend-mode: multiply;
   }
+
+  &__brightness-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
 }

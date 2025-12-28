@@ -6,6 +6,7 @@ import {
   Search12Filled,
   Speaker0Regular,
   Wifi1Regular,
+  WifiOffRegular,
 } from '@fluentui/react-icons';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
@@ -59,6 +60,7 @@ function Taskbar() {
     dateFormat,
     autoSyncDateTime,
     timezone,
+    activeQuickActions,
   } = useSystemUIState();
 
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
@@ -225,7 +227,11 @@ function Taskbar() {
             {(taskbarAlignment === 'top' || taskbarAlignment === 'bottom') && (
               <p className="taskbar__text">ENG IN</p>
             )}
-            <Wifi1Regular className="taskbar__fluent-icon" />
+            {activeQuickActions.includes('airplane') ? (
+              <WifiOffRegular className="taskbar__fluent-icon" />
+            ) : (
+              <Wifi1Regular className="taskbar__fluent-icon" />
+            )}
             <Speaker0Regular className="taskbar__fluent-icon" />
             <Battery0Filled className="taskbar__fluent-icon" />
             {isQuickActionsOpen && (
