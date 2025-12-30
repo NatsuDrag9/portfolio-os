@@ -13,6 +13,8 @@ import AppIcon from '@components/AppIcon/AppIcon';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
 import { useWindowManager } from '@hooks/useWindowManager';
 import { DateFormat, TimeFormat } from '@definitions/settingsTypes';
+import { AppIconRightClickActionType } from '@definitions/desktopTypes';
+import { AppIconVariant } from '@definitions/applicationTypes';
 
 const formatTime = (
   date: Date,
@@ -67,8 +69,14 @@ function Taskbar() {
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
 
-  const { taskbarPinnedAppIds, windowInstanceCounters } = useWorkspaceState();
-  const { focusWindow, closeWindow, restoreOrFocusApp } = useWindowManager();
+  const {
+    taskbarPinnedAppIds,
+    windowInstanceCounters,
+    togglePin,
+    activeWindows,
+  } = useWorkspaceState();
+  const { focusWindow, closeWindow, restoreOrFocusApp, launchWindow } =
+    useWindowManager();
 
   // Combine pinned apps and apps with open windows
   // Use Set to avoid duplicates
@@ -163,6 +171,60 @@ function Taskbar() {
     setStartMenuOpen(!startMenuOpen);
   };
 
+  // Handle context menu actions from AppIcon
+  const handleContextMenuItemClick = useCallback(
+    (
+      appId: string,
+      action: AppIconRightClickActionType,
+      _variant: AppIconVariant
+    ) => {
+      switch (action) {
+        case 'new-window':
+          // Always launch a new window instance
+          launchWindow(appId);
+          break;
+        case 'pin-to-taskbar':
+        case 'unpin-from-taskbar':
+          togglePin(appId);
+          break;
+        case 'close-window':
+          // Close the most recently focused window for this app
+          {
+            const appWindows = activeWindows.filter((w) =>
+              w.id?.startsWith(`${appId}-`)
+            );
+            if (appWindows.length > 0) {
+              // Find the window with highest zIndex (most recently focused)
+              const mostRecentWindow = appWindows.reduce((prev, current) =>
+                current.zIndex > prev.zIndex ? current : prev
+              );
+              if (mostRecentWindow.id) {
+                closeWindow(mostRecentWindow.id);
+              }
+            }
+          }
+          break;
+        case 'close-all-windows':
+          // Close all windows for this app
+          {
+            const appWindows = activeWindows.filter((w) =>
+              w.id?.startsWith(`${appId}-`)
+            );
+            appWindows.forEach((window) => {
+              if (window.id) {
+                closeWindow(window.id);
+              }
+            });
+          }
+          break;
+        case 'properties':
+          // Future: Open properties dialog
+          break;
+      }
+    },
+    [activeWindows, closeWindow, launchWindow, togglePin]
+  );
+
   return (
     <div
       className={`taskbar ${taskbarAlignment}`}
@@ -213,6 +275,7 @@ function Taskbar() {
               onSingleClick={restoreOrFocusApp}
               onWindowFocus={focusWindow}
               onWindowClose={closeWindow}
+              onContextMenuItemClick={handleContextMenuItemClick}
             />
           );
         })}
