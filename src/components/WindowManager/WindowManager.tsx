@@ -1,6 +1,6 @@
 import { useWorkspaceState } from '@store/store';
 import WindowContainer from '@components/WindowContainer/WindowContainer';
-import { VSCode, Settings } from '@apps/recommended/';
+import { VSCode, Settings, Notepad } from '@apps/recommended/';
 
 function WindowManager() {
   const { activeWindows } = useWorkspaceState();
@@ -11,6 +11,8 @@ function WindowManager() {
         return <Settings key={windowId} />;
       case 'VSCode':
         return <VSCode key={windowId} />;
+      case 'Notepad':
+        return <Notepad key={windowId} />;
       default:
         return null;
     }
