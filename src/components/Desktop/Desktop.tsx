@@ -26,6 +26,7 @@ import {
   GRID_ROWS,
 } from '@constants/desktopConstants';
 import { isDevMode } from '@utils/logUtils';
+import { useWindowManager } from '@hooks/useWindowManager';
 
 function Desktop() {
   const [showDesktopContextMenu, setShowDesktopContextMenu] = useState(false);
@@ -40,8 +41,9 @@ function Desktop() {
   >(() => getInitialIconPositions(APP_REGISTRY.map((app) => app.id)));
 
   const desktopRef = useRef<HTMLDivElement>(null);
-  const { taskbarPinnedAppIds, addWindow, togglePin, activeBackground } =
+  const { taskbarPinnedAppIds, togglePin, activeBackground } =
     useWorkspaceState();
+  const { launchWindow } = useWindowManager();
 
   // Handle drag stop - snap to grid
   const handleDragStop = useCallback((appId: string, d: DraggableData) => {
@@ -70,13 +72,10 @@ function Desktop() {
       action: AppIconRightClickActionType,
       _variant: AppIconVariant
     ) => {
-      const appMetadata = APP_REGISTRY.find((app) => app.id === appId);
-
       switch (action) {
         case 'new-window':
-          if (appMetadata) {
-            addWindow(appId, appMetadata);
-          }
+          // Always launch a new window instance
+          launchWindow(appId);
           break;
         case 'pin-to-taskbar':
         case 'unpin-from-taskbar':
@@ -87,7 +86,7 @@ function Desktop() {
           break;
       }
     },
-    [addWindow, togglePin]
+    [launchWindow, togglePin]
   );
 
   // Handle desktop right-click
@@ -135,12 +134,9 @@ function Desktop() {
   // Handle double click on app icon - open window
   const handleAppDoubleClick = useCallback(
     (appId: string) => {
-      const appMetadata = APP_REGISTRY.find((app) => app.id === appId);
-      if (appMetadata) {
-        addWindow(appId, appMetadata);
-      }
+      launchWindow(appId);
     },
-    [addWindow]
+    [launchWindow]
   );
 
   // Keyboard navigation
