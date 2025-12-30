@@ -48,7 +48,7 @@ function AppIcon({
   isPinned = false,
   onContextMenuItemClick,
 }: AppIconProps) {
-  const { activeWindows, windowInstanceCounters } = useWorkspaceState();
+  const { activeWindows } = useWorkspaceState();
   const [showPopup, setShowPopup] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
@@ -56,8 +56,12 @@ function AppIcon({
 
   const appMetaData = APP_REGISTRY.find((app) => app.id === appId);
 
-  // Get window instance count for this app from the store
-  const instanceCount = windowInstanceCounters[appId] || 0;
+  // Count actual open windows for this app from activeWindows
+  // Note: windowInstanceCounters is an ID generator, not a window count
+  const openWindowsForApp = activeWindows.filter((w) =>
+    w.id?.startsWith(`${appId}-`)
+  );
+  const instanceCount = openWindowsForApp.length;
   const hasOpenWindows = instanceCount > 0;
   const hasMultipleWindows = instanceCount > 1;
 

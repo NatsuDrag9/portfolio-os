@@ -30,11 +30,17 @@ function RightClickMenu({
   onClose,
   onClick,
 }: RightClickMenuProps) {
-  const { windowInstanceCounters } = useWorkspaceState();
+  const { activeWindows } = useWorkspaceState();
   const menuRef = useRef<HTMLDivElement>(null);
 
   const appMetaData = APP_REGISTRY.find((app) => app.id === appId);
-  const instanceCount = windowInstanceCounters[appId] || 0;
+
+  // Count actual open windows for this app from activeWindows
+  // Note: windowInstanceCounters is an ID generator, not a window count
+  const openWindowsForApp = activeWindows.filter((w) =>
+    w.id?.startsWith(`${appId}-`)
+  );
+  const instanceCount = openWindowsForApp.length;
   const hasWindows = instanceCount > 0;
   const hasMultipleWindows = instanceCount > 1;
 

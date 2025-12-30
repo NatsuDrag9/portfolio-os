@@ -56,8 +56,8 @@
   // }
 
   &__image {
-    width: clamp(3rem, 4vw, 4rem);
-    height: clamp(3rem, 4vw, 4rem);
+    width: clamp(4rem, 4vw, 4.5rem);
+    height: clamp(4rem, 4vw, 4.5rem);
     object-fit: contain;
 
     filter: drop-shadow(var(--shadow2));
@@ -101,8 +101,8 @@
   }
 
   &--taskbar &__image {
-    width: clamp(3rem, 4vw, 3.8rem);
-    height: clamp(3rem, 4vw, 3.8rem);
+    width: clamp(3rem, 4vw, 3.3rem);
+    height: clamp(3rem, 4vw, 3.3rem);
   }
 
   &--start-menu {
@@ -227,7 +227,7 @@
 
   &__popup-container {
     position: absolute;
-    bottom: 7rem;
+    bottom: 5.2rem;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-vertical-xs);
@@ -278,8 +278,8 @@
 
   &--desktop &__image--fluent {
     // Fluent icons need to match regular icon sizes in desktop
-    width: clamp(5rem, 4vw, 6rem);
-    height: clamp(5rem, 4vw, 6rem);
+    width: clamp(4.5rem, 4vw, 5rem);
+    height: clamp(4.5rem, 4vw, 5rem);
   }
 
   &--desktop &__name {
@@ -293,8 +293,8 @@
     padding: var(--spacing-horizontal-xs);
 
     &__image {
-      width: 5.6rem;
-      height: 5.6rem;
+      // width: 5.6rem;
+      // height: 5.6rem;
 
       &--fluent {
         width: clamp(3rem, 4vw, 4rem);

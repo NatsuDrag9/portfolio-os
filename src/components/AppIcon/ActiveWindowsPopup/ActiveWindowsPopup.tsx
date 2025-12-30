@@ -92,7 +92,7 @@ function ActiveWindowsPopup({
         onMouseDown={(e) => e.stopPropagation()} // Prevent parent :active state
         onTouchStart={(e) => e.stopPropagation()} // Prevent parent :active state on touch
       >
-        <DismissRegular className="close-image" />
+        <DismissRegular className="active-windows-popup__fluent-icon" />
       </button>
     </div>
   );

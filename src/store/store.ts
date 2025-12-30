@@ -161,6 +161,17 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
     (app) => app.defaultPinned === true
   ).map((item) => item.id), // Initialize with all the apps containing defaultPinned = true in APP_REGISTRY
   activeBackground: DefaultWallpaper,
+  /**
+   * Window instance counter for generating unique window IDs.
+   * Maps appId to the highest instance number created for that app.
+   * This is NOT a count of open windows - it's an auto-incrementing ID generator.
+   *
+   * Example: Opening notepad 3 times creates notepad-1, notepad-2, notepad-3.
+   * Closing notepad-1 keeps the counter at 3, so the next window is notepad-4.
+   * The counter only resets to undefined when all windows for an app are closed.
+   *
+   * To get the actual count of open windows, filter activeWindows by appId.
+   */
   windowInstanceCounters: {},
 
   addWindow: (appId: string, appMetadata: AppMetadata) => {
