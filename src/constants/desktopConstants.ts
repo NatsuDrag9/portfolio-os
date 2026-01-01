@@ -285,3 +285,6 @@ export const QUICK_ACTION_BUTTONS: Record<
 export const GRID_ROWS = 6;
 export const GRID_CELL_WIDTH = 90; // pixels
 export const GRID_CELL_HEIGHT = 100; // pixels
+
+// Window animation timings
+export const WINDOW_CLOSE_TIMEOUT = 200; // milliseconds - must match CSS transition duration in WindowContainer.scss

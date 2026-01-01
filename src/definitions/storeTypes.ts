@@ -40,6 +40,7 @@ export interface WorkspaceState {
   // Window management
   addWindow: (appId: string, appMetaData: AppMetadata) => void;
   removeWindow: (windowId: string) => void;
+  requestCloseWindow: (windowId: string) => void; // Triggers fade-out animation then removes window
 
   // Window property updates (all at WorkspaceState level)
   setWindowTitle: (windowId: string, title: string) => void;

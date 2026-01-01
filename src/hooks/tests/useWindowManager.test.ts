@@ -11,12 +11,14 @@ vi.mock('@store/store', () => ({
 describe('useWindowManager', () => {
   const mockAddWindow = vi.fn();
   const mockRemoveWindow = vi.fn();
+  const mockRequestCloseWindow = vi.fn();
   const mockUpdateWindowZIndex = vi.fn();
   const mockSetWindowIsMaximized = vi.fn();
 
   const mockWorkspaceState = {
     addWindow: mockAddWindow,
     removeWindow: mockRemoveWindow,
+    requestCloseWindow: mockRequestCloseWindow,
     updateWindowZIndex: mockUpdateWindowZIndex,
     setWindowIsMaximized: mockSetWindowIsMaximized,
     activeWindows: [
@@ -297,15 +299,15 @@ describe('useWindowManager', () => {
   });
 
   describe('closeWindow', () => {
-    it('should call removeWindow with windowId', () => {
+    it('should call requestCloseWindow with windowId', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
         result.current.closeWindow('window1');
       });
 
-      expect(mockRemoveWindow).toHaveBeenCalledOnce();
-      expect(mockRemoveWindow).toHaveBeenCalledWith('window1');
+      expect(mockRequestCloseWindow).toHaveBeenCalledOnce();
+      expect(mockRequestCloseWindow).toHaveBeenCalledWith('window1');
     });
 
     it('should handle closing multiple windows', () => {
@@ -317,10 +319,10 @@ describe('useWindowManager', () => {
         result.current.closeWindow('window3');
       });
 
-      expect(mockRemoveWindow).toHaveBeenCalledTimes(3);
-      expect(mockRemoveWindow).toHaveBeenNthCalledWith(1, 'window1');
-      expect(mockRemoveWindow).toHaveBeenNthCalledWith(2, 'window2');
-      expect(mockRemoveWindow).toHaveBeenNthCalledWith(3, 'window3');
+      expect(mockRequestCloseWindow).toHaveBeenCalledTimes(3);
+      expect(mockRequestCloseWindow).toHaveBeenNthCalledWith(1, 'window1');
+      expect(mockRequestCloseWindow).toHaveBeenNthCalledWith(2, 'window2');
+      expect(mockRequestCloseWindow).toHaveBeenNthCalledWith(3, 'window3');
     });
   });
 
@@ -555,7 +557,7 @@ describe('useWindowManager', () => {
 
       expect(mockAddWindow).toHaveBeenCalledTimes(2);
       expect(mockUpdateWindowZIndex).toHaveBeenCalledTimes(1);
-      expect(mockRemoveWindow).toHaveBeenCalledTimes(1);
+      expect(mockRequestCloseWindow).toHaveBeenCalledTimes(1);
     });
 
     it('should handle mixed browser and regular operations', () => {
@@ -597,7 +599,7 @@ describe('useWindowManager', () => {
         });
       }).not.toThrow();
 
-      expect(mockRemoveWindow).toHaveBeenCalledWith('nonexistent-window');
+      expect(mockRequestCloseWindow).toHaveBeenCalledWith('nonexistent-window');
     });
 
     it('should handle empty appId string', () => {

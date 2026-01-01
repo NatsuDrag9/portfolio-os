@@ -256,10 +256,12 @@ describe('useWorkspaceState', () => {
       expect(window.title).toBe('Chrome');
       expect(window.windowName).toBe('ChromeApp');
       expect(window.isMaximized).toBe('normal');
-      expect(window.position).toStrictEqual({ x: 100, y: 100 });
-      expect(window.size).toStrictEqual({ width: 800, height: 600 });
+      expect(window.previousDisplayState).toBe('normal');
+      expect(window.position).toStrictEqual({ x: 100, y: 80 });
+      expect(window.size).toStrictEqual({ width: 700, height: 400 });
       expect(window.customTheme).toBeUndefined();
       expect(window.snapPosition).toBe('fullscreen');
+      expect(window.isClosing).toBeUndefined();
     });
 
     it('should set incremental z-index for windows', () => {
@@ -412,6 +414,53 @@ describe('useWorkspaceState', () => {
 
       const state = useWorkspaceState.getState();
       expect(state.activeWindows[0].isMaximized).toBe('normal');
+    });
+
+    it('should preserve previousDisplayState when changing to non-minimized state', () => {
+      const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+
+      // Change to maximized (should not update previousDisplayState)
+      setWindowIsMaximized('vscode-1', 'maximized');
+      let state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe('maximized');
+      expect(state.activeWindows[0].previousDisplayState).toBe('normal');
+    });
+
+    it('should save previousDisplayState when minimizing', () => {
+      const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+
+      // First maximize the window
+      setWindowIsMaximized('vscode-1', 'maximized');
+
+      // Then minimize it - should save 'maximized' as previousDisplayState
+      setWindowIsMaximized('vscode-1', 'minimized');
+
+      const state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe('minimized');
+      expect(state.activeWindows[0].previousDisplayState).toBe('maximized');
+    });
+
+    it('should not update previousDisplayState when already minimized', () => {
+      const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+
+      // Minimize first time (saves 'normal')
+      setWindowIsMaximized('vscode-1', 'minimized');
+      let state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].previousDisplayState).toBe('normal');
+
+      // Minimize again (should not change previousDisplayState)
+      setWindowIsMaximized('vscode-1', 'minimized');
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].previousDisplayState).toBe('normal');
     });
 
     it('should update window position', () => {
@@ -620,6 +669,33 @@ describe('useWorkspaceState', () => {
         'notepad-2',
         'vscode-3',
       ]);
+    });
+
+    it('should handle minimize and restore workflow with previousDisplayState', () => {
+      const { addWindow, setWindowIsMaximized } = useWorkspaceState.getState();
+      const appMetadata = createMockAppMetadata();
+
+      addWindow('vscode', appMetadata);
+
+      // Maximize window
+      setWindowIsMaximized('vscode-1', 'maximized');
+      let state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe('maximized');
+      expect(state.activeWindows[0].previousDisplayState).toBe('normal');
+
+      // Minimize window (should save 'maximized' state)
+      setWindowIsMaximized('vscode-1', 'minimized');
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe('minimized');
+      expect(state.activeWindows[0].previousDisplayState).toBe('maximized');
+
+      // Restore window (could use previousDisplayState to restore to 'maximized')
+      setWindowIsMaximized(
+        'vscode-1',
+        state.activeWindows[0].previousDisplayState
+      );
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows[0].isMaximized).toBe('maximized');
     });
   });
 });

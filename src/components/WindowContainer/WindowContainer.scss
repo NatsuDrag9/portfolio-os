@@ -7,6 +7,18 @@
   background-color: var(--color-neutral-background1);
   box-shadow: var(--shadow16);
 
+  // Fade-in and fade-out animations
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  &--visible {
+    opacity: 1;
+  }
+
+  &--hidden {
+    opacity: 0;
+  }
+
   // Maximized state - fullscreen minus taskbar
   // Using !important to override react-rnd inline styles
   &--maximized {

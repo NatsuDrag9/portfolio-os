@@ -32,3 +32,15 @@ Create Notepad app containing
 - Used `Desktop.tsx` as reference to implement the `handleContextMenuItemClick` function.
 - Use `launchWindow` instead of `addWindow` whenever user clicks on New Window
 - Implement all context-menu-item functionalities
+
+### 1-1-2026
+
+#### Window Container
+
+**Feature**: Add fade-in fade-out animation when opening and closing the window
+
+- Add an `isClosing` flag in WindowData to trigger closing operation from various components like Taskbar, AppIcon's ActiveWindow and RightClick, etc
+- Create requestCloseWindow action to set isClosing flag and delay calling removeWindow action
+- Create a global timeout constant which stores the delay time
+- Update `workspaceStore.test.ts` and `useWindowManaget.test.ts`
+- Add styles for fade-in and fade-out animations

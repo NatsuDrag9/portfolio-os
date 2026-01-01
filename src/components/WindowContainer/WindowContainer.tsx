@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useEffect, useState } from 'react';
 import './WindowContainer.scss';
 import { useWorkspaceState } from '@store/store';
 import { WindowDisplayType } from '@definitions/applicationTypes';
@@ -15,10 +15,12 @@ export interface WindowContainerProps {
 }
 
 function WindowContainer({ children, windowId }: WindowContainerProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
   const {
     activeWindows,
     setWindowIsMaximized,
-    removeWindow,
+    requestCloseWindow,
     updateWindowPosition,
     updateWindowSize,
   } = useWorkspaceState();
@@ -40,8 +42,23 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
   };
 
   const handleCloseClick = () => {
-    removeWindow(windowId);
+    requestCloseWindow(windowId);
   };
+
+  // Fade-in animation on mount
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure the DOM has rendered before applying the fade-in
+    const rafId = requestAnimationFrame(() => {
+      setIsMounted(true);
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  // Derive visibility from mounted state and isClosing flag
+  const isVisible = isMounted && !windowData?.isClosing;
 
   const isMaximized = windowData?.isMaximized === 'maximized';
   const isMinimized = windowData?.isMaximized === 'minimized';
@@ -81,7 +98,7 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
       enableResizing={!isMaximized}
       enableUserSelectHack={false}
       dragHandleClassName="window-container__top"
-      className={`window-container window-container--${windowData?.isMaximized}`}
+      className={`window-container window-container--${windowData?.isMaximized} ${isVisible ? 'window-container--visible' : 'window-container--hidden'}`}
       style={{
         zIndex: windowData?.zIndex,
         visibility: isMinimized ? 'hidden' : 'visible',

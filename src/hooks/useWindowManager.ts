@@ -11,7 +11,7 @@ import { useCallback } from 'react';
 export const useWindowManager = () => {
   const {
     addWindow,
-    removeWindow,
+    requestCloseWindow,
     updateWindowZIndex,
     activeWindows,
     setWindowIsMaximized,
@@ -63,9 +63,9 @@ export const useWindowManager = () => {
 
   const closeWindow = useCallback(
     (windowId: string) => {
-      removeWindow(windowId);
+      requestCloseWindow(windowId);
     },
-    [removeWindow]
+    [requestCloseWindow]
   );
 
   // Restore or focus a single window for an app (used by taskbar click)

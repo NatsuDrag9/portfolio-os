@@ -23,7 +23,10 @@ import {
   WindowData,
   WindowDisplayType,
 } from '@definitions/applicationTypes';
-import { APP_REGISTRY } from '@constants/desktopConstants';
+import {
+  APP_REGISTRY,
+  WINDOW_CLOSE_TIMEOUT,
+} from '@constants/desktopConstants';
 import { DateFormat, TimeFormat } from '@definitions/settingsTypes';
 
 export const useBootStatus = create<BootStatusState>((set) => ({
@@ -155,7 +158,7 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   },
 }));
 
-export const useWorkspaceState = create<WorkspaceState>((set) => ({
+export const useWorkspaceState = create<WorkspaceState>((set, get) => ({
   activeWindows: [],
   taskbarPinnedAppIds: APP_REGISTRY.filter(
     (app) => app.defaultPinned === true
@@ -187,9 +190,9 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
         windowName: appMetadata.windowName,
         isMaximized: 'normal',
         previousDisplayState: 'normal',
-        position: { x: 100, y: 100 },
+        position: { x: 100, y: 80 },
         zIndex: state.activeWindows.length + 1,
-        size: { width: 800, height: 600 },
+        size: { width: 700, height: 400 },
         customTheme: undefined,
         snapPosition: 'fullscreen',
       };
@@ -225,6 +228,20 @@ export const useWorkspaceState = create<WorkspaceState>((set) => ({
         windowInstanceCounters: updatedCounters,
       };
     });
+  },
+
+  requestCloseWindow: (windowId: string) => {
+    // Mark window as closing to trigger fade-out animation
+    set((state) => ({
+      activeWindows: state.activeWindows.map((w) =>
+        w.id === windowId ? { ...w, isClosing: true } : w
+      ),
+    }));
+
+    // Wait for animation to complete, then remove the window
+    setTimeout(() => {
+      get().removeWindow(windowId);
+    }, WINDOW_CLOSE_TIMEOUT);
   },
 
   setWindowTitle: (windowId: string, title: string) => {

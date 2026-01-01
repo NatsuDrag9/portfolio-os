@@ -28,4 +28,5 @@ export interface WindowData {
   size: { width: number; height: number }; // Width of the window and height of the window
   customTheme?: CustomTheme; // For personalization
   snapPosition?: SnapPositionType; // Mobile-only
+  isClosing?: boolean; // Window is in closing animation state
 }

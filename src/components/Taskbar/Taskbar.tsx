@@ -153,7 +153,7 @@ function Taskbar() {
 
   // Right click handler (placeholder for future context menu)
   const handleRightClick = useCallback(() => {
-    // To Do: Add right click functionality for taskbar (settings, task-manager (if possible))
+    // To Do: Add right click functionality for taskbar (settings, task-manager (if possible), positioning snap)
   }, []);
 
   const handleQuickActionsClick = () => {
