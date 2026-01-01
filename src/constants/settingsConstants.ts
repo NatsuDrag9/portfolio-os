@@ -63,7 +63,7 @@ export const BACKGROUND_IMAGE_MAP: Record<string, BackgroundImageMap> = {
     name: 'Scenary Snow (Mobile)',
     image: SnowScenaryWallpaperMobile,
   },
-};
+} as const;
 
 export const SETTINGS_ICON_MAP: Record<
   string,
@@ -76,7 +76,7 @@ export const SETTINGS_ICON_MAP: Record<
   volume: SpeakerEditRegular,
   dateAndTime: GlobeClockRegular,
   accounts: PersonAccountsRegular,
-};
+} as const;
 
 export const COMMON_TIMEZONES = [
   { displayName: 'New York (EST/EDT)', value: 'America/New_York' },
@@ -90,4 +90,4 @@ export const COMMON_TIMEZONES = [
   { displayName: 'India (IST)', value: 'Asia/Kolkata' },
   { displayName: 'Sydney (AEDT/AEST)', value: 'Australia/Sydney' },
   { displayName: 'Auckland (NZDT/NZST)', value: 'Pacific/Auckland' },
-];
+] as const;

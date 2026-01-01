@@ -65,7 +65,7 @@ export const FILE_MENU_ITEMS: Record<string, NotepadMenuItem> = {
     isAToggle: false,
     isDisabled: false,
   },
-};
+} as const;
 
 export const EDIT_MENU_ITEMS: Record<string, NotepadMenuItem> = {
   undo: {
@@ -116,7 +116,7 @@ export const EDIT_MENU_ITEMS: Record<string, NotepadMenuItem> = {
     isAToggle: false,
     isDisabled: false,
   },
-};
+} as const;
 
 export const VIEW_MENU_ITEMS: Record<string, NotepadMenuItem> = {
   zoomIn: {
@@ -151,4 +151,4 @@ export const VIEW_MENU_ITEMS: Record<string, NotepadMenuItem> = {
     isAToggle: true,
     isDisabled: false,
   },
-};
+} as const;

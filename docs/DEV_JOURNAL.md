@@ -44,3 +44,9 @@ Create Notepad app containing
 - Create a global timeout constant which stores the delay time
 - Update `workspaceStore.test.ts` and `useWindowManaget.test.ts`
 - Add styles for fade-in and fade-out animations
+
+#### Constant files
+
+Make all major local and global constants immutable by suffixing variable definition with `as const`.
+
+Files Changed - `desktopConstants.ts`, `settingsConstants.ts`, `Notepad/constants.ts`

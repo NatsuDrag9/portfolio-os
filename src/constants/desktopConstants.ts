@@ -139,14 +139,14 @@ export const APP_REGISTRY: AppMetadata[] = [
   },
 
   // To Do: More apps - calculator, music player, calendar
-];
+] as const;
 
 export const START_MENU_WINDOWS = {
   id: 'windows',
   name: 'Start Menu',
   mobileIcon: '/apps/windows-11-48.png',
   desktopIcon: '/apps/windows-11-96.png',
-};
+} as const;
 
 export const RIGHT_CLICK_OPTIONS: Record<
   AppIconVariant,
@@ -226,7 +226,7 @@ export const RIGHT_CLICK_OPTIONS: Record<
       showWhen: 'pinned',
     },
   ],
-};
+} as const;
 
 export const DESKTOP_MENU_OPTIONS: DesktopMenuItem[] = [
   {
@@ -279,7 +279,7 @@ export const QUICK_ACTION_BUTTONS: Record<
       clicked: SettingsFilled,
     },
   },
-};
+} as const;
 
 // Grid configuration - Windows 11 uses a 5-row grid by default
 export const GRID_ROWS = 6;
