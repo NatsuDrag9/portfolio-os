@@ -6,7 +6,6 @@ import AppIcon from '@components/AppIcon/AppIcon';
 import { useWindowManager } from '@hooks/useWindowManager';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
-import { logInDev } from '@utils/logUtils';
 import { useMemo } from 'react';
 
 export interface PanelTwoProps {
@@ -14,24 +13,25 @@ export interface PanelTwoProps {
 }
 
 function PanelTwo({ onButtonClick }: PanelTwoProps) {
-  const { taskbarPinnedAppIds } = useWorkspaceState();
+  const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
 
   const handleContextMenuClick = (
     appId: string,
     action: AppIconRightClickActionType,
-    variant: AppIconVariant
+    _variant: AppIconVariant
   ) => {
-    // To Do: Add functionality
-    logInDev(
-      'Right click: ',
-      'appId: ',
-      appId,
-      'action: ',
-      action,
-      'variant: ',
-      variant
-    );
+    switch (action) {
+      case 'new-window':
+        launchWindow(appId);
+        break;
+      case 'pin-to-taskbar':
+      case 'unpin-from-taskbar':
+        togglePin(appId);
+        break;
+      default:
+        break;
+    }
   };
 
   const groupAppsByFirstLetter = (
@@ -94,7 +94,7 @@ function PanelTwo({ onButtonClick }: PanelTwoProps) {
                     <AppIcon
                       key={app.id}
                       appId={app.id}
-                      iconVariant="taskbar"
+                      iconVariant="start-menu"
                       isPinned={isPinned}
                       onContextMenuItemClick={handleContextMenuClick}
                       onSingleClick={launchWindow}

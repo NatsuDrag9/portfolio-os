@@ -1,8 +1,10 @@
 import { RefObject, useRef, useState } from 'react';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
+import { useWindowManager } from '@hooks/useWindowManager';
 import { DesktopMenuAction } from '@definitions/desktopTypes';
 import { DESKTOP_MENU_OPTIONS } from '@constants/desktopConstants';
 import './DesktopRightClickMenu.scss';
+import { useSettingsState } from '@store/store';
 
 export interface DesktopRightClickMenuProps {
   position: { x: number; y: number };
@@ -15,6 +17,8 @@ function DesktopRightClickMenu({
 }: DesktopRightClickMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { launchWindow } = useWindowManager();
+  const { setActiveSettingButton } = useSettingsState();
 
   useClickOutsideModal(true, onClose, menuRef as RefObject<HTMLElement>);
 
@@ -29,15 +33,17 @@ function DesktopRightClickMenu({
         }, 500);
         break;
       case 'settings':
-        // TODO: Open Settings app
+        launchWindow('settings');
         onClose();
         break;
       case 'personalize':
-        // TODO: Open Personalization in settings
+        // Open Settings app (personalization is part of settings)
+        setActiveSettingButton('personalization');
+        launchWindow('settings');
         onClose();
         break;
       case 'terminal':
-        // TODO: Open Terminal app
+        launchWindow('command-prompt');
         onClose();
         break;
       default:

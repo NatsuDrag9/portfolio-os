@@ -5,7 +5,6 @@ import AppIcon from '@components/AppIcon/AppIcon';
 import { useWorkspaceState } from '@store/store';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
-import { logInDev } from '@utils/logUtils';
 import { useWindowManager } from '@hooks/useWindowManager';
 
 export interface PanelOneProps {
@@ -13,23 +12,25 @@ export interface PanelOneProps {
 }
 
 function PanelOne({ onButtonClick }: PanelOneProps) {
-  const { taskbarPinnedAppIds } = useWorkspaceState();
+  const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
 
   const handleContextMenuClick = (
     appId: string,
     action: AppIconRightClickActionType,
-    variant: AppIconVariant
+    _variant: AppIconVariant
   ) => {
-    logInDev(
-      'Right click: ',
-      'appId: ',
-      appId,
-      'action: ',
-      action,
-      'variant: ',
-      variant
-    );
+    switch (action) {
+      case 'new-window':
+        launchWindow(appId);
+        break;
+      case 'pin-to-taskbar':
+      case 'unpin-from-taskbar':
+        togglePin(appId);
+        break;
+      default:
+        break;
+    }
   };
 
   const DEFAULT_APPS = APP_REGISTRY.filter(
