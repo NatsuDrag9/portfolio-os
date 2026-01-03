@@ -1,0 +1,99 @@
+.cp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-m);
+  width: 100%;
+  height: 95%;
+  padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+  overflow-y: scroll;
+
+  background-color: var(--color-static-black);
+  color: var(--color-static-white);
+  font-family: var(--font-family-monospace);
+  font-size: var(--font-size-base200);
+  line-height: var(--line-height-base300);
+  cursor: text;
+
+  &__welcome {
+    // margin: 0 0 var(--spacing-vertical-l) 0;
+    color: var(--color-static-white);
+
+    kbd {
+      padding: 0.1rem 0.4rem;
+      border: 1px solid rgb(70 70 70);
+      border-radius: var(--border-radius-small);
+      background-color: rgb(50 50 50);
+      font-family: var(--font-family-monospace);
+      font-size: 0.9em;
+    }
+  }
+
+  &__history-entry {
+    margin-bottom: var(--spacing-vertical-s);
+  }
+
+  &__history-input {
+    display: flex;
+    gap: var(--spacing-horizontal-xs);
+  }
+
+  &__history-output {
+    margin-top: var(--spacing-vertical-xxs);
+    margin-left: var(--spacing-horizontal-l);
+    color: var(--color-static-white);
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  &__form {
+    display: flex;
+    gap: var(--spacing-horizontal-xs);
+    margin-top: var(--spacing-vertical-xs);
+  }
+
+  &__prompt {
+    flex-shrink: 0;
+    color: var(--color-static-white);
+    user-select: none;
+  }
+
+  &__command {
+    color: var(--color-static-white);
+  }
+
+  &__input {
+    flex: 1;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-static-white);
+    font-family: var(--font-family-monospace);
+    font-size: var(--font-size-base200);
+    line-height: var(--line-height-base300);
+    outline: none;
+    caret-color: var(--color-static-white);
+
+    &::selection {
+      background-color: var(--color-static-white);
+      color: var(--color-static-black);
+    }
+  }
+
+  /* Custom scrollbar to match Windows 11 CMD */
+  &::-webkit-scrollbar {
+    width: 1.2rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-static-black);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 0.3rem solid var(--color-static-black);
+    background: rgb(60 60 60);
+
+    &:hover {
+      background: rgb(80 80 80);
+    }
+  }
+}

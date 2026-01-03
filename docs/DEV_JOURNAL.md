@@ -147,3 +147,9 @@ Even with `z-index: 300`, RightClickMenu is only compared within Icon 1's stacki
 **Note**: Commented out TaskbarRightClickMenu as snap functionality has bad animation
 
 **Files Changed**: `StartMenu.tsx`, `StartMenu.scss`, `Taskbar.tsx`, `Taskbar.scss`, `TaskbarRightClickMenu.tsx`, `TaskbarRightClickMenu.scss`, `desktopConstants.ts`, `desktopTypes.ts`
+
+#### Command Prompt
+
+**Problem**: cp element was pushing window-container\_\_top outside due to its excess height during overflow
+
+**Solution**: Reduced cp element's height from 100% to 95%
