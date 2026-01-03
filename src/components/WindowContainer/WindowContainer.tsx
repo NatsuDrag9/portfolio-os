@@ -69,8 +69,8 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
   const defaultWidth = windowData?.size?.width ?? 450;
   const defaultHeight = windowData?.size?.height ?? 300;
 
-  // Taskbar height in pixels (5.5rem = 55px at 10px base)
-  const TASKBAR_HEIGHT = 55;
+  // Taskbar height in pixels (5.0rem = 50px at 10px base)
+  const TASKBAR_HEIGHT = 45;
 
   return (
     <Rnd

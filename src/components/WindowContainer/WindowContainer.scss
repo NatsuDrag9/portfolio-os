@@ -23,12 +23,13 @@
   // Using !important to override react-rnd inline styles
   &--maximized {
     // stylelint-disable-next-line declaration-no-important
-    width: 100%;
+    width: 100% !important;
     // stylelint-disable-next-line declaration-no-important
-    height: calc(100% - 5.5rem);
-    border-radius: 0;
+    height: calc(100% - 4rem) !important;
     // stylelint-disable-next-line declaration-no-important
-    transform: translate(0, 0);
+    border-radius: 0 !important;
+    // stylelint-disable-next-line declaration-no-important
+    transform: translate(0, 0) !important;
   }
 
   &__top {
