@@ -50,3 +50,100 @@ Create Notepad app containing
 Make all major local and global constants immutable by suffixing variable definition with `as const`.
 
 Files Changed - `desktopConstants.ts`, `settingsConstants.ts`, `Notepad/constants.ts`
+
+#### Command Prompt
+
+Implement the core functionality of command prompt:
+
+- Applied styles
+- Commands are prcocessed
+- It is buggy though as multi-word commands are not being identified and there's a layout overflow issue
+
+### 2-1-2026 and 3-1-2026
+
+#### CSS Stacking Context & React Portals
+
+**Problem**: AppIcon's RightClickMenu appeared behind other desktop icons even with `z-index: 300`
+
+**Root cause**: Misunderstanding of CSS stacking contexts
+
+- `position: absolute` only removes an element from normal document flow (for layout)
+- It does **NOT** remove the element from its parent's stacking context
+- Each `react-rnd` wrapper creates its own stacking context
+- Child z-index values are confined within their parent's stacking context
+- Sibling stacking contexts are ordered by DOM order, not by descendant z-index values
+
+**Key Learning**:
+
+```
+<Rnd> (Icon 1 - creates stacking context)
+  └─ <AppIcon> (position: relative)
+     └─ <RightClickMenu> (z-index: 300) ← Trapped in Icon 1's context!
+
+<Rnd> (Icon 2 - later in DOM, renders on top)
+  └─ <AppIcon>
+```
+
+Even with `z-index: 300`, RightClickMenu is only compared within Icon 1's stacking context. Icon 2's entire stacking context renders on top due to DOM order.
+
+**Solution**: Use React Portal to render RightClickMenu at `document.body` level
+
+- Portals escape the parent component's stacking context completely
+- Menu renders at the root level, outside all Rnd wrappers
+- Use `position: fixed` with viewport coordinates from `getBoundingClientRect()`
+- Pass anchor element reference using callback ref pattern (state-based ref to avoid accessing `ref.current` during render)
+
+**Implementation**:
+
+1. Added `createPortal` from `react-dom`
+2. Calculate position based on anchor element's bounding rect
+3. Use callback ref (`useState` instead of `useRef`) to store anchor element
+4. Portal renders menu content to `document.body`
+
+**Files changed**: RightClickMenu.tsx, RightClickMenu.scss, AppIcon.tsx
+
+**References**:
+
+- [React Portals](https://react.dev/reference/react-dom/createPortal)
+- [Understanding CSS Stacking Contexts](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)
+
+#### WindowContainer Maximize Height Issue
+
+**Problem**: When maximizing a window, it didn't occupy the full height of its parent (Workspace). The window would expand to full width but height remained constrained, creating an awkward UI.
+
+**Root cause**: CSS specificity issue with `react-rnd` inline styles
+
+- `react-rnd` applies inline styles directly to the element with high specificity
+- The `window-container--maximized` SCSS class had the correct height calculation: `height: calc(100% - 5.5rem)`
+- However, the `!important` flags were **missing** from the CSS properties
+- Without `!important`, inline styles from `react-rnd` overrode the SCSS rules
+
+**Solution**: Added `!important` flags to all maximized state properties
+
+- `width: 100% !important`
+- `height: calc(100% - 4rem) !important` (adjusted for taskbar)
+- `border-radius: 0 !important`
+- `transform: translate(0, 0) !important`
+
+**Key Learning**: When working with third-party libraries that apply inline styles (like `react-rnd`), you need `!important` in CSS to override them. The comments indicated this was the intent, but the actual `!important` flags were missing from the declarations.
+
+**Files changed**: WindowContainer.scss
+
+**Additional fix**: Used `useMemo` instead of `useEffect` + `setState` pattern in RightClickMenu to avoid cascading renders (React best practice for derived values)
+
+#### Context Menu Option Functionality Integration
+
+- Integrate settings and personalize in DesktopRightClickMenu
+- Integrate context menu option functionalities in start-menu panels
+
+**Files Changed** - `DesktopRightClickMenu.tsx`, `PanelOne.tsx` and `PanelTwo.tsx`
+
+#### Taskbar
+
+**Feature**: Add functionality for right-click-menu with options
+
+**Options**: Settings, Snap to: right, left, top, bottom
+
+**Note**: Commented out TaskbarRightClickMenu as snap functionality has bad animation
+
+**Files Changed**: `StartMenu.tsx`, `StartMenu.scss`, `Taskbar.tsx`, `Taskbar.scss`, `TaskbarRightClickMenu.tsx`, `TaskbarRightClickMenu.scss`, `desktopConstants.ts`, `desktopTypes.ts`

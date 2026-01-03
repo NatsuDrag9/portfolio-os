@@ -12,42 +12,9 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import AppIcon from '@components/AppIcon/AppIcon';
 import QuickActionsPopup from './QuickActionsPopup/QuickActionsPopup';
 import { useWindowManager } from '@hooks/useWindowManager';
-import { DateFormat, TimeFormat } from '@definitions/settingsTypes';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
-
-const formatTime = (
-  date: Date,
-  timeFormat: TimeFormat,
-  timezone?: string
-): string => {
-  return date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: timeFormat === '12h',
-    timeZone: timezone,
-  });
-};
-
-const formatDate = (
-  date: Date,
-  dateFormat: DateFormat,
-  timezone?: string
-): string => {
-  const options: Intl.DateTimeFormatOptions = {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    timeZone: timezone,
-  };
-
-  const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(date);
-  const [day, month, year] = formattedDate.split('/');
-
-  return dateFormat === 'DD/MM/YYYY'
-    ? `${day}-${month}-${year}`
-    : `${month}-${day}-${year}`;
-};
+import { formatDate, formatTime } from './helperFunctions';
 
 function Taskbar() {
   const {
@@ -65,6 +32,11 @@ function Taskbar() {
     activeQuickActions,
   } = useSystemUIState();
 
+  // const [showTaskbarContextMenu, setShowTaskbarContextMenu] = useState(false);
+  // const [taskbarContextMenuPosition, setTaskbarContextMenuPosition] = useState({
+  //   x: 0,
+  //   y: 0,
+  // });
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
@@ -152,9 +124,26 @@ function Taskbar() {
   };
 
   // Right click handler (placeholder for future context menu)
-  const handleRightClick = useCallback(() => {
-    // To Do: Add right click functionality for taskbar (settings, task-manager (if possible), positioning snap)
-  }, []);
+  // To Do: Uncomment when snap animation has been improved
+  // const handleTaskbarRightClick = useCallback(
+  //   (e: MouseEvent<HTMLDivElement>) => {
+  //     // Only show context menu if clicking directly on taskbar background
+  //     const target = e.target as HTMLElement;
+  //     const isTaskbarBackground = target.classList.contains('taskbar');
+
+  //     if (!isTaskbarBackground) {
+  //       logInDev('has taskbar children');
+  //       return; // Don't show context menu for child elements
+  //     }
+
+  //     logInDev('no taskbar children');
+
+  //     e.preventDefault();
+  //     setTaskbarContextMenuPosition({ x: e.clientX, y: e.clientY });
+  //     setShowTaskbarContextMenu(true);
+  //   },
+  //   []
+  // );
 
   const handleQuickActionsClick = () => {
     setIsQuickActionsOpen((prev) => !prev);
@@ -228,7 +217,7 @@ function Taskbar() {
   return (
     <div
       className={`taskbar ${taskbarAlignment}`}
-      onContextMenu={handleRightClick}
+      // onContextMenu={handleTaskbarRightClick}
     >
       {/* Windows icon for Start menu */}
       <button
@@ -280,6 +269,8 @@ function Taskbar() {
           );
         })}
       </div>
+      {/* Spacer for vertical taskbar alignment */}
+      <div className={`taskbar__spacer ${taskbarAlignment}`} />
       {/* Right section - static apps and date-time */}
       <div className={`taskbar__right-section ${taskbarAlignment}`}>
         {showMoreIcons && (
@@ -310,6 +301,13 @@ function Taskbar() {
           <p className="taskbar__date">{currentDate}</p>
         </div>
       </div>
+      {/* To Do: Uncomment after improving snap animation */}
+      {/* {showTaskbarContextMenu && (
+        <TaskbarRightClickMenu
+          position={taskbarContextMenuPosition}
+          onClose={() => setShowTaskbarContextMenu(false)}
+        />
+      )} */}
     </div>
   );
 }

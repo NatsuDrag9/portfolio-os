@@ -180,11 +180,21 @@
 
     &.left,
     &.right {
-      flex: 1;
       flex-direction: column;
       gap: var(--spacing-vertical-s);
       width: 100%;
-      height: auto;
+      height: fit-content;
+    }
+  }
+
+  // Spacer to push right section to bottom for vertical taskbar
+  &__spacer {
+    display: none;
+
+    &.left,
+    &.right {
+      display: block;
+      flex: 1;
     }
   }
 

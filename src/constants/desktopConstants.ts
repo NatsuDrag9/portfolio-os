@@ -4,6 +4,7 @@ import {
   QuickActionsType,
   AppIconRightClickOption,
   DesktopMenuItem,
+  TaskbarMenuItem,
 } from '@definitions/desktopTypes';
 import {
   PinRegular,
@@ -24,10 +25,11 @@ import {
   ArrowClockwiseRegular,
   WindowConsoleFilled,
   WindowBrushRegular,
+  ArrowRightRegular,
+  ArrowDownRegular,
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
-  // To Do: Recommended apps - vscode, browser, command prompt, notepad
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
@@ -249,6 +251,36 @@ export const DESKTOP_MENU_OPTIONS: DesktopMenuItem[] = [
     label: 'Settings',
     icon: SettingsRegular,
   },
+];
+
+export const TASKBAR_MENU_OPTIONS: TaskbarMenuItem[] = [
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: SettingsRegular,
+  },
+  // NOTE: By default, Taskbar is snapped at bottom so it's not displayed in the menu options. Display only those snap-positions to which Taskbar is not snapped
+  {
+    id: 'right',
+    label: 'Snap Right',
+    icon: ArrowRightRegular,
+  },
+  {
+    id: 'bottom',
+    label: 'Snap Bottom',
+    icon: ArrowDownRegular,
+  },
+  // NOTE: Removing these as they require shifting the positions of desktop icons. Will implement later
+  // {
+  //   id: 'top',
+  //   label: 'Snap Top',
+  //   icon: ArrowUpRegular,
+  // },
+  // {
+  //   id: 'left',
+  //   label: 'Snap Left',
+  //   icon: ArrowLeftRegular,
+  // },
 ];
 
 export const QUICK_ACTION_BUTTONS: Record<

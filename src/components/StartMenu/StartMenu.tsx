@@ -15,8 +15,13 @@ function StartMenu() {
   const windowsButtonRef = useRef<HTMLElement | null>(null);
   const [changePanel, setChangePanel] =
     useState<StartMenuPanelType>('panel-one');
-  const { startMenuOpen, setStartMenuOpen, searchValue, setSearchValue } =
-    useSystemUIState();
+  const {
+    startMenuOpen,
+    setStartMenuOpen,
+    searchValue,
+    setSearchValue,
+    taskbarAlignment,
+  } = useSystemUIState();
   const { activeWindows } = useWorkspaceState();
 
   // Get reference to Windows button in Taskbar via data attribute
@@ -62,7 +67,7 @@ function StartMenu() {
 
   return (
     <div
-      className={`start-menu ${activePanel} ${startMenuOpen ? 'open' : ''}`}
+      className={`start-menu ${activePanel} ${taskbarAlignment} ${startMenuOpen ? 'open' : ''}`}
       style={{ zIndex: startMenuZIndex }}
       ref={startMenuRef}
     >

@@ -1,0 +1,54 @@
+.taskbar-rc-menu {
+  @include acrylic-material-light(85%);
+
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xs);
+  min-width: 14rem;
+  padding: var(--spacing-vertical-xs);
+  box-shadow: var(--shadow16);
+  cursor: default;
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-s);
+    align-items: center;
+    padding: var(--spacing-vertical-xs) var(--spacing-horizontal-s);
+    border-radius: var(--border-radius-small);
+    color: var(--color-neutral-foreground1);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-regular);
+    cursor: default;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      background-color: var(--color-neutral-background3);
+    }
+
+    &:active {
+      background-color: var(--color-neutral-background4);
+      transform: scale(0.9);
+    }
+  }
+
+  &__item-icon {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__item-fluent-icon {
+    width: 1.5rem;
+    height: auto;
+    color: var(--color-neutral-foreground1);
+  }
+
+  &__item-label {
+    flex: 1;
+    white-space: nowrap;
+  }
+}

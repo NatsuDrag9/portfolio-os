@@ -72,3 +72,11 @@ export interface DesktopMenuItem {
 }
 export type QuickActionsType = 'night-light' | 'airplane' | 'settings';
 export type SliderForType = 'volume' | 'brightness';
+
+export type TaskbarMenuAction = 'settings' | TaskbarAlignmentType;
+
+export interface TaskbarMenuItem {
+  id: TaskbarMenuAction;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+}

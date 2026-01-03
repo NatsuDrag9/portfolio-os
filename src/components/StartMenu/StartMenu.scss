@@ -21,7 +21,10 @@
   transition:
     opacity 0.25s ease-out,
     transform 0.25s ease-out,
-    visibility 0.25s ease-out;
+    visibility 0.25s ease-out,
+    left 0.3s ease,
+    right 0.3s ease,
+    bottom 0.3s ease;
   transform: translateX(-50%) translateY(2rem);
 
   // Open state
@@ -30,6 +33,18 @@
     visibility: visible;
     pointer-events: auto;
     transform: translateX(-50%) translateY(0);
+  }
+
+  // Right-aligned taskbar positioning
+  &.right {
+    top: 2rem;
+    right: 9rem;
+    left: auto;
+    transform: translateX(3rem) translateY(0);
+
+    &.open {
+      transform: translateX(0) translateY(0);
+    }
   }
 
   // Panel carousel container
@@ -190,6 +205,38 @@
       .dark-theme & {
         background-color: var(--color-neutral-background6);
       }
+    }
+
+    // Override AppIcon start-menu variant sizing for compact layout
+    .app-icon--start-menu {
+      flex-direction: row;
+      gap: 0;
+      width: auto;
+      height: auto;
+      padding: 0;
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &:active {
+        background-color: transparent;
+        transform: none;
+      }
+    }
+
+    .app-icon__image {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+
+    .app-icon__image--fluent {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+
+    .app-icon__name {
+      display: none;
     }
   }
 
