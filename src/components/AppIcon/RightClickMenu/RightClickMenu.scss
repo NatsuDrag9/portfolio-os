@@ -1,6 +1,5 @@
 .rc-menu {
-  position: absolute;
-  z-index: 9;
+  z-index: 300;
   display: flex;
   flex-shrink: 0;
   flex-direction: column;
@@ -12,16 +11,7 @@
   background-color: var(--color-neutral-background3);
   box-shadow: var(--shadow8);
 
-  &--bottom-right {
-    top: 7rem;
-    left: 7rem;
-  }
-
-  &--top-right {
-    // top: 0;
-    bottom: 5rem;
-    left: 3rem;
-  }
+  // Position is now controlled via inline styles in component (using Portal)
 
   &__item {
     display: flex;

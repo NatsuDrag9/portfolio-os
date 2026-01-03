@@ -6,7 +6,8 @@ import {
 } from '@definitions/desktopTypes';
 import { APP_REGISTRY, RIGHT_CLICK_OPTIONS } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
-import { RefObject, useRef } from 'react';
+import { RefObject, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
 
 export interface RightClickMenuProps {
@@ -20,6 +21,7 @@ export interface RightClickMenuProps {
     action: AppIconRightClickActionType,
     variant: AppIconVariant
   ) => void;
+  anchorElement?: HTMLElement | null;
 }
 
 function RightClickMenu({
@@ -29,6 +31,7 @@ function RightClickMenu({
   isPinned = false,
   onClose,
   onClick,
+  anchorElement,
 }: RightClickMenuProps) {
   const { activeWindows } = useWorkspaceState();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -43,6 +46,30 @@ function RightClickMenu({
   const instanceCount = openWindowsForApp.length;
   const hasWindows = instanceCount > 0;
   const hasMultipleWindows = instanceCount > 1;
+
+  // Calculate position based on anchor element
+  const position = useMemo(() => {
+    if (!anchorElement || !isOpen) {
+      return { top: 0, left: 0 };
+    }
+
+    const rect = anchorElement.getBoundingClientRect();
+
+    // Position based on variant
+    if (iconVariant === 'taskbar') {
+      // Position above taskbar icon
+      return {
+        top: rect.top - 70, // Offset above the icon
+        left: rect.left + 40, // Offset to the right
+      };
+    }
+
+    // Position bottom-right for desktop icons
+    return {
+      top: rect.bottom - 15, // Offset below the icon
+      left: rect.right - 15, // Offset to the right
+    };
+  }, [anchorElement, isOpen, iconVariant]);
 
   // Close menu when clicking outside
   useClickOutsideModal(
@@ -70,12 +97,17 @@ function RightClickMenu({
 
   const options = RIGHT_CLICK_OPTIONS[iconVariant];
 
-  return (
+  const menuContent = (
     <div
       className={`rc-menu ${iconVariant === 'taskbar' ? 'rc-menu--top-right' : 'rc-menu--bottom-right'}`}
       ref={menuRef}
       role="menu"
       tabIndex={0}
+      style={{
+        position: 'fixed',
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+      }}
     >
       {options
         .filter((option) => shouldShowOption(option.showWhen))
@@ -91,10 +123,14 @@ function RightClickMenu({
               className={`rc-menu__item ${option.destructive ? 'rc-menu__item--destructive' : ''}`}
               role="menuitem"
               tabIndex={0}
-              onClick={() => handleMenuItemClick(option.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuItemClick(option.id);
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
+                  e.stopPropagation();
                   handleMenuItemClick(option.id);
                 }
               }}
@@ -134,6 +170,9 @@ function RightClickMenu({
         })}
     </div>
   );
+
+  // Render to portal at document body to escape stacking context
+  return isOpen ? createPortal(menuContent, document.body) : null;
 }
 
 export default RightClickMenu;

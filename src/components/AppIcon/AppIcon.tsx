@@ -53,6 +53,7 @@ function AppIcon({
   const [isExiting, setIsExiting] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
   const unmountTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [iconElement, setIconElement] = useState<HTMLDivElement | null>(null);
 
   const appMetaData = APP_REGISTRY.find((app) => app.id === appId);
 
@@ -165,6 +166,7 @@ function AppIcon({
 
   return (
     <div
+      ref={setIconElement}
       className={`app-icon ${shape} ${getVariantModifiers(iconVariant, hasMultipleWindows, Boolean(isThisAppFocused))}`}
       role="button"
       tabIndex={0}
@@ -235,6 +237,7 @@ function AppIcon({
           }}
           isOpen={showContextMenu}
           onClose={handleRightClickMenuClose}
+          anchorElement={iconElement}
         />
       )}
     </div>
