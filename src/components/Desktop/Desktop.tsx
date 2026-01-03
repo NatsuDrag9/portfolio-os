@@ -82,7 +82,7 @@ function Desktop() {
           togglePin(appId);
           break;
         case 'properties':
-          // Future: Open properties dialog
+          // To Do: Open properties dialog
           break;
       }
     },

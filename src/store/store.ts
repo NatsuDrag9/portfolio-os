@@ -70,7 +70,7 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   volumeLevel: 50,
   currentTheme: 'light',
   activeQuickActions: [],
-  brightnessLevel: 30,
+  brightnessLevel: 70,
   isNightLightActive: false,
   timeFormat: '12h',
   dateFormat: 'DD/MM/YYYY',
