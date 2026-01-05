@@ -14,6 +14,10 @@ beforeEach(() => {
     currentTheme: 'light',
     brightnessLevel: 30,
     activeQuickActions: [],
+    displayLoader: {
+      triggeredFrom: 'undefined',
+      isLoading: false,
+    },
   });
 });
 
@@ -31,6 +35,8 @@ describe('useSystemUIState', () => {
       expect(state.currentTheme).toBe('light');
       expect(state.brightnessLevel).toBe(30);
       expect(state.activeQuickActions).toEqual([]);
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
     });
   });
 
@@ -384,3 +390,5 @@ describe('useSystemUIState', () => {
     });
   });
 });
+
+// To Do: Add unit-test for displayLoader

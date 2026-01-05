@@ -12,7 +12,11 @@ import {
 import { COMMON_TIMEZONES } from '@constants/settingsConstants';
 import { DropdownType } from '@definitions/utlityTypes';
 
-function System() {
+interface SystemProps {
+  onClose: () => void;
+}
+
+function System({ onClose }: SystemProps) {
   const {
     volumeLevel: storeVolumeLevel,
     brightnessLevel: storeBrightnessLevel,
@@ -28,6 +32,7 @@ function System() {
     setDateFormat,
     setAutoSyncDateTime,
     setTimezone,
+    setDisplayLoader,
   } = useSystemUIState();
 
   // Local state initialized with store values
@@ -82,6 +87,10 @@ function System() {
   };
 
   const handleApply = () => {
+    setDisplayLoader({
+      triggeredFrom: 'settings',
+      isLoading: true,
+    });
     setBrightnessLevel(brightnessLevel);
     setVolumeLevel(volumeLevel);
     setNightLight(isNightLightActive);
@@ -89,6 +98,8 @@ function System() {
     setDateFormat(dateFormat);
     setAutoSyncDateTime(autoSyncDateTime);
     setTimezone(timezone);
+    // Close the settings window
+    onClose();
   };
 
   const hasChanges = useMemo(() => {

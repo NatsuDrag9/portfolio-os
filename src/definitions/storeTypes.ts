@@ -66,6 +66,12 @@ export interface WorkspaceState {
   togglePin: (appId: string) => void;
 }
 
+export type LoaderTriggerType = 'settings' | 'undefined'; // Add more triggers here
+export interface DisplayLoader {
+  triggeredFrom: LoaderTriggerType;
+  isLoading: boolean;
+}
+
 export interface SystemUIState {
   taskbarAlignment: TaskbarAlignmentType; // Position of taskbar: "top", "right", "bottom", "left"
   isSearchVisible: boolean; // Whether the search bar is visible in the taskbar
@@ -83,6 +89,7 @@ export interface SystemUIState {
   dateFormat: DateFormat; // Date format preference
   autoSyncDateTime: boolean; // Auto-sync date/time with system
   timezone: string; // User's timezone
+  displayLoader: DisplayLoader;
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => void;
   setIsSearchVisible: (isVisible: boolean) => void;
@@ -100,9 +107,10 @@ export interface SystemUIState {
   setDateFormat: (format: DateFormat) => void;
   setAutoSyncDateTime: (autoSync: boolean) => void;
   setTimezone: (timezone: string) => void;
+  setDisplayLoader: (value: DisplayLoader) => void;
 }
 
 export interface SettingsState {
-  activeSettingButton: string;
+  activeSettingButton: string; // To Do: Replace string with a defined type later for typesafety - "home", "accounts", "personalization", "exit"
   setActiveSettingButton: (value: string) => void;
 }

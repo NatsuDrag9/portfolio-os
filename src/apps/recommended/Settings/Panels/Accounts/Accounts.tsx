@@ -1,26 +1,36 @@
 import { ChangeEvent, FormEventHandler, useState } from 'react';
 import './Accounts.scss';
-import { useAuth } from '@store/store';
+import { useAuth, useSystemUIState } from '@store/store';
 import { PrimaryButton } from '@components/index';
 import { Natsu } from '@assets/images/specifics';
 import { PersonCircleRegular } from '@fluentui/react-icons';
 
-function Accounts() {
+interface AccountsProps {
+  onClose: () => void;
+}
+
+function Accounts({ onClose }: AccountsProps) {
   const [newUsername, setNewUsername] = useState<string>('');
   const { username, isAdmin, updateAuthState, updateUserAvatar } = useAuth();
   const [previewUrl, setPreviewUrl] = useState<string>(() =>
     isAdmin ? Natsu : ''
   );
+  const { setDisplayLoader } = useSystemUIState();
 
   const handleFormSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     if (!isAdmin && newUsername.trim()) {
+      // Update displayLoader state
+      setDisplayLoader({ isLoading: true, triggeredFrom: 'settings' });
+
       // Update the username in the store
       updateAuthState(newUsername.trim());
-
       // Clear the input field after successful update
       setNewUsername('');
+
+      // Close the settings window
+      onClose();
     }
   };
 

@@ -153,3 +153,40 @@ Even with `z-index: 300`, RightClickMenu is only compared within Icon 1's stacki
 **Problem**: cp element was pushing window-container\_\_top outside due to its excess height during overflow
 
 **Solution**: Reduced cp element's height from 100% to 95%
+
+### 5-1-2026
+
+#### Loader
+
+**Feature**: Create loader component with storybook
+
+#### LoginScreen Loader Integration
+
+**Feature**: Added `<Loader />` to `<LoginScreen />`
+
+- Display `<Loader />` before rendering login-screen\_\_panels
+- Use local `isLoading` state for timeout as LoginScreen is not connected to the SystemUI state in the store
+
+#### Settings Loader Integration on Clicking Apply button
+
+**Feature**: Loader integration
+
+- Create a new object called `displayLoader` within SystemUIState
+
+```
+{
+  triggeredFrom: LoaderTriggerType; // Stores the app triggering <Loader /> component
+  isLoading: boolean; // Display <Loader /> when true
+}
+```
+
+- Create `setDisplayLoader: (value: DisplayLoader) => void` action to update displayLoader property
+
+- Set display loader state in settings panel when clicking Apply button
+
+#### Callback to Close Settings Window on Clicking Apply Button
+
+**Feature**: Added a callback in `Settings.tsx` which is called when user clicks Apply Button
+
+- Finds the `settings` window from `activeWindows` array
+- Add `onClose: ()=> void` prop to all settings panel which is called when user clicks Apply button

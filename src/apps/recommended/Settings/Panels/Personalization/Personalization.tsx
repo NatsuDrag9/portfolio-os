@@ -11,9 +11,17 @@ const COLOR_MODE_OPTIONS: DropdownType[] = [
   { displayName: 'Dark', value: 'dark' },
 ];
 
-function Personalization() {
+interface PersonalizationProps {
+  onClose: () => void;
+}
+
+function Personalization({ onClose }: PersonalizationProps) {
   const { activeBackground, setActiveBackground } = useWorkspaceState();
-  const { currentTheme: storeCurrentTheme, setTheme } = useSystemUIState();
+  const {
+    currentTheme: storeCurrentTheme,
+    setTheme,
+    setDisplayLoader,
+  } = useSystemUIState();
 
   // Find the background image map entry that matches activeBackground
   const initialBgMap = useMemo(() => {
@@ -36,8 +44,14 @@ function Personalization() {
   };
 
   const handleApply = () => {
+    setDisplayLoader({
+      isLoading: true,
+      triggeredFrom: 'settings',
+    });
     setActiveBackground(localActiveBg.image);
     setTheme(localTheme);
+    // Close the settings window
+    onClose();
   };
 
   const hasChanges = useMemo(() => {

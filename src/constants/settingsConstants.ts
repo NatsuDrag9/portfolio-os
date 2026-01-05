@@ -90,4 +90,4 @@ export const COMMON_TIMEZONES = [
   { displayName: 'India (IST)', value: 'Asia/Kolkata' },
   { displayName: 'Sydney (AEDT/AEST)', value: 'Australia/Sydney' },
   { displayName: 'Auckland (NZDT/NZST)', value: 'Pacific/Auckland' },
-] as const;
+];

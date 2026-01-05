@@ -3,6 +3,7 @@ import {
   AuthState,
   BootStatusState,
   BootStatusType,
+  DisplayLoader,
   SettingsState,
   SystemUIState,
   WorkspaceState,
@@ -76,6 +77,10 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   dateFormat: 'DD/MM/YYYY',
   autoSyncDateTime: true,
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  displayLoader: {
+    triggeredFrom: 'undefined',
+    isLoading: false,
+  },
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => {
     set({ taskbarAlignment: alignment });
@@ -155,6 +160,9 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   },
   setTimezone: (timezone: string) => {
     set({ timezone });
+  },
+  setDisplayLoader: (value: DisplayLoader) => {
+    set({ displayLoader: value });
   },
 }));
 
