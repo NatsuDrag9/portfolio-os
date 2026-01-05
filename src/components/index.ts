@@ -8,3 +8,4 @@ export { default as ToggleButton } from './ToggleButton/ToggleButton';
 export { default as ImagePicker } from './ImagePicker/ImagePicker';
 export { default as WindowManager } from './WindowManager/WindowManager';
 export { default as GenericDropdown } from './GenericDropdown/GenericDropdown';
+export { default as Loader } from './Loader/Loader';
