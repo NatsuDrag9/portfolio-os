@@ -347,6 +347,171 @@ describe('useSystemUIState', () => {
     });
   });
 
+  describe('Display Loader', () => {
+    it('should initialize with default loader state', () => {
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
+    });
+
+    it('should set loader to loading from settings', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: true,
+      });
+
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(true);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+    });
+
+    it('should stop loader from settings', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      // Start loading
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: true,
+      });
+
+      // Stop loading
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: false,
+      });
+
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+    });
+
+    it('should reset loader to undefined state', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      // Set to settings loader
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: true,
+      });
+
+      // Reset to undefined
+      setDisplayLoader({
+        triggeredFrom: 'undefined',
+        isLoading: false,
+      });
+
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
+    });
+
+    it('should handle multiple loader trigger sources sequentially', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      // Settings loader starts
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: true,
+      });
+
+      let state = useSystemUIState.getState();
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+      expect(state.displayLoader.isLoading).toBe(true);
+
+      // Settings loader stops
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: false,
+      });
+
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+      expect(state.displayLoader.isLoading).toBe(false);
+    });
+
+    it('should update loader state independently of other system UI state', () => {
+      const { setDisplayLoader, setTheme, setVolumeLevel } =
+        useSystemUIState.getState();
+
+      // Set some other state
+      setTheme('dark');
+      setVolumeLevel(80);
+
+      // Update loader
+      setDisplayLoader({
+        triggeredFrom: 'settings',
+        isLoading: true,
+      });
+
+      const state = useSystemUIState.getState();
+
+      // Loader state should be updated
+      expect(state.displayLoader.isLoading).toBe(true);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+
+      // Other state should remain unchanged
+      expect(state.currentTheme).toBe('dark');
+      expect(state.volumeLevel).toBe(80);
+    });
+
+    it('should handle rapid loader state changes', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      // Rapid on/off
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: false });
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(true);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+    });
+
+    it('should maintain loader trigger source while toggling loading state', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+      let state = useSystemUIState.getState();
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: false });
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+    });
+
+    it('should handle complete loader lifecycle', () => {
+      const { setDisplayLoader } = useSystemUIState.getState();
+
+      // Initial state
+      let state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
+
+      // Start loading from settings
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(true);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+
+      // Stop loading from settings
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: false });
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('settings');
+
+      // Reset to undefined
+      setDisplayLoader({ triggeredFrom: 'undefined', isLoading: false });
+      state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
+    });
+  });
+
   describe('Multiple State Changes', () => {
     it('should handle multiple independent state updates', () => {
       const {
@@ -390,5 +555,3 @@ describe('useSystemUIState', () => {
     });
   });
 });
-
-// To Do: Add unit-test for displayLoader
