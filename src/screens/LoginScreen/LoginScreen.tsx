@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth, useBootStatus } from '@store/store';
 import { ADMIN } from '@constants/storeConstants';
 import { Natsu, LoginScreenWallpaper } from '@assets/images/specifics';
 import DateTimeDisplay from './DateTimeDisplay';
 import PowerButton from './PowerButton';
 import './LoginScreen.scss';
+import { Loader } from '@components/index';
 
 function LoginScreen() {
   const { updateAuthState } = useAuth();
   const { updateBootStatus } = useBootStatus();
   const [showNewUserInput, setShowNewUserInput] = useState(false);
   const [newUsername, setNewUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 3000);
+  }, []);
 
   const handleAdminLogin = () => {
     updateAuthState(ADMIN);
@@ -29,22 +35,12 @@ function LoginScreen() {
     }
   };
 
-  return (
-    <div
-      className="login-screen"
-      style={{ backgroundImage: `url(${LoginScreenWallpaper})` }}
-    >
-      {/* Smoke overlay for dimming background */}
-      <div className="login-screen__overlay" />
-
-      {/* Time and Date display */}
-      <DateTimeDisplay />
-
-      {/* Power button */}
-      <PowerButton />
-
-      {/* User selection panel */}
-      <div className="login-screen__panel">
+  const renderUserSectionPanel = () => {
+    if (isLoading) {
+      return <Loader />;
+    }
+    return (
+      <>
         {/* Admin user card */}
         <button
           type="button"
@@ -116,7 +112,26 @@ function LoginScreen() {
             </div>
           </form>
         )}
-      </div>
+      </>
+    );
+  };
+
+  return (
+    <div
+      className="login-screen"
+      style={{ backgroundImage: `url(${LoginScreenWallpaper})` }}
+    >
+      {/* Smoke overlay for dimming background */}
+      {!isLoading && <div className="login-screen__overlay" />}
+
+      {/* Time and Date display */}
+      <DateTimeDisplay />
+
+      {/* Power button */}
+      <PowerButton />
+
+      {/* User selection panel */}
+      <div className="login-screen__panel">{renderUserSectionPanel()}</div>
     </div>
   );
 }
