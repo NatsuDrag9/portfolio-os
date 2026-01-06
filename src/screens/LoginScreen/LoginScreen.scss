@@ -237,56 +237,21 @@
       outline-offset: 2px;
     }
   }
+}
 
-  .power-button {
-    @include disable-default-button-styles;
-
-    position: absolute;
-    right: var(--spacing-horizontal-xxxl);
-    bottom: var(--spacing-vertical-xxxl);
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 4rem;
-    height: 4rem;
-    border-radius: var(--border-radius-circular);
-    background-color: color-mix(
-      in srgb,
-      var(--color-static-white) 10%,
-      transparent
-    );
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease;
-
-    &:hover {
-      background-color: color-mix(
-        in srgb,
-        var(--color-static-white) 20%,
-        transparent
-      );
+@media (max-width: $breakpoint-tablet-landscape) {
+  .login-screen {
+    &__avatar {
+      width: 7rem;
+      height: 7rem;
     }
 
-    &:active {
-      background-color: color-mix(
-        in srgb,
-        var(--color-palette-red-background3) 40%,
-        transparent
-      );
-      transform: scale(0.95);
+    &__username {
+      font-size: var(--font-size-base400);
     }
 
-    &:focus-visible {
-      outline: 2px solid var(--color-static-white);
-      outline-offset: 2px;
-    }
-
-    &__icon {
-      width: 2.4rem;
-      height: 2.4rem;
-      color: var(--color-static-white);
+    &__role {
+      font-size: var(--font-size-base200);
     }
   }
 }

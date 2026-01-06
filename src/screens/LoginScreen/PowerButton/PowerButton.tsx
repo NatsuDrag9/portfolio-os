@@ -1,6 +1,6 @@
 import { Power24Regular } from '@fluentui/react-icons';
 import { useBootStatus } from '@store/store';
-import './LoginScreen';
+import './PowerButton.scss';
 
 function PowerButton() {
   const { updateBootStatus } = useBootStatus();

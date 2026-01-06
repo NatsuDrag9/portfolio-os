@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useAuth, useBootStatus } from '@store/store';
 import { ADMIN } from '@constants/storeConstants';
 import { Natsu, LoginScreenWallpaper } from '@assets/images/specifics';
-import DateTimeDisplay from './DateTimeDisplay';
-import PowerButton from './PowerButton';
+import DateTimeDisplay from './DateTimeDisplay/DateTimeDisplay';
+import PowerButton from './PowerButton/PowerButton';
 import './LoginScreen.scss';
 import { Loader } from '@components/index';
 
@@ -125,10 +125,10 @@ function LoginScreen() {
       {!isLoading && <div className="login-screen__overlay" />}
 
       {/* Time and Date display */}
-      <DateTimeDisplay />
+      {!isLoading && <DateTimeDisplay />}
 
       {/* Power button */}
-      <PowerButton />
+      {!isLoading && <PowerButton />}
 
       {/* User selection panel */}
       <div className="login-screen__panel">{renderUserSectionPanel()}</div>
