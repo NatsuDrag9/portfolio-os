@@ -34,6 +34,7 @@ function StartMenuPowerButton() {
     >
       <PowerRegular className="start-menu__fluent-icon" />
 
+      {/* To Do: Add a transition to display these options using requestAnimationFrame */}
       {showPopup && (
         <div
           className="start-menu__power-off-options"

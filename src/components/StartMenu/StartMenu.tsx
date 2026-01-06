@@ -1,12 +1,12 @@
 import './StartMenu.scss';
 import { RefObject, useEffect, useMemo, useRef, useState } from 'react';
-import PanelOne from './PanelOne';
 import StartMenuUser from './StartMenuUser';
-import PanelTwo from './PanelTwo';
 import StartMenuPowerButton from './StartMenuPowerButton';
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
-import PanelSearchResults from './PanelSearchResults';
+import PanelSearchResults from './Panels/PanelSearchResults';
+import PanelOne from './Panels/PanelOne';
+import PanelTwo from './Panels/PanelTwo';
 
 type StartMenuPanelType = 'panel-one' | 'panel-two' | 'search-results';
 

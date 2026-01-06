@@ -1,11 +1,12 @@
 import { ChevronRightRegular } from '@fluentui/react-icons';
-import StartMenuCategory from './StartMenuCategory';
+import './Panels.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import AppIcon from '@components/AppIcon/AppIcon';
 import { useWorkspaceState } from '@store/store';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
 import { useWindowManager } from '@hooks/useWindowManager';
+import StartMenuCategory from '../StartMenuCategory';
 
 export interface PanelOneProps {
   onButtonClick?: () => void;

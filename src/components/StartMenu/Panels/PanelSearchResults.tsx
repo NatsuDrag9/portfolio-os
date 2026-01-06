@@ -1,8 +1,12 @@
 import { ArrowLeftFilled, SearchRegular } from '@fluentui/react-icons';
+import './Panels.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import AppIcon from '@components/AppIcon/AppIcon';
 import { useWorkspaceState } from '@store/store';
 import { useWindowManager } from '@hooks/useWindowManager';
+import { AppIconRightClickActionType } from '@definitions/desktopTypes';
+import { AppIconVariant } from '@definitions/applicationTypes';
+import { logInDev } from '@utils/logUtils';
 
 export interface PanelSearchResultsProps {
   searchValue: string;
@@ -13,7 +17,7 @@ function PanelSearchResults({
   searchValue,
   onButtonClick,
 }: PanelSearchResultsProps) {
-  const { taskbarPinnedAppIds } = useWorkspaceState();
+  const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
 
   // Filter apps based on search value
@@ -22,6 +26,25 @@ function PanelSearchResults({
         app.appName.toLowerCase().includes(searchValue.toLowerCase())
       )
     : [];
+
+  const handleContextMenuClick = (
+    appId: string,
+    action: AppIconRightClickActionType,
+    _variant: AppIconVariant
+  ) => {
+    logInDev('Called context menu callback');
+    switch (action) {
+      case 'new-window':
+        launchWindow(appId);
+        break;
+      case 'pin-to-taskbar':
+      case 'unpin-from-taskbar':
+        togglePin(appId);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="start-menu__search-results">
@@ -49,6 +72,7 @@ function PanelSearchResults({
                 isPinned={isPinned}
                 onSingleClick={launchWindow}
                 onWindowClose={closeWindow}
+                onContextMenuItemClick={handleContextMenuClick}
               />
             );
           })

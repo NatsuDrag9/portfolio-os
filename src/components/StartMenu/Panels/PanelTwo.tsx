@@ -1,5 +1,5 @@
 import { ChevronLeftRegular } from '@fluentui/react-icons';
-import StartMenuCategory from './StartMenuCategory';
+import './Panels.scss';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { useWorkspaceState } from '@store/store';
 import AppIcon from '@components/AppIcon/AppIcon';
@@ -7,6 +7,7 @@ import { useWindowManager } from '@hooks/useWindowManager';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant, AppMetadata } from '@definitions/applicationTypes';
 import { useMemo } from 'react';
+import StartMenuCategory from '../StartMenuCategory';
 
 export interface PanelTwoProps {
   onButtonClick?: () => void;
@@ -90,14 +91,19 @@ function PanelTwo({ onButtonClick }: PanelTwoProps) {
                   taskbarPinnedAppIds.find((id) => id === app.id)
                 );
                 return (
-                  <div className="start-menu__letter-app" key={app.id}>
+                  <div
+                    className="start-menu__letter-app"
+                    key={app.id}
+                    role="menuitem"
+                    onClick={() => launchWindow(app.id)}
+                  >
                     <AppIcon
                       key={app.id}
                       appId={app.id}
                       iconVariant="start-menu"
                       isPinned={isPinned}
                       onContextMenuItemClick={handleContextMenuClick}
-                      onSingleClick={launchWindow}
+                      // onSingleClick={launchWindow}
                       onWindowClose={closeWindow}
                     />
                     <p className="start-menu__letter-app-name">{app.appName}</p>
