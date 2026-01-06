@@ -304,10 +304,34 @@
   }
 }
 
-@media (min-width: $breakpoint-tablet-portrait) and (max-width: $breakpoint-tablet-landscape) {
+// Desktop (1200px - 1400px) - Standard desktop sizing
+@media (min-width: $breakpoint-desktop) and (max-width: #{$breakpoint-desktop-xl - 1}) {
+  .taskbar {
+    &__windows-button {
+      width: clamp(3.6rem, 5vw, 4rem);
+      height: clamp(3.6rem, 5vw, 4rem);
+    }
+  }
+}
+
+// Between tablet landscape and desktop
+@media (max-width: #{$breakpoint-desktop - 1}) {
   .taskbar {
     &.bottom {
       justify-content: start;
+    }
+
+    &__windows-button {
+      width: clamp(3.2rem, 5vw, 3.6rem);
+      height: clamp(3.2rem, 5vw, 3.6rem);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .taskbar {
+    &.bottom {
+      height: 4.5rem;
     }
   }
 }
@@ -319,6 +343,14 @@
 
     &.bottom {
       justify-content: start;
+    }
+
+    &__search {
+      width: clamp(25rem, 25vw, 30rem);
+    }
+
+    &__apps-container {
+      display: none;
     }
   }
 }

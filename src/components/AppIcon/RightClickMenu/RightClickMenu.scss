@@ -26,7 +26,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: var(--color-neutral-background3);
+      background-color: var(--color-neutral-background5);
     }
 
     &:active {
@@ -45,5 +45,13 @@
   &__item-fluent-icon {
     width: 1.8rem;
     height: auto;
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .rc-menu {
+    &__item {
+      font-size: var(--font-size-base200);
+    }
   }
 }

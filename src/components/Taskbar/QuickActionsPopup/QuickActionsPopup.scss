@@ -42,6 +42,13 @@
       width: clamp(10rem, 90vw, 17rem);
       height: clamp(20rem, 90vh, 25rem);
     }
+
+    &.mobile {
+      flex-direction: row;
+      justify-content: space-between;
+      width: clamp(15rem, 50vw, 20rem);
+      height: 25rem;
+    }
   }
 
   &__qa-buttons {
@@ -53,7 +60,8 @@
     width: 100%;
 
     &.taskbar-left,
-    &.taskbar-right {
+    &.taskbar-right,
+    &.mobile {
       flex: 1;
       flex-direction: column;
 
@@ -69,10 +77,15 @@
     height: 100%;
 
     &.taskbar-left,
-    &.taskbar-right {
+    &.taskbar-right,
+    &.mobile {
       flex: 1;
       flex-direction: row;
       gap: var(--spacing-horizontal-m);
+    }
+
+    &.mobile {
+      justify-content: center;
     }
   }
 }

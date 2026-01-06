@@ -263,10 +263,50 @@
 }
 
 // Desktop (1200px - 1400px) - Standard desktop sizing
-// @media (min-width: $breakpoint-desktop) and (max-width: #{$breakpoint-desktop-xl - 1}) {
-//   .start-menu {
-//     &__power-off-option {
-//       font-size: var(--font-size-base200);
-//     }
-//   }
-// }
+@media (min-width: $breakpoint-desktop) and (max-width: #{$breakpoint-desktop-xl - 1}) {
+  .start-menu {
+    bottom: 22rem;
+    left: 42%;
+
+    &__power-off-option {
+      font-size: var(--font-size-base200);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-desktop) {
+  .start-menu {
+    left: 29%;
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .start-menu {
+    width: 55vw;
+    max-width: none;
+    height: 77vh;
+
+    &__bottom {
+      height: 10%;
+    }
+
+    &__user-avatar {
+      width: clamp(3rem, 4vw, 4rem);
+      height: clamp(3rem, 4vw, 4rem);
+    }
+
+    &__fluent-icon {
+      width: clamp(2.5rem, 4vw, 3rem);
+      height: clamp(2.5rem, 4vw, 3rem);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .start-menu {
+    bottom: 5rem;
+    left: 42%;
+    width: 80%;
+    height: 50vh;
+  }
+}

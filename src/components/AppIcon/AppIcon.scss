@@ -106,8 +106,12 @@
   }
 
   &--start-menu {
-    width: clamp(8rem, 4vw, 10rem);
-    height: clamp(8rem, 4vw, 10rem);
+    // width: clamp(8rem, 4vw, 10rem);
+    // height: clamp(8rem, 4vw, 10rem);
+
+    // Start menu PanelOne's default-panel element has a grid layout
+    width: 80%;
+    height: 100%;
   }
 
   &--start-menu &__image {
@@ -116,8 +120,8 @@
   }
 
   &--start-menu &__image--fluent {
-    width: clamp(5rem, 4vw, 6rem);
-    height: clamp(5rem, 4vw, 6rem);
+    width: clamp(4rem, 4vw, 4.5rem);
+    height: clamp(4rem, 4vw, 4.5rem);
   }
 
   // Square shape (Windows 11 default - slightly rounded)
@@ -283,7 +287,8 @@
   }
 
   &--desktop &__name {
-    max-width: 10rem;
+    // max-width: 10rem;
+    max-width: fit-content;
   }
 }
 
@@ -292,15 +297,15 @@
   .app-icon {
     padding: var(--spacing-horizontal-xs);
 
-    &__image {
-      // width: 5.6rem;
-      // height: 5.6rem;
+    // &__image {
+    //   // width: 5.6rem;
+    //   // height: 5.6rem;
 
-      &--fluent {
-        width: clamp(3rem, 4vw, 4rem);
-        height: clamp(3rem, 4vw, 4rem);
-      }
-    }
+    //   &--fluent {
+    //     width: clamp(3rem, 4vw, 4rem);
+    //     height: clamp(3rem, 4vw, 4rem);
+    //   }
+    // }
 
     &__name {
       font-size: var(--font-size-base200);
@@ -316,18 +321,18 @@
   }
 }
 
-// Desktop (1200px+) - Standard desktop sizing
+// Desktop (1200px - 1400px) - Standard desktop sizing
 @media (min-width: $breakpoint-desktop) and (max-width: #{$breakpoint-desktop-xl - 1}) {
   .app-icon {
-    width: 8rem;
+    width: clamp(8rem, 5vw, 9rem);
 
     &__image {
-      width: 4.8rem;
-      height: 4.8rem;
+      width: clamp(4rem, 4vw, 4.3rem);
+      height: clamp(4rem, 4vw, 4.3rem);
 
       &--fluent {
-        width: clamp(2.5rem, 4vw, 3rem);
-        height: clamp(2.5rem, 4vw, 3rem);
+        width: clamp(2.5rem, 4vw, 2.8rem);
+        height: clamp(2.5rem, 4vw, 2.8rem);
       }
     }
 
@@ -337,25 +342,34 @@
 
     // Taskbar variant - compact sizing for taskbar
     &--taskbar {
-      width: 4.3rem;
-      height: 4.3rem;
+      width: clamp(3.6rem, 4vw, 4rem);
+      height: clamp(3.6rem, 4vw, 4rem);
     }
 
     &--taskbar &__image {
       width: clamp(3rem, 4vw, 3.8rem);
       height: clamp(3rem, 4vw, 3.8rem);
     }
+
+    // Desktop variant
+    &--desktop &__image--fluent {
+      // Fluent icons need to match regular icon sizes in desktop
+      width: clamp(3rem, 4vw, 4rem);
+      height: clamp(3rem, 4vw, 4rem);
+    }
+
+    // Start menu variant
   }
 }
 
-// Tablet Landscape (1024px - 1199px)
+// Between tablet landscape and desktop
 @media (min-width: $breakpoint-tablet-landscape) and (max-width: #{$breakpoint-desktop - 1}) {
   .app-icon {
     width: 7.2rem;
 
     &__image {
-      width: 4.4rem;
-      height: 4.4rem;
+      width: clamp(3.6rem, 4vw, 4rem);
+      height: clamp(3.6rem, 4vw, 4rem);
 
       &--fluent {
         width: clamp(2.5rem, 4vw, 3rem);
@@ -369,19 +383,24 @@
 
     // Taskbar variant - compact sizing for taskbar
     &--taskbar {
-      width: 4.3rem;
-      height: 4.3rem;
+      width: clamp(4rem, 4vw, 5rem);
+      height: clamp(4rem, 4vw, 5rem);
     }
 
     &--taskbar &__image {
-      width: clamp(3rem, 4vw, 3.8rem);
-      height: clamp(3rem, 4vw, 3.8rem);
+      width: clamp(3rem, 3vw, 3.8rem);
+      height: clamp(3rem, 3vw, 3.8rem);
+    }
+
+    &--taskbar &__image--fluent {
+      width: clamp(3rem, 3.5vw, 3.8rem);
+      height: clamp(3rem, 3.5vw, 3.8rem);
     }
   }
 }
 
-// Tablet Portrait (820px - 1023px)
-@media (min-width: $breakpoint-tablet-portrait) and (max-width: #{$breakpoint-tablet-landscape - 1}) {
+// Tablet landscape
+@media (max-width: $breakpoint-tablet-landscape) {
   .app-icon {
     width: 7rem;
     padding: var(--spacing-horizontal-s);
@@ -410,27 +429,21 @@
       width: clamp(3rem, 4vw, 3.8rem);
       height: clamp(3rem, 4vw, 3.8rem);
     }
-  }
-}
 
-// Mobile Large (576px - 819px)
-@media (min-width: $breakpoint-mobile-lg) and (max-width: #{$breakpoint-tablet-portrait - 1}) {
-  .app-icon {
-    width: 6.4rem;
-    padding: var(--spacing-horizontal-xs);
-
-    &__image {
-      width: 3.6rem;
-      height: 3.6rem;
-
-      &--fluent {
-        width: clamp(1.8rem, 4vw, 2.5rem);
-        height: clamp(1.8rem, 4vw, 2.5rem);
-      }
+    &--start-menu {
+      // Start menu PanelOne's default-panel element has a grid layout
+      width: 75%;
+      height: 100%;
     }
 
-    &__name {
-      font-size: var(--font-size-base100);
+    &--start-menu &__image {
+      width: clamp(2.5rem, 4vw, 3.5rem);
+      height: clamp(2.5rem, 4vw, 3.5rem);
+    }
+
+    &--start-menu &__image--fluent {
+      width: clamp(4rem, 4vw, 5rem);
+      height: clamp(4rem, 4vw, 5rem);
     }
   }
 }

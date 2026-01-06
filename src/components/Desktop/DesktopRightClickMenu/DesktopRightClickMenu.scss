@@ -57,3 +57,15 @@
     white-space: nowrap;
   }
 }
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .desktop-rc-menu {
+    &__item {
+      font-size: var(--font-size-base200);
+    }
+
+    &__item-fluent-icon {
+      width: 1.6rem;
+    }
+  }
+}

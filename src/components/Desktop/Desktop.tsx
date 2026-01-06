@@ -12,6 +12,7 @@ import {
   type MouseEvent,
   type KeyboardEvent,
 } from 'react';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 import DesktopRightClickMenu from './DesktopRightClickMenu/DesktopRightClickMenu';
 import {
   IconPosition,
@@ -44,6 +45,7 @@ function Desktop() {
   const { taskbarPinnedAppIds, togglePin, activeBackground } =
     useWorkspaceState();
   const { launchWindow } = useWindowManager();
+  const isMobile = useMediaQuery('(max-width: 819px)');
 
   // Handle drag stop - snap to grid
   const handleDragStop = useCallback((appId: string, d: DraggableData) => {
@@ -82,7 +84,6 @@ function Desktop() {
           togglePin(appId);
           break;
         case 'properties':
-          // To Do: Open properties dialog
           break;
       }
     },
@@ -262,37 +263,42 @@ function Desktop() {
       role="grid"
       aria-label="Desktop"
     >
-      <div className="desktop__icons-container">
-        {APP_REGISTRY.map((app, index) => {
-          const isAppPinned = taskbarPinnedAppIds.includes(app.id);
-          const isSelected = selectedAppId === app.id;
-          const isFocused = focusedIndex === index;
-          const position = iconPositions[app.id] || { gridX: 0, gridY: index };
-          const pixelPos = gridToPixel(position.gridX, position.gridY);
+      {!isMobile && (
+        <div className="desktop__icons-container">
+          {APP_REGISTRY.map((app, index) => {
+            const isAppPinned = taskbarPinnedAppIds.includes(app.id);
+            const isSelected = selectedAppId === app.id;
+            const isFocused = focusedIndex === index;
+            const position = iconPositions[app.id] || {
+              gridX: 0,
+              gridY: index,
+            };
+            const pixelPos = gridToPixel(position.gridX, position.gridY);
 
-          return (
-            <Rnd
-              key={app.id}
-              position={{ x: pixelPos.x, y: pixelPos.y }}
-              size={{ width: GRID_CELL_WIDTH, height: GRID_CELL_HEIGHT }}
-              enableResizing={false}
-              bounds="parent"
-              dragGrid={[GRID_CELL_WIDTH, GRID_CELL_HEIGHT]}
-              onDragStop={(_e, d) => handleDragStop(app.id, d)}
-              className={`desktop__icon-wrapper ${isSelected ? 'desktop__icon-wrapper--selected' : ''} ${isFocused ? 'desktop__icon-wrapper--focused' : ''}`}
-            >
-              <AppIcon
-                appId={app.id}
-                iconVariant="desktop"
-                isPinned={isAppPinned}
-                onSingleClick={handleAppSingleClick}
-                onDoubleClick={handleAppDoubleClick}
-                onContextMenuItemClick={handleAppContextMenuClick}
-              />
-            </Rnd>
-          );
-        })}
-      </div>
+            return (
+              <Rnd
+                key={app.id}
+                position={{ x: pixelPos.x, y: pixelPos.y }}
+                size={{ width: GRID_CELL_WIDTH, height: GRID_CELL_HEIGHT }}
+                enableResizing={false}
+                bounds="parent"
+                dragGrid={[GRID_CELL_WIDTH, GRID_CELL_HEIGHT]}
+                onDragStop={(_e, d) => handleDragStop(app.id, d)}
+                className={`desktop__icon-wrapper ${isSelected ? 'desktop__icon-wrapper--selected' : ''} ${isFocused ? 'desktop__icon-wrapper--focused' : ''}`}
+              >
+                <AppIcon
+                  appId={app.id}
+                  iconVariant="desktop"
+                  isPinned={isAppPinned}
+                  onSingleClick={handleAppSingleClick}
+                  onDoubleClick={handleAppDoubleClick}
+                  onContextMenuItemClick={handleAppContextMenuClick}
+                />
+              </Rnd>
+            );
+          })}
+        </div>
+      )}
 
       {showDesktopContextMenu && (
         <DesktopRightClickMenu

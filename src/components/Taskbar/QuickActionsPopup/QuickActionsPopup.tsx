@@ -7,6 +7,7 @@ import { useSystemUIState, useWorkspaceState } from '@store/store';
 import Slider from '@components/Slider/Slider';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
 import { useWindowManager } from '@hooks/useWindowManager';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 
 export interface QuickActionsPopupProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export interface QuickActionsPopupProps {
 function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const { taskbarAlignment } = useSystemUIState();
+  const isMobile = useMediaQuery('(max-width: 819px)');
 
   useClickOutsideModal(isOpen, onClose, popupRef as RefObject<HTMLElement>);
   const {
@@ -97,12 +99,29 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
     [setBrightnessLevel, setVolumeLevel]
   );
 
+  const getSliderAlignment = () => {
+    if (isMobile) {
+      // Vertical orientation when in mobile device
+      return 'vertical';
+    }
+
+    // Vertical orientation when taskbar is snapped to left/right
+    if (taskbarAlignment === 'left' || taskbarAlignment === 'right') {
+      return 'vertical';
+    }
+
+    // Else default 'horizontal' alignment
+    return 'horizontal';
+  };
+
   return (
     <div
-      className={`taskbar__qa-popup taskbar-${taskbarAlignment}`}
+      className={`taskbar__qa-popup taskbar-${taskbarAlignment} ${isMobile ? 'mobile' : ''}`}
       ref={popupRef}
     >
-      <div className={`taskbar__qa-buttons taskbar-${taskbarAlignment}`}>
+      <div
+        className={`taskbar__qa-buttons taskbar-${taskbarAlignment} ${isMobile ? 'mobile' : ''}`}
+      >
         {Object.values(QUICK_ACTION_BUTTONS).map((button) => (
           <QuickActionButton
             key={button.actionType}
@@ -114,26 +133,20 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
           />
         ))}
       </div>
-      <div className={`taskbar__qa-sliders taskbar-${taskbarAlignment}`}>
+      <div
+        className={`taskbar__qa-sliders taskbar-${taskbarAlignment} ${isMobile ? 'mobile' : ''}`}
+      >
         <Slider
           onSliderChange={handleSliderChange}
           sliderFor="brightness"
           sliderValue={brightnessLevel}
-          alignment={
-            taskbarAlignment === 'left' || taskbarAlignment === 'right'
-              ? 'vertical'
-              : 'horizontal'
-          }
+          alignment={getSliderAlignment()}
         />
         <Slider
           onSliderChange={handleSliderChange}
           sliderFor="volume"
           sliderValue={volumeLevel}
-          alignment={
-            taskbarAlignment === 'left' || taskbarAlignment === 'right'
-              ? 'vertical'
-              : 'horizontal'
-          }
+          alignment={getSliderAlignment()}
         />
       </div>
     </div>
