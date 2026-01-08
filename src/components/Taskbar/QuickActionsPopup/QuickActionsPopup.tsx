@@ -1,7 +1,10 @@
-import { QUICK_ACTION_BUTTONS } from '@constants/desktopConstants';
+import {
+  FADE_OUT_DELAY,
+  QUICK_ACTION_BUTTONS,
+} from '@constants/desktopConstants';
 import QuickActionButton from '@components/QuickActionButton/QuickActionButton';
 import './QuickActionsPopup.scss';
-import { RefObject, useCallback, useEffect, useRef } from 'react';
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { QuickActionsType, SliderForType } from '@definitions/desktopTypes';
 import { useSystemUIState, useWorkspaceState } from '@store/store';
 import Slider from '@components/Slider/Slider';
@@ -18,8 +21,20 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const { taskbarAlignment } = useSystemUIState();
   const isMobile = useMediaQuery('(max-width: 819px)');
+  const [isExiting, setIsExiting] = useState(false);
 
-  useClickOutsideModal(isOpen, onClose, popupRef as RefObject<HTMLElement>);
+  // Use hook with fade-out animation
+  useClickOutsideModal(
+    isOpen,
+    onClose,
+    popupRef as RefObject<HTMLElement>,
+    undefined,
+    {
+      fadeOutDuration: FADE_OUT_DELAY,
+      onBeforeClose: () => setIsExiting(true), // Trigger fade-out class
+    }
+  );
+
   const {
     activeQuickActions,
     toggleQuickAction,
@@ -116,7 +131,7 @@ function QuickActionsPopup({ isOpen, onClose }: QuickActionsPopupProps) {
 
   return (
     <div
-      className={`taskbar__qa-popup taskbar-${taskbarAlignment} ${isMobile ? 'mobile' : ''}`}
+      className={`taskbar__qa-popup taskbar-${taskbarAlignment} ${isMobile ? 'mobile' : ''} ${isExiting ? 'exiting' : ''}`}
       ref={popupRef}
     >
       <div

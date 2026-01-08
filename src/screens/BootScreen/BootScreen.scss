@@ -78,7 +78,19 @@
   }
 }
 
-// Animation for progress bar fill
+@media (max-width: $breakpoint-mobile) {
+  .bs-screen {
+    &__operations {
+      font-size: var(--font-size-base400);
+    }
+
+    &__progress-container {
+      height: 3.5rem;
+    }
+  }
+}
+
+// Animation to fill progress bar - applied in-line to bs-screen__progress-bar element  in BootScreen.tsx
 @keyframes fill-progress {
   from {
     width: 0;

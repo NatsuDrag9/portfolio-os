@@ -1,5 +1,5 @@
 import { PlayFunctionProps } from '@definitions/storybookTypes';
-import { expect, userEvent, within } from '@storybook/test';
+import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { AppIconProps } from './AppIcon';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata } from '@definitions/applicationTypes';
@@ -199,8 +199,15 @@ export const appIconPopupPlayFunction = async ({
     await userEvent.click(firstCloseButton);
 
     // Verify the callback was called with a window ID
-    expect(args.onWindowClose).toHaveBeenCalled();
-    expect(args.onWindowClose).toHaveBeenCalledWith('vscode-1');
+    waitFor(
+      () => {
+        expect(args.onWindowClose).toHaveBeenCalled();
+        expect(args.onWindowClose).toHaveBeenCalledWith('vscode-1');
+      },
+      {
+        timeout: 1000,
+      }
+    );
   }
 };
 

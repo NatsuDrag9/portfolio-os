@@ -320,3 +320,5 @@ export const GRID_CELL_HEIGHT = 100; // pixels
 
 // Window animation timings
 export const WINDOW_CLOSE_TIMEOUT = 200; // milliseconds - must match CSS transition duration in WindowContainer.scss
+
+export const FADE_OUT_DELAY = 500; // Match animation duration in ms

@@ -12,6 +12,12 @@
   cursor: pointer;
   transition: background-color 0.1s ease;
 
+  @include fade-in-element(0.5s);
+
+  &--exiting {
+    @include fade-out-element(0.5s);
+  }
+
   // Hover state (Windows 7 style highlight)
   &:hover {
     background-color: color-mix(

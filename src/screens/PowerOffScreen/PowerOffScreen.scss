@@ -10,6 +10,8 @@
   // Solid material with subtle depth (Fluent solid fallback for non-themeable screen)
   background-color: var(--color-static-black);
 
+  @include fade-in-element(1s);
+
   &__button {
     @include disable-default-button-styles;
 

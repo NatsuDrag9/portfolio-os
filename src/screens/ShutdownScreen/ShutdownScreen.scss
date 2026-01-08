@@ -78,6 +78,14 @@
   }
 }
 
+@media (max-width: $breakpoint-mobile) {
+  .sd-screen {
+    &__operations {
+      font-size: var(--font-size-base400);
+    }
+  }
+}
+
 // Animation for progress bar fill
 @keyframes sd-fill-progress {
   from {

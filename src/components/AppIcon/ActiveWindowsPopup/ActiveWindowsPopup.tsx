@@ -1,6 +1,6 @@
-import { useCallback, type MouseEvent } from 'react';
+import { useCallback, useState, type MouseEvent } from 'react';
 import './ActiveWindowsPopup.scss';
-import { APP_REGISTRY } from '@constants/desktopConstants';
+import { APP_REGISTRY, FADE_OUT_DELAY } from '@constants/desktopConstants';
 import { AppMetadata, WindowData } from '@definitions/applicationTypes';
 import { DismissRegular } from '@fluentui/react-icons';
 
@@ -17,6 +17,8 @@ function ActiveWindowsPopup({
   onFocus,
   onClose,
 }: ActiveWindowsPopupProps) {
+  const [isExiting, setIsExiting] = useState(false);
+
   const appMetaData = APP_REGISTRY.find(
     (app) => app.id === appId
   ) as AppMetadata;
@@ -38,9 +40,13 @@ function ActiveWindowsPopup({
   const handleCloseClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent triggering the parent click handler
     e.preventDefault(); // Prevent default button behavior
-    if (windowData.id && onClose) {
-      onClose(windowData.id);
-    }
+    const windowId = windowData.id;
+    if (!windowId || !onClose) return;
+
+    setIsExiting(true);
+    setTimeout(() => {
+      onClose(windowId);
+    }, FADE_OUT_DELAY);
   };
 
   // Bring window to focus: delegate to parent handler
@@ -69,7 +75,7 @@ function ActiveWindowsPopup({
 
   return (
     <div
-      className="active-windows-popup"
+      className={`active-windows-popup ${isExiting ? 'active-windows-popup--exiting' : ''}`}
       onClick={handlePopupClick}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
