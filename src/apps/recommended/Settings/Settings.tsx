@@ -1,3 +1,4 @@
+import React, { RefObject, useMemo, useRef } from 'react';
 import { PersonCircleRegular } from '@fluentui/react-icons';
 import './Settings.scss';
 import SettingsSidebar from './SettingsSidebar';
@@ -7,13 +8,18 @@ import System from './Panels/System/System';
 import Accounts from './Panels/Accounts/Accounts';
 import Personalization from './Panels/Personalization/Personalization';
 import { useWindowManager } from '@hooks/useWindowManager';
-import { useMemo } from 'react';
+import { useMediaQuery } from '@hooks/useMediaQuery';
+import useClickOutsideModal from '@hooks/useClickOutsideModal';
 
 function Settings() {
   const { username, isAdmin, uploadedUserAvatar } = useAuth();
   const { activeSettingButton } = useSettingsState();
   const { closeWindow } = useWindowManager();
   const { activeWindows } = useWorkspaceState();
+  const isMobileView = useMediaQuery('(max-width: 819px)');
+  const settingsLeftRef = useRef<HTMLDivElement>(null);
+  const menuToggleRef = useRef<HTMLInputElement>(null);
+  const hamburgerRef = useRef<HTMLLabelElement>(null);
 
   // Get current Settings window
   const currentSettingsWindow = useMemo(
@@ -27,6 +33,24 @@ function Settings() {
       closeWindow(currentSettingsWindow.id);
     }
   };
+
+  // Close mobile menu when clicking outside
+  const handleCloseMenu = () => {
+    if (menuToggleRef.current) {
+      menuToggleRef.current.checked = false;
+    }
+  };
+
+  // Use click outside hook to close menu on mobile
+  useClickOutsideModal(
+    isMobileView,
+    handleCloseMenu,
+    settingsLeftRef as unknown as React.RefObject<HTMLElement>,
+    [
+      menuToggleRef as unknown as RefObject<HTMLElement>,
+      hamburgerRef as unknown as RefObject<HTMLElement>,
+    ]
+  );
 
   const renderSettingsPanel = () => {
     switch (activeSettingButton) {
@@ -45,7 +69,27 @@ function Settings() {
 
   return (
     <div className="settings">
-      <div className="settings__left">
+      <input
+        type="checkbox"
+        id="settings-menu-toggle"
+        className="settings__menu-toggle"
+        aria-label="Toggle settings menu"
+        ref={menuToggleRef}
+      />
+      <label
+        htmlFor="settings-menu-toggle"
+        className="settings__hamburger"
+        ref={hamburgerRef}
+      >
+        <span className="settings__hamburger-line"></span>
+        <span className="settings__hamburger-line"></span>
+        <span className="settings__hamburger-line"></span>
+      </label>
+      <label
+        htmlFor="settings-menu-toggle"
+        className="settings__menu-overlay"
+      ></label>
+      <div className="settings__left" ref={settingsLeftRef}>
         <div className="user-card">
           {uploadedUserAvatar ? (
             <img

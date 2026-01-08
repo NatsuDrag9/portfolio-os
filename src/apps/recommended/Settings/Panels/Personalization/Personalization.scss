@@ -91,3 +91,17 @@
     }
   }
 }
+
+@container personalizatoin (max-width: $breakpoint-tablet-portrait) {
+  .personalization {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .personalization {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}

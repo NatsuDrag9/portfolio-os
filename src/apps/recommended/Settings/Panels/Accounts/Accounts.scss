@@ -248,3 +248,10 @@
     }
   }
 }
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .accounts {
+    margin-top: 2rem;
+    margin-left: 1rem;
+  }
+}

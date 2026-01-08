@@ -1,4 +1,7 @@
 .settings {
+  container-type: inline-size;
+  container-name: settings;
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -6,6 +9,54 @@
   height: 100%;
   min-height: 0;
   background-color: var(--color-neutral-background1);
+
+  // Hidden checkbox for menu state
+  &__menu-toggle {
+    display: none;
+  }
+
+  // Hamburger button (hidden on desktop)
+  &__hamburger {
+    position: absolute;
+    top: 2.5rem;
+    left: 1rem;
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    gap: 0.4rem;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 4rem;
+    padding: var(--spacing-horizontal-s);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  &__hamburger-line {
+    display: block;
+    width: 2rem;
+    height: 0.1rem;
+    border-radius: 0.1rem;
+    background-color: var(--color-neutral-foreground1);
+    transition: all 0.3s ease;
+  }
+
+  // Menu overlay (visible when menu is open on mobile)
+  &__menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 29;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: color-mix(in srgb, black 50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
 
   &__left {
     display: flex;
@@ -86,17 +137,83 @@
     width: 100%;
     height: 100%;
   }
+}
 
-  // Dark theme adjustments
-  .dark-theme & {
-    background-color: var(--color-neutral-background2);
+// Dark theme adjustments
+.dark-theme .settings {
+  background-color: var(--color-neutral-background2);
+
+  &__left {
+    border-right-color: var(--color-neutral-stroke1);
+
+    .user-card {
+      background-color: var(--color-neutral-background3);
+    }
+  }
+}
+
+// Media queries
+@media (max-width: $breakpoint-tablet-portrait) {
+  .settings {
+    flex-direction: column;
+    padding-top: 3.5rem; // Space for hamburger button
+
+    &__hamburger {
+      display: flex;
+    }
+
+    &__menu-overlay {
+      display: block;
+    }
 
     &__left {
-      border-right-color: var(--color-neutral-stroke1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-vertical-xl);
+      width: 60%;
+      min-width: auto;
+      max-width: 100%;
+      height: 100%;
+      padding: 4rem var(--spacing-horizontal-m) var(--spacing-vertical-l);
+      overflow-y: auto;
+      background-color: var(--color-neutral-background1);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
+      transform: translateX(-100%);
+
+      box-shadow: var(--shadow8);
+
+      .dark-theme & {
+        background-color: var(--color-neutral-background2);
+      }
 
       .user-card {
-        background-color: var(--color-neutral-background3);
+        margin-left: 2rem;
       }
+    }
+
+    &__right {
+      width: 100%;
+      padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+    }
+
+    &__menu-toggle:checked ~ &__left {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    &__menu-toggle:checked ~ &__menu-overlay {
+      opacity: 1;
+      pointer-events: auto;
     }
   }
 }

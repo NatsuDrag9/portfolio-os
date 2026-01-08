@@ -141,3 +141,18 @@
     }
   }
 }
+
+@container system (max-width: $breakpoint-tablet-portrait) {
+  .system {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}
+
+// Media queries
+@media (max-width: $breakpoint-tablet-portrait) {
+  .system {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}
