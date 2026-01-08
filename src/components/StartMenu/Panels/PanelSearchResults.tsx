@@ -11,11 +11,13 @@ import { logInDev } from '@utils/logUtils';
 export interface PanelSearchResultsProps {
   searchValue: string;
   onButtonClick?: () => void;
+  onAppLaunch: () => void;
 }
 
 function PanelSearchResults({
   searchValue,
   onButtonClick,
+  onAppLaunch,
 }: PanelSearchResultsProps) {
   const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
@@ -70,7 +72,11 @@ function PanelSearchResults({
                 appId={app.id}
                 iconVariant="start-menu"
                 isPinned={isPinned}
-                onSingleClick={launchWindow}
+                onSingleClick={(appId: string) => {
+                  launchWindow(appId);
+                  // Close start menu
+                  onAppLaunch();
+                }}
                 onWindowClose={closeWindow}
                 onContextMenuItemClick={handleContextMenuClick}
               />

@@ -32,15 +32,17 @@ function StartMenu() {
     }
   }, []);
 
+  const handleStartMenuClose = () => {
+    if (searchValue) {
+      setSearchValue('');
+    }
+    setStartMenuOpen(false);
+  };
+
   // Close start menu when clicking outside
   useClickOutsideModal(
     startMenuOpen,
-    () => {
-      if (searchValue) {
-        setSearchValue('');
-      }
-      setStartMenuOpen(false);
-    },
+    handleStartMenuClose,
     startMenuRef as RefObject<HTMLElement>,
     [windowsButtonRef as RefObject<HTMLElement>]
   );
@@ -75,17 +77,20 @@ function StartMenu() {
         onButtonClick={() => {
           setChangePanel('panel-two');
         }}
+        onAppLaunch={handleStartMenuClose}
       />
 
       <PanelTwo
         onButtonClick={() => {
           setChangePanel('panel-one');
         }}
+        onAppLaunch={handleStartMenuClose}
       />
 
       <PanelSearchResults
         searchValue={searchValue}
         onButtonClick={handleBackToMain}
+        onAppLaunch={handleStartMenuClose}
       />
 
       <div className="start-menu__bottom">

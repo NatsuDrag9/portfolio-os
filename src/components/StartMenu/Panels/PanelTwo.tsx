@@ -11,9 +11,10 @@ import StartMenuCategory from '../StartMenuCategory';
 
 export interface PanelTwoProps {
   onButtonClick?: () => void;
+  onAppLaunch: () => void;
 }
 
-function PanelTwo({ onButtonClick }: PanelTwoProps) {
+function PanelTwo({ onButtonClick, onAppLaunch }: PanelTwoProps) {
   const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
 
@@ -95,7 +96,11 @@ function PanelTwo({ onButtonClick }: PanelTwoProps) {
                     className="start-menu__letter-app"
                     key={app.id}
                     role="menuitem"
-                    onClick={() => launchWindow(app.id)}
+                    onClick={() => {
+                      launchWindow(app.id);
+                      // Close Start Menu
+                      onAppLaunch();
+                    }}
                   >
                     <AppIcon
                       key={app.id}

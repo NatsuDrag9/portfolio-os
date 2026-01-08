@@ -10,9 +10,10 @@ import StartMenuCategory from '../StartMenuCategory';
 
 export interface PanelOneProps {
   onButtonClick?: () => void;
+  onAppLaunch: () => void;
 }
 
-function PanelOne({ onButtonClick }: PanelOneProps) {
+function PanelOne({ onButtonClick, onAppLaunch }: PanelOneProps) {
   const { taskbarPinnedAppIds, togglePin } = useWorkspaceState();
   const { launchWindow, closeWindow } = useWindowManager();
 
@@ -66,7 +67,9 @@ function PanelOne({ onButtonClick }: PanelOneProps) {
                 iconVariant="start-menu"
                 isPinned={isPinned}
                 onContextMenuItemClick={handleContextMenuClick}
-                onSingleClick={launchWindow}
+                onSingleClick={(appId: string) => {
+                  launchWindow(appId);
+                }}
                 onWindowClose={closeWindow}
               />
             );
@@ -89,7 +92,11 @@ function PanelOne({ onButtonClick }: PanelOneProps) {
                 iconVariant="start-menu"
                 isPinned={isPinned}
                 onContextMenuItemClick={handleContextMenuClick}
-                onSingleClick={launchWindow}
+                onSingleClick={(appId: string) => {
+                  launchWindow(appId);
+                  // Close start menu
+                  onAppLaunch();
+                }}
                 onWindowClose={closeWindow}
               />
             );
