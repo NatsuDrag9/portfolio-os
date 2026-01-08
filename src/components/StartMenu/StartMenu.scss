@@ -310,3 +310,10 @@
     height: 50vh;
   }
 }
+
+@media (max-width: $breakpoint-mobile) {
+  .start-menu {
+    left: 47%;
+    width: 90%;
+  }
+}

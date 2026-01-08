@@ -8,6 +8,7 @@ import {
   SubtractRegular,
 } from '@fluentui/react-icons';
 import { Rnd } from 'react-rnd';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 
 export interface WindowContainerProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ export interface WindowContainerProps {
 
 function WindowContainer({ children, windowId }: WindowContainerProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const isMobileView = useMediaQuery('(max-width: 819px)');
 
   const {
     activeWindows,
@@ -70,22 +72,22 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
   const defaultHeight = windowData?.size?.height ?? 300;
 
   // Taskbar height in pixels (5.0rem = 50px at 10px base)
-  const TASKBAR_HEIGHT = 45;
+  // const TASKBAR_HEIGHT = 45;
+
+  const isMobileFullscreen = isMobileView || isMaximized;
 
   return (
     <Rnd
       position={{
-        x: isMaximized ? 0 : defaultX,
-        y: isMaximized ? 0 : defaultY,
+        x: isMobileFullscreen ? 0 : defaultX,
+        y: isMobileFullscreen ? 0 : defaultY,
       }}
       size={{
-        width: isMaximized ? '100%' : defaultWidth,
-        height: isMaximized
-          ? `calc(100% - ${TASKBAR_HEIGHT}px)`
-          : defaultHeight,
+        width: isMobileFullscreen ? '100%' : defaultWidth,
+        height: isMobileFullscreen ? '100%' : defaultHeight,
       }}
-      minWidth={400}
-      minHeight={300}
+      minWidth={600}
+      minHeight={400}
       bounds="parent"
       onDragStop={(_e, d) => {
         updateWindowPosition(windowId, d.x, d.y);
@@ -94,16 +96,15 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
         updateWindowSize(windowId, ref.offsetWidth, ref.offsetHeight);
         updateWindowPosition(windowId, position.x, position.y);
       }}
-      disableDragging={isMaximized}
-      enableResizing={!isMaximized}
+      disableDragging={isMobileFullscreen}
+      enableResizing={!isMobileFullscreen}
       enableUserSelectHack={false}
       dragHandleClassName="window-container__top"
       className={`window-container window-container--${windowData?.isMaximized} ${isVisible ? 'window-container--visible' : 'window-container--hidden'}`}
       style={{
         zIndex: windowData?.zIndex,
         visibility: isMinimized ? 'hidden' : 'visible',
-        // For maximized, override react-rnd's inline height with CSS
-        ...(isMaximized && { height: `calc(100% - ${TASKBAR_HEIGHT}px)` }),
+        borderRadius: isMobileView ? '0' : undefined,
       }}
     >
       <div className="window-container__top">
@@ -111,20 +112,24 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
           {windowData?.title ?? 'Untitled'}
         </h5>
         <div className="window-container__window-buttons">
-          <button
-            type="button"
-            className="window-container__button minimize"
-            onClick={() => handleWindowDisplayClick('minimized')}
-          >
-            <SubtractRegular className="window-container__fluent-icon" />
-          </button>
-          <button
-            type="button"
-            className="window-container__button maximize"
-            onClick={() => handleWindowDisplayClick('maximized')}
-          >
-            <SquareMultipleRegular className="window-container__fluent-icon" />
-          </button>
+          {!isMobileView && (
+            <>
+              <button
+                type="button"
+                className="window-container__button minimize"
+                onClick={() => handleWindowDisplayClick('minimized')}
+              >
+                <SubtractRegular className="window-container__fluent-icon" />
+              </button>
+              <button
+                type="button"
+                className="window-container__button maximize"
+                onClick={() => handleWindowDisplayClick('maximized')}
+              >
+                <SquareMultipleRegular className="window-container__fluent-icon" />
+              </button>
+            </>
+          )}
           <button
             type="button"
             className="window-container__button close"

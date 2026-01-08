@@ -15,6 +15,7 @@ import { useWindowManager } from '@hooks/useWindowManager';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
 import { formatDate, formatTime } from './helperFunctions';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 
 function Taskbar() {
   const {
@@ -40,6 +41,7 @@ function Taskbar() {
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+  const isMobile = useMediaQuery('(max-width: 819px)');
 
   const {
     taskbarPinnedAppIds,
@@ -296,9 +298,19 @@ function Taskbar() {
             )}
           </div>
         )}
-        <div className={`taskbar__date-time ${taskbarAlignment}`}>
+        <div
+          className={`taskbar__date-time ${taskbarAlignment}`}
+          onClick={isMobile ? handleQuickActionsClick : undefined}
+        >
           <p className="taskbar__time">{currentTime}</p>
           <p className="taskbar__date">{currentDate}</p>
+
+          {isMobile && isQuickActionsOpen && (
+            <QuickActionsPopup
+              isOpen={isQuickActionsOpen}
+              onClose={handleQuickActionsClose}
+            />
+          )}
         </div>
       </div>
       {/* To Do: Uncomment after improving snap animation */}

@@ -69,3 +69,12 @@
     text-align: center;
   }
 }
+
+@media (max-width: $breakpoint-mobile) {
+  .qa-button {
+    &__button {
+      width: 6rem;
+      height: 4rem;
+    }
+  }
+}
