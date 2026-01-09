@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { useWorkspaceState } from '../store';
 import { AppMetadata } from '@definitions/applicationTypes';
 import { APP_REGISTRY } from '@constants/desktopConstants';
+import { DefaultWallpaper } from '@assets/images/specifics';
 
 // Mock app metadata
 const createMockAppMetadata = (
@@ -696,6 +697,54 @@ describe('useWorkspaceState', () => {
       );
       state = useWorkspaceState.getState();
       expect(state.activeWindows[0].isMaximized).toBe('maximized');
+    });
+  });
+
+  describe('Reset', () => {
+    it('should reset all state properties to their default values', () => {
+      const { addWindow, setActiveBackground, togglePin, reset } =
+        useWorkspaceState.getState();
+
+      // 1. Modify the state away from defaults
+      addWindow('test-app', createMockAppMetadata());
+      setActiveBackground('/temporary-wallpaper.jpg');
+      togglePin('new-app-id');
+
+      // Verify state is dirty
+      let state = useWorkspaceState.getState();
+      expect(state.activeWindows).toHaveLength(1);
+      expect(state.activeBackground).toBe('/temporary-wallpaper.jpg');
+      expect(state.taskbarPinnedAppIds).toContain('new-app-id');
+
+      // 2. Execute Reset
+      reset();
+
+      // 3. Verify state is back to initial
+      state = useWorkspaceState.getState();
+      expect(state.activeWindows).toStrictEqual([]);
+      expect(state.activeBackground).toBe(DefaultWallpaper);
+      expect(state.taskbarPinnedAppIds).toStrictEqual(pinnedAppIds);
+      expect(state.windowInstanceCounters).toStrictEqual({});
+    });
+
+    it('should clear window instance counters upon reset', () => {
+      const { addWindow, reset } = useWorkspaceState.getState();
+
+      addWindow('vscode', createMockAppMetadata());
+      addWindow('vscode', createMockAppMetadata());
+
+      expect(
+        useWorkspaceState.getState().windowInstanceCounters['vscode']
+      ).toBe(2);
+
+      reset();
+
+      const state = useWorkspaceState.getState();
+      expect(state.windowInstanceCounters).toStrictEqual({});
+
+      // Verify that adding a window after reset starts the ID back at 1
+      addWindow('vscode', createMockAppMetadata());
+      expect(useWorkspaceState.getState().activeWindows[0].id).toBe('vscode-1');
     });
   });
 });

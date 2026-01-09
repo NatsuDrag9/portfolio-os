@@ -6,7 +6,7 @@ const OPERATION_DURATION = 1500; // milliseconds per operation
 
 function ShutdownScreen() {
   const { allOperations, updateBootStatus } = useBootStatus();
-  const { updateAuthState } = useAuth();
+  const { updateAuthState, updateUserAvatar } = useAuth();
 
   useEffect(() => {
     if (allOperations.length === 0) return;
@@ -17,12 +17,14 @@ function ShutdownScreen() {
     const timer = setTimeout(() => {
       // Logout the user
       updateAuthState(null);
+      // Update the avatar
+      updateUserAvatar(undefined);
       // All operations displayed, transition to OFF screen
       updateBootStatus('OFF');
     }, totalDuration);
 
     return () => clearTimeout(timer);
-  }, [allOperations, updateAuthState, updateBootStatus]);
+  }, [allOperations, updateAuthState, updateBootStatus, updateUserAvatar]);
 
   // Calculate progress (0 to 100)
   const progress =

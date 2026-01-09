@@ -554,4 +554,58 @@ describe('useSystemUIState', () => {
       expect(stateAfter.activeQuickActions).toEqual(originalActiveQuickActions);
     });
   });
+
+  describe('Reset', () => {
+    it('should reset all system UI properties to their default values', () => {
+      const {
+        updateTaskbarAlignment,
+        setVolumeLevel,
+        setTheme,
+        toggleQuickAction,
+        setBrightnessLevel,
+        reset,
+      } = useSystemUIState.getState();
+
+      // 1. Change multiple states
+      updateTaskbarAlignment('top');
+      setVolumeLevel(100);
+      setTheme('dark');
+      toggleQuickAction('night-light');
+      setBrightnessLevel(10);
+
+      // Verify states are changed
+      let state = useSystemUIState.getState();
+      expect(state.taskbarAlignment).toBe('top');
+      expect(state.volumeLevel).toBe(100);
+      expect(state.currentTheme).toBe('dark');
+      expect(state.activeQuickActions).toContain('night-light');
+      expect(state.isNightLightActive).toBe(true);
+
+      // 2. Execute Reset
+      reset();
+
+      // 3. Verify everything is back to initial values
+      state = useSystemUIState.getState();
+      expect(state.taskbarAlignment).toBe('bottom');
+      expect(state.volumeLevel).toBe(50);
+      expect(state.currentTheme).toBe('light');
+      expect(state.activeQuickActions).toEqual([]);
+      expect(state.isNightLightActive).toBe(false);
+      expect(state.brightnessLevel).toBe(70);
+      expect(state.displayLoader.isLoading).toBe(false);
+    });
+
+    it('should handle resetting while a loader is active', () => {
+      const { setDisplayLoader, reset } = useSystemUIState.getState();
+
+      setDisplayLoader({ triggeredFrom: 'settings', isLoading: true });
+      expect(useSystemUIState.getState().displayLoader.isLoading).toBe(true);
+
+      reset();
+
+      const state = useSystemUIState.getState();
+      expect(state.displayLoader.isLoading).toBe(false);
+      expect(state.displayLoader.triggeredFrom).toBe('undefined');
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import React, { RefObject, useMemo, useRef } from 'react';
+import React, { RefObject, useMemo, useRef, useEffect } from 'react';
 import { PersonCircleRegular } from '@fluentui/react-icons';
 import './Settings.scss';
 import SettingsSidebar from './SettingsSidebar';
@@ -12,8 +12,8 @@ import { useMediaQuery } from '@hooks/useMediaQuery';
 import useClickOutsideModal from '@hooks/useClickOutsideModal';
 
 function Settings() {
-  const { username, isAdmin, uploadedUserAvatar } = useAuth();
-  const { activeSettingButton } = useSettingsState();
+  const { username, isAdmin, isReadOnlyMode, uploadedUserAvatar } = useAuth();
+  const { activeSettingButton, setActiveSettingButton } = useSettingsState();
   const { closeWindow } = useWindowManager();
   const { activeWindows } = useWorkspaceState();
   const isMobileView = useMediaQuery('(max-width: 819px)');
@@ -26,6 +26,13 @@ function Settings() {
     () => activeWindows.find((w) => w.id?.startsWith('settings')),
     [activeWindows]
   );
+
+  // When in read-only mode, open to Accounts panel
+  useEffect(() => {
+    if (isReadOnlyMode) {
+      setActiveSettingButton('accounts');
+    }
+  }, [isReadOnlyMode, setActiveSettingButton]);
 
   // Handler to close the Settings window
   const handleCloseSettings = () => {
@@ -53,18 +60,38 @@ function Settings() {
   );
 
   const renderSettingsPanel = () => {
-    switch (activeSettingButton) {
-      case 'home':
-        return <Home />;
-      case 'system':
-        return <System onClose={handleCloseSettings} />;
-      case 'accounts':
-        return <Accounts onClose={handleCloseSettings} />;
-      case 'personalization':
-        return <Personalization onClose={handleCloseSettings} />;
-      default:
-        return <p className="settings__message">Invalid choice</p>;
+    const panelContent = (() => {
+      switch (activeSettingButton) {
+        case 'home':
+          return <Home />;
+        case 'system':
+          return <System onClose={handleCloseSettings} />;
+        case 'accounts':
+          return <Accounts key={username} onClose={handleCloseSettings} />;
+        case 'personalization':
+          return <Personalization onClose={handleCloseSettings} />;
+        default:
+          return <p className="settings__message">Invalid choice</p>;
+      }
+    })();
+
+    // Add read-only overlay for non-Accounts panels when in read-only mode
+    const isReadOnlyPanel =
+      isReadOnlyMode &&
+      (activeSettingButton === 'system' ||
+        activeSettingButton === 'personalization' ||
+        activeSettingButton === 'home');
+
+    if (isReadOnlyPanel) {
+      return (
+        <>
+          {panelContent}
+          <div className="settings__read-only-overlay"></div>
+        </>
+      );
     }
+
+    return panelContent;
   };
 
   return (

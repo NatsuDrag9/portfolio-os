@@ -24,7 +24,7 @@ interface CommandHistory {
 }
 
 function CommandPrompt() {
-  const { isAdmin, updateAuthState } = useAuth();
+  const { isAdmin, updateAuthState, updateUserAvatar } = useAuth();
   const { updateBootStatus } = useBootStatus();
   const {
     activeWindows,
@@ -160,7 +160,10 @@ function CommandPrompt() {
       }
 
       case 'logout': {
+        // Logout and clear the avatar
         updateAuthState(null);
+        updateUserAvatar(undefined);
+
         updateBootStatus('DISPLAY_LOGIN_SCREEN');
         return SUCCESS_MESSAGES.LOGOUT;
       }

@@ -26,9 +26,10 @@ export interface BootStatusState {
 export interface AuthState {
   username: string | null;
   isAdmin: boolean;
+  isReadOnlyMode: boolean;
   uploadedUserAvatar?: string;
   updateAuthState: (newUsername: string | null) => void;
-  updateUserAvatar: (imgUrl: string) => void;
+  updateUserAvatar: (imgUrl: string | undefined) => void;
 }
 
 export interface WorkspaceState {
@@ -64,6 +65,7 @@ export interface WorkspaceState {
   setActiveBackground: (image: string) => void;
   setTaskbarPinnedAppIds: (idArray: string[]) => void;
   togglePin: (appId: string) => void;
+  reset: () => void;
 }
 
 export type LoaderTriggerType = 'settings' | 'undefined'; // Add more triggers here
@@ -108,6 +110,7 @@ export interface SystemUIState {
   setAutoSyncDateTime: (autoSync: boolean) => void;
   setTimezone: (timezone: string) => void;
   setDisplayLoader: (value: DisplayLoader) => void;
+  reset: () => void;
 }
 
 export interface SettingsState {

@@ -46,14 +46,16 @@ export const useBootStatus = create<BootStatusState>((set) => ({
 export const useAuth = create<AuthState>((set) => ({
   username: null, // Powered OFF
   isAdmin: false,
+  isReadOnlyMode: false,
   uploadedUserAvatar: undefined,
   updateAuthState: (newUsername: string | null) => {
     set({
       username: newUsername,
       isAdmin: newUsername === ADMIN,
+      isReadOnlyMode: newUsername !== null && newUsername !== ADMIN,
     });
   },
-  updateUserAvatar: (imgUrl: string) => {
+  updateUserAvatar: (imgUrl: string | undefined) => {
     set({
       uploadedUserAvatar: imgUrl,
     });
@@ -163,6 +165,30 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   },
   setDisplayLoader: (value: DisplayLoader) => {
     set({ displayLoader: value });
+  },
+  reset: () => {
+    set({
+      taskbarAlignment: 'bottom',
+      isSearchVisible: true,
+      searchValue: '',
+      startMenuOpen: false,
+      startMenuLayout: 'grid',
+      showRecommendedApps: true,
+      showMoreIcons: true,
+      volumeLevel: 50,
+      currentTheme: 'light',
+      activeQuickActions: [],
+      brightnessLevel: 70,
+      isNightLightActive: false,
+      timeFormat: '12h',
+      dateFormat: 'DD/MM/YYYY',
+      autoSyncDateTime: true,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      displayLoader: {
+        triggeredFrom: 'undefined',
+        isLoading: false,
+      },
+    });
   },
 }));
 
@@ -341,6 +367,17 @@ export const useWorkspaceState = create<WorkspaceState>((set, get) => ({
           ? state.taskbarPinnedAppIds.filter((id) => id !== appId)
           : [...state.taskbarPinnedAppIds, appId],
       };
+    });
+  },
+
+  reset: () => {
+    set({
+      activeWindows: [],
+      taskbarPinnedAppIds: APP_REGISTRY.filter(
+        (app) => app.defaultPinned === true
+      ).map((item) => item.id),
+      activeBackground: DefaultWallpaper,
+      windowInstanceCounters: {},
     });
   },
 }));

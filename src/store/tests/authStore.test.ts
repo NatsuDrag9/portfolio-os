@@ -8,6 +8,7 @@ describe('useAuth', () => {
     useAuth.setState({
       username: null,
       isAdmin: false,
+      isReadOnlyMode: false,
       uploadedUserAvatar: undefined,
     });
   });
@@ -17,6 +18,7 @@ describe('useAuth', () => {
       const state = useAuth.getState();
       expect(state.username).toBe(null);
       expect(state.isAdmin).toBe(false);
+      expect(state.isReadOnlyMode).toBe(false);
     });
 
     it('should initialize with undefined uploadedUserAvatar', () => {
@@ -50,6 +52,8 @@ describe('useAuth', () => {
       const state = useAuth.getState();
       expect(state.username).toBe('Guest');
       expect(state.isAdmin).toBe(false);
+      // Checks for GUEST user
+      expect(state.isReadOnlyMode).toBe(true);
     });
 
     it('should handle switching between admin and non-admin users', () => {
@@ -58,14 +62,17 @@ describe('useAuth', () => {
       updateAuthState(ADMIN);
       let state = useAuth.getState();
       expect(state.isAdmin).toBe(true);
+      expect(state.isReadOnlyMode).toBe(false);
 
       updateAuthState('Guest');
       state = useAuth.getState();
       expect(state.isAdmin).toBe(false);
+      expect(state.isReadOnlyMode).toBe(true);
 
       updateAuthState(ADMIN);
       state = useAuth.getState();
       expect(state.isAdmin).toBe(true);
+      expect(state.isReadOnlyMode).toBe(false);
     });
 
     it('should handle null username', () => {
@@ -76,6 +83,7 @@ describe('useAuth', () => {
       const state = useAuth.getState();
       expect(state.username).toBe(null);
       expect(state.isAdmin).toBe(false);
+      expect(state.isReadOnlyMode).toBe(false);
     });
   });
 

@@ -2,7 +2,7 @@ import { APP_REGISTRY } from '@constants/desktopConstants';
 import './Desktop.scss';
 import { Rnd, DraggableData } from 'react-rnd';
 import AppIcon from '@components/AppIcon/AppIcon';
-import { useWorkspaceState } from '@store/store';
+import { useAuth, useWorkspaceState } from '@store/store';
 import { AppIconRightClickActionType } from '@definitions/desktopTypes';
 import { AppIconVariant } from '@definitions/applicationTypes';
 import {
@@ -26,7 +26,7 @@ import {
   GRID_CELL_WIDTH,
   GRID_ROWS,
 } from '@constants/desktopConstants';
-import { isDevMode } from '@utils/logUtils';
+import { isDevMode, logInDev } from '@utils/logUtils';
 import { useWindowManager } from '@hooks/useWindowManager';
 
 function Desktop() {
@@ -46,6 +46,8 @@ function Desktop() {
     useWorkspaceState();
   const { launchWindow } = useWindowManager();
   const isMobile = useMediaQuery('(max-width: 819px)');
+  const { isReadOnlyMode } = useAuth();
+  logInDev('Readonly mode: ', isReadOnlyMode);
 
   // Handle drag stop - snap to grid
   const handleDragStop = useCallback((appId: string, d: DraggableData) => {

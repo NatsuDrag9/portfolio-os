@@ -121,6 +121,7 @@
   }
 
   &__right {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -128,6 +129,28 @@
     min-height: 0;
     padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
     overflow: hidden;
+  }
+
+  // &__panel-container {
+  //   position: relative;
+  //   width: 100%;
+  //   height: 100%;
+  // }
+
+  &__read-only-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: color-mix(in srgb, var(--color-neutral-background1) 60%);
+    cursor: not-allowed;
+    pointer-events: auto;
+  }
+
+  .dark-theme &__read-only-overlay {
+    background-color: color-mix(in srgb, var(--color-neutral-background2) 70%);
   }
 
   &-sidebar {

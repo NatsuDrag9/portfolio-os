@@ -30,6 +30,7 @@ import {
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
+  // Recommended apps
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
