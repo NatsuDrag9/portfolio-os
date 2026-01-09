@@ -1,4 +1,5 @@
 import { useBootStatus, useSystemUIState } from '@store/store';
+import { useMemo } from 'react';
 import '@styles/main.scss';
 import {
   BootScreen,
@@ -7,10 +8,17 @@ import {
   PowerOffScreen,
   ShutdownScreen,
 } from './screens';
+import { Portfolio } from '@apps/default/';
 
 function App() {
   const { bootStatus } = useBootStatus();
   const { currentTheme } = useSystemUIState();
+
+  // Check if current URL is /portfolio
+  const isPortfolioRoute = useMemo(
+    () => window.location.pathname.endsWith('/portfolio'),
+    []
+  );
 
   // // To Do: Remove this useEffect after development
   // useEffect(() => {
@@ -32,6 +40,11 @@ function App() {
   // }, []);
 
   const renderScreen = () => {
+    // Render Portfolio component for /portfolio route
+    if (isPortfolioRoute) {
+      return <Portfolio />;
+    }
+
     if (bootStatus === 'ON') {
       return <Workspace />;
     }

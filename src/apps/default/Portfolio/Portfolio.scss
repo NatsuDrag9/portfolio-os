@@ -1,0 +1,6 @@
+.portfolio {
+  display: flex;
+  color: var(--color-neutral-foreground1);
+
+  @include fade-in-element(1s);
+}

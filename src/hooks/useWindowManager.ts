@@ -2,6 +2,7 @@ import {
   FIREFOX_LINK,
   GITHUB_LINK,
   GOOGLE_CHROME_LINK,
+  PORTFOLIO_LINK,
 } from '@constants/appConstants';
 import { APP_REGISTRY } from '@constants/desktopConstants';
 import { AppMetadata } from '@definitions/applicationTypes';
@@ -30,6 +31,10 @@ export const useWindowManager = () => {
       }
       if (appId === 'github') {
         window.open(GITHUB_LINK, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (appId === 'portfolio') {
+        window.open(PORTFOLIO_LINK, '_blank', 'noopener,noreferrer');
         return;
       }
 
