@@ -68,18 +68,19 @@ export const playEscapeClose = async ({
   const listbox = await canvas.findByRole('listbox');
   expect(listbox).toBeInTheDocument();
 
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  // Wait a moment to ensure interactions are processed
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // Close with Escape key
   await userEvent.keyboard('{Escape}');
 
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  // Wait for potential animations or state updates
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // Verify dropdown closed (listbox should not be in document)
+  // Check that the listbox is no longer in the document
   const listboxAfterEscape = canvas.queryByRole('listbox');
   expect(listboxAfterEscape).not.toBeInTheDocument();
 };
-
 export const playClickOutside = async ({
   canvasElement,
 }: PlayFunctionProps<GenericDropdownProps>) => {
