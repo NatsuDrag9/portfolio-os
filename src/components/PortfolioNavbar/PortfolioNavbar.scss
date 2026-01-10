@@ -1,0 +1,89 @@
+.portfolio-navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 7rem;
+  padding: var(--spacing-vertical-m) var(--spacing-horizontal-l);
+  border: 1px solid var(--color-neutral-stroke2);
+  border-radius: var(--border-radius-large);
+  background-color: var(--color-neutral-background2);
+
+  &__fluent-icon,
+  &__image {
+    width: 2.2rem;
+    height: auto;
+    color: var(--color-neutral-foreground3);
+    transition: color 0.3s ease;
+
+    .dark-theme & {
+      color: var(--color-neutral-foreground4);
+    }
+  }
+
+  &__button {
+    @include disable-default-button-styles;
+
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-horizontal-m);
+    align-items: center;
+    width: fit-content;
+    min-width: 10rem;
+    height: 100%;
+    padding: var(--spacing-vertical-s) var(--spacing-horizontal-l);
+    color: var(--color-neutral-foreground3);
+    font-size: var(--font-size-base400);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition:
+      border 0.3s ease,
+      color 0.3s ease,
+      background-color 0.3s ease;
+
+    // Hover state - button AND icon color change
+    &:hover {
+      color: var(--color-neutral-foreground1);
+
+      .portfolio-navbar__fluent-icon,
+      .portfolio-navbar__image {
+        color: var(--color-neutral-foreground1);
+      }
+    }
+
+    // Active state - button AND icon color change
+    &--active {
+      border-bottom: 2px solid var(--color-palette-yellow-foreground3);
+      border-radius: var(--border-radius-large);
+      background-color: var(--color-neutral-background3);
+      color: var(--color-black-static);
+
+      /* stylelint-disable-next-line no-descending-specificity */
+      .portfolio-navbar__fluent-icon,
+      /* stylelint-disable-next-line no-descending-specificity */
+      .portfolio-navbar__image {
+        color: var(--color-black-static);
+      }
+
+      .dark-theme & {
+        color: var(--color-palette-yellow-background3);
+
+        .portfolio-navbar__fluent-icon,
+        .portfolio-navbar__image {
+          color: var(--color-palette-yellow-background3);
+        }
+      }
+
+      // Active button hover - lighter yellow
+      &:hover {
+        .portfolio-navbar__fluent-icon,
+        .portfolio-navbar__image {
+          .dark-theme & {
+            color: var(--color-palette-yellow-foreground3);
+          }
+        }
+      }
+    }
+  }
+}
