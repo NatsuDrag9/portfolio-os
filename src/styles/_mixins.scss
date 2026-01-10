@@ -62,13 +62,18 @@
 }
 
 // Fade-in mixin
-
 @mixin fade-in-element($duration: 0.3s) {
   animation: fade-in $duration ease-in;
 }
 
 @mixin fade-out-element($duration: 0.3s) {
   animation: fade-out $duration ease-in;
+}
+
+// Portfolio layout
+@mixin mobile-device-layout {
+  width: 90%;
+  margin: 0 auto;
 }
 
 @keyframes fade-in {

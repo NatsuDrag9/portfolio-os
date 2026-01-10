@@ -9,6 +9,10 @@ import ScenaryWallpaper from './wallpaper-scenary.jpg';
 import ScenaryWallpaperMobile from './wallpaper-scenary-mobile.jpg';
 import SnowScenaryWallpaper from './wallpaper-scenary-snow.jpg';
 import SnowScenaryWallpaperMobile from './wallpaper-scenary-snow-mobile.jpg';
+import DeviMa from './devi-ma.svg';
+import Linkedin from './linkedin.svg';
+import Medium from './medium.svg';
+import Github from './github.svg';
 
 export {
   Natsu,
@@ -22,4 +26,8 @@ export {
   ScenaryWallpaperMobile,
   SnowScenaryWallpaper,
   SnowScenaryWallpaperMobile,
+  DeviMa,
+  Linkedin,
+  Github,
+  Medium,
 };

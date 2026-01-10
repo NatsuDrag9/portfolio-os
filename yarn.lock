@@ -294,7 +294,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.27.1"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.17.8", "@babel/runtime@^7.23.2", "@babel/runtime@^7.26.0":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.17.8", "@babel/runtime@^7.23.2", "@babel/runtime@^7.26.0", "@babel/runtime@^7.27.0":
   version "7.28.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.4.tgz#a70226016fabe25c5783b2f22d3e1c9bc5ca3326"
   integrity sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==
@@ -7196,6 +7196,13 @@ react-rnd@*, react-rnd@^10.5.2:
     re-resizable "6.11.2"
     react-draggable "4.4.6"
     tslib "2.6.2"
+
+react-social-icons@^6.25.0:
+  version "6.25.0"
+  resolved "https://registry.yarnpkg.com/react-social-icons/-/react-social-icons-6.25.0.tgz#a97d11e162da9e61dc7371ec034188b4d16c8a48"
+  integrity sha512-PN9UpIb+f2u9H2t6MOoybaCD88yvQH+f9z/BILlg+n9MRzSYPtDODPzLb5dCUeyQ42eYyGDPGPIVARLWz5UEjg==
+  dependencies:
+    "@babel/runtime" "^7.27.0"
 
 react-svg@^16.3.0:
   version "16.3.0"

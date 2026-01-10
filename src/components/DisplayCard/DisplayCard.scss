@@ -1,6 +1,7 @@
 .display-card {
   display: flex;
   flex-direction: row;
+  gap: var(--spacing-horizontal-m);
   align-items: center;
 
   &__left {
@@ -8,10 +9,18 @@
     width: 4.5rem;
     height: auto;
     margin-right: var(--spacing-horizontal-m);
+    border: 1px solid
+      color-mix(in srgb, var(--color-neutral-stroke2), transparent 80%);
+    border-radius: var(--border-radius-medium);
     box-shadow: var(--shadow4);
 
     &.fluent-icon {
       padding: var(--spacing-vertical-xs) var(--spacing-horizontal-s);
+    }
+
+    .dark-theme & {
+      border: 1px solid
+        color-mix(in srgb, var(--color-neutral-stroke2), transparent 40%);
     }
   }
 
@@ -33,7 +42,7 @@
     }
 
     &:hover {
-      color: var(--color-brand-foreground1);
+      color: var(--color-palette-yellow-foreground3);
     }
   }
 
