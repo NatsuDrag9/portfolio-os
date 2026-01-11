@@ -27,6 +27,7 @@ import {
   WindowBrushRegular,
   ArrowRightRegular,
   ArrowDownRegular,
+  BriefcaseRegular,
 } from '@fluentui/react-icons';
 
 export const APP_REGISTRY: AppMetadata[] = [
@@ -111,6 +112,14 @@ export const APP_REGISTRY: AppMetadata[] = [
     id: 'portfolio-skills',
     appName: 'Skills',
     desktopIcon: HatGraduationSparkleRegular,
+    defaultPinned: false,
+    windowName: 'PortfolioSection',
+    startMenuAppCategory: 'default',
+  },
+  {
+    id: 'portfolio-workexp',
+    appName: 'Work Experience',
+    desktopIcon: BriefcaseRegular,
     defaultPinned: false,
     windowName: 'PortfolioSection',
     startMenuAppCategory: 'default',

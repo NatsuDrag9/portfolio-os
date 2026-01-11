@@ -1,0 +1,5 @@
+.work-exp {
+  display: flex;
+
+  @include fade-in-element;
+}

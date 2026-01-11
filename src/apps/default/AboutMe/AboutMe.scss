@@ -1,0 +1,5 @@
+.about-me {
+  display: flex;
+
+  @include fade-in-element;
+}
