@@ -1,5 +1,6 @@
 import { ComponentType } from 'react';
 import './PortfolioNavbar.scss';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 
 export interface ButtonDetailProps {
   name: string;
@@ -14,11 +15,15 @@ export interface PortfolioNavbarProps {
 }
 
 function PortfolioNavbar({ buttons }: PortfolioNavbarProps) {
+  const isMobileView = useMediaQuery('(max-width: 450px)');
+
   return (
     <nav className="portfolio-navbar">
       {buttons.map((item) => {
         const isFluentIcon = typeof item.image !== 'string';
         const FluentIconComponent = isFluentIcon ? item.image : null;
+        const shouldShowName = !isMobileView || item.isActive;
+
         return (
           <button
             key={item.id}
@@ -37,7 +42,9 @@ function PortfolioNavbar({ buttons }: PortfolioNavbarProps) {
                 className="portfolio-navbar__image"
               />
             )}
-            <span className="portfolio-navbar__button-name">{item.name}</span>
+            {shouldShowName && (
+              <span className="portfolio-navbar__button-name">{item.name}</span>
+            )}
           </button>
         );
       })}

@@ -87,3 +87,27 @@
     }
   }
 }
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .portfolio-navbar {
+    background-color: var(--color-neutral-background1);
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .portfolio-navbar {
+    &__button {
+      gap: 0;
+      min-width: auto;
+      padding: var(--spacing-vertical-s) var(--spacing-horizontal-m);
+      font-size: var(--font-size-base200);
+
+      &--active {
+        flex-direction: row;
+        gap: var(--spacing-horizontal-m);
+
+        @include fade-in-element;
+      }
+    }
+  }
+}

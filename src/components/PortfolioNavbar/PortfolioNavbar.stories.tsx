@@ -246,3 +246,56 @@ export const ManyButtons: Story = {
   ],
   play: keyboardNavigationPlay,
 };
+
+export const MobileView: Story = {
+  args: {
+    buttons: [
+      {
+        id: 'home',
+        name: 'Home',
+        image: HomeRegular,
+        isActive: true,
+        onButtonClick: (id: string | number) => console.log('Clicked:', id),
+      },
+      {
+        id: 'about',
+        name: 'About',
+        image: PersonRegular,
+        isActive: false,
+        onButtonClick: (id: string | number) => console.log('Clicked:', id),
+      },
+      {
+        id: 'portfolio',
+        name: 'Portfolio',
+        image: DocumentRegular,
+        isActive: false,
+        onButtonClick: (id: string | number) => console.log('Clicked:', id),
+      },
+      {
+        id: 'contact',
+        name: 'Contact',
+        image: MailRegular,
+        isActive: false,
+        onButtonClick: (id: string | number) => console.log('Clicked:', id),
+      },
+    ],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Mobile view with multiple buttons showing how the navbar adapts. Active button (Home) displays both icon and name, while inactive buttons show only icons for space efficiency.',
+      },
+    },
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: '400px', padding: '20px' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
