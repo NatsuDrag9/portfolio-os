@@ -3,7 +3,7 @@ import {
   BriefcaseRegular,
   CodeRegular,
   DocumentRegular,
-  MailRegular,
+  ArrowDownRegular,
   PersonRegular,
 } from '@fluentui/react-icons';
 
@@ -11,7 +11,7 @@ export type PortfolioSectionId =
   | 'portfolio-about'
   | 'portfolio-projects'
   | 'portfolio-skills'
-  | 'portfolio-contact'
+  | 'portfolio-resume'
   | 'portfolio-workexp';
 
 export const PORTFOLIO_NAV_BUTTONS: Omit<
@@ -39,8 +39,8 @@ export const PORTFOLIO_NAV_BUTTONS: Omit<
     image: CodeRegular,
   },
   {
-    id: 'portfolio-contact',
-    name: "Let's Connect",
-    image: MailRegular,
+    id: 'portfolio-resume',
+    name: 'Resume',
+    image: ArrowDownRegular,
   },
 ];

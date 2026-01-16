@@ -3,7 +3,7 @@ import {
   PORTFOLIO_ABOUT_LINK,
   PORTFOLIO_PROJECTS_LINK,
   PORTFOLIO_SKILLS_LINK,
-  PORTFOLIO_CONTACT_LINK,
+  PORTFOLIO_RESUME_LINK,
 } from '@constants/appConstants';
 import Loader from '@components/Loader/Loader';
 import './Portfolio.scss';
@@ -20,7 +20,7 @@ function PortfolioSection({ appId }: PortfolioSectionProps) {
     'portfolio-about': PORTFOLIO_ABOUT_LINK,
     'portfolio-projects': PORTFOLIO_PROJECTS_LINK,
     'portfolio-skills': PORTFOLIO_SKILLS_LINK,
-    'portfolio-contact': PORTFOLIO_CONTACT_LINK,
+    'portfolio-resume': PORTFOLIO_RESUME_LINK,
   };
 
   const url = sectionMap[appId || ''];

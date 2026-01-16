@@ -5,7 +5,7 @@ import { PortfolioNavbar } from '@components/index';
 import AboutMe from '../AboutMe/AboutMe';
 import Projects from '../Projects/Projects';
 import Skills from '../Skills/Skills';
-import LetsConnect from '../LetsConnect/LetsConnect';
+import DownloadableResume from '../DownloadableResume/DownloadableResume';
 import { PORTFOLIO_NAV_BUTTONS, PortfolioSectionId } from './constants';
 import { ButtonDetailProps } from '@components/PortfolioNavbar/PortfolioNavbar';
 import WorkExperience from '../WorkExperience/WorkExperience';
@@ -42,8 +42,8 @@ function Portfolio() {
         return <Skills items={SKILLS.items} />;
       case 'portfolio-workexp':
         return <WorkExperience experience={WORK_EXPERIENCE_DETAILS} />;
-      case 'portfolio-contact':
-        return <LetsConnect />;
+      case 'portfolio-resume':
+        return <DownloadableResume />;
       default:
         return (
           <AboutMe
