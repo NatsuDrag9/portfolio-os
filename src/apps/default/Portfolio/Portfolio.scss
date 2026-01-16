@@ -27,13 +27,15 @@
     height: 80%; // Same as Sidebar
     padding: 0 var(--spacing-horizontal-l);
     margin-right: 5rem; // Close to margin-left in Sidebar
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   &__section-wrapper {
     width: 100%;
     height: 100%;
-    padding: var(--spacing-vertical-m) var(--spacing-horizontal-m);
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-xl);
+    overflow-y: auto;
+    scrollbar-width: thin;
     border: 1px solid var(--color-neutral-stroke2);
     border-radius: var(--border-radius-large);
   }
@@ -77,9 +79,57 @@
   }
 }
 
+@media (max-width: $breakpoint-tablet-landscape) {
+  .portfolio {
+    &__main {
+      width: 100%;
+      margin-right: 3rem;
+    }
+  }
+}
+
 @media (max-width: $breakpoint-tablet-portrait) {
   .portfolio {
+    position: relative;
     flex-direction: column;
-    gap: var(--spacing-vertical-l);
+    gap: var(--spacing-vertical-xxxl);
+    justify-content: start;
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    &__main {
+      // position: static;
+
+      @include mobile-device-layout;
+      flex-direction: column-reverse;
+      width: 90.5%;
+      height: 67vh;
+      padding: 0;
+
+      // padding: 0 var(--spacing-horizontal-xl);
+
+      // .portfolio-navbar {
+      //   position: fixed;
+      //   bottom: 5rem;
+      //   width: 91%;
+      // }
+    }
+
+    &__section-wrapper {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .portfolio {
+    &__main {
+      height: 55vh;
+
+      // .portfolio-navbar {
+      //   bottom: 1rem;
+      // }
+    }
   }
 }

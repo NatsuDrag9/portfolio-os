@@ -1,5 +1,108 @@
 .about-me {
   display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xl);
 
   @include fade-in-element;
+
+  &__heading {
+    margin: 0;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-hero700);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-hero800);
+    letter-spacing: -0.02em;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xl);
+  }
+
+  &__quote {
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-l);
+    margin: 0;
+    border-left: 3px solid var(--color-brand-foreground1);
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base400);
+    font-weight: var(--font-weight-medium);
+    font-style: italic;
+    line-height: var(--line-height-base400);
+  }
+
+  &__author {
+    width: 50%;
+    margin: 0;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base300);
+    text-align: right;
+  }
+
+  &__sub-heading {
+    margin: 0 0 var(--spacing-vertical-m) 0;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base500);
+  }
+
+  &__activity-list {
+    padding: 0;
+    margin: var(--spacing-vertical-m) 0 0 var(--spacing-horizontal-l);
+    list-style: disc;
+  }
+
+  &__activity-item {
+    margin: var(--spacing-vertical-xs) 0;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base200);
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .about-me {
+    &__heading {
+      font-size: var(--font-size-base600);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .about-me {
+    &__heading {
+      font-size: var(--font-size-base500);
+    }
+
+    &__sub-heading {
+      font-size: var(--font-size-base300);
+    }
+
+    &__quote {
+      font-size: var(--font-size-base200);
+    }
+
+    &__activity-list {
+      padding: 0;
+      margin: var(--spacing-vertical-m) 0 0 var(--spacing-horizontal-l);
+      list-style: disc;
+    }
+
+    &__activity-item {
+      margin: var(--spacing-vertical-xs) 0;
+      color: var(--color-neutral-foreground2);
+      font-size: var(--font-size-base200);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--line-height-base200);
+    }
+
+    &__author {
+      width: 100%;
+      font-size: var(--font-size-base100);
+    }
+  }
 }

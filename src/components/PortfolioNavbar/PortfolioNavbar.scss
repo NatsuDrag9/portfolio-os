@@ -101,6 +101,7 @@
       min-width: auto;
       padding: var(--spacing-vertical-s) var(--spacing-horizontal-m);
       font-size: var(--font-size-base200);
+      transition: width 0.3s ease;
 
       &--active {
         flex-direction: row;

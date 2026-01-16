@@ -9,6 +9,7 @@ import LetsConnect from '../LetsConnect/LetsConnect';
 import { PORTFOLIO_NAV_BUTTONS, PortfolioSectionId } from './constants';
 import { ButtonDetailProps } from '@components/PortfolioNavbar/PortfolioNavbar';
 import WorkExperience from '../WorkExperience/WorkExperience';
+import { ABOUT_ME_DETAILS } from '@constants/portfolioConstants';
 
 // NOTE: Portfolio is by default set to dark theme
 
@@ -23,7 +24,14 @@ function Portfolio() {
   const renderSection = (): ReactNode => {
     switch (activeSection) {
       case 'portfolio-about':
-        return <AboutMe />;
+        return (
+          <AboutMe
+            name={ABOUT_ME_DETAILS.name}
+            education={ABOUT_ME_DETAILS.education}
+            otherActitvities={ABOUT_ME_DETAILS.otherActitvities}
+            quote={ABOUT_ME_DETAILS.quote}
+          />
+        );
       case 'portfolio-projects':
         return <Projects />;
       case 'portfolio-skills':
@@ -33,7 +41,14 @@ function Portfolio() {
       case 'portfolio-contact':
         return <LetsConnect />;
       default:
-        return <AboutMe />;
+        return (
+          <AboutMe
+            name={ABOUT_ME_DETAILS.name}
+            education={ABOUT_ME_DETAILS.education}
+            otherActitvities={ABOUT_ME_DETAILS.otherActitvities}
+            quote={ABOUT_ME_DETAILS.quote}
+          />
+        );
     }
   };
 

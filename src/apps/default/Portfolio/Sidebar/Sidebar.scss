@@ -15,6 +15,7 @@
   box-shadow: var(--shadow8-brand);
 
   &__top {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-vertical-xxl);
@@ -25,6 +26,9 @@
   &__toggle-display-button {
     @include disable-default-button-styles;
 
+    position: absolute;
+    top: 0;
+    right: 1rem;
     display: none;
     flex-direction: row;
     justify-content: center;
@@ -40,11 +44,17 @@
     height: auto;
     color: var(--color-palette-yellow-background3);
     transition: transform 0.3s ease;
-    transform: rotate(-180deg);
+    transform: rotate(0deg);
 
     &.open {
-      transform: rotate(0deg);
+      transform: rotate(-180deg);
     }
+  }
+
+  &__image {
+    object-fit: cover;
+    filter: blur(1px);
+    transition: filter 0.5s ease;
   }
 
   &__image-wrapper {
@@ -67,11 +77,11 @@
         opacity: 1;
         box-shadow: var(--shadow8-brand);
       }
-    }
-  }
 
-  &__image {
-    object-fit: cover;
+      &.hovered .sidebar__image {
+        filter: blur(0);
+      }
+    }
   }
 
   &__content {
@@ -185,20 +195,32 @@
 
 @media (max-width: $breakpoint-tablet-landscape) {
   .sidebar {
-    margin-left: 7rem;
+    margin-left: 3rem;
+
+    &__image {
+      filter: blur(0);
+    }
+
+    &__image-wrapper {
+      .dark-theme & {
+        opacity: 1;
+      }
+    }
   }
 }
 
 @media (max-width: $breakpoint-tablet-portrait) {
   .sidebar {
     top: 2rem;
-    gap: var(--spacing-vertical-xl);
+    gap: var(--spacing-vertical-xxxl);
     height: auto;
 
     @include mobile-device-layout;
 
     &__top {
-      gap: var(--spacing-vertical-m);
+      flex-direction: row;
+      gap: var(--spacing-horizontal-xxl);
+      justify-content: space-around;
     }
 
     &__toggle-display-button {
@@ -206,11 +228,12 @@
     }
 
     &__image-wrapper {
-      width: 45%;
+      width: 60%;
+      margin-top: 3rem;
     }
 
     &__image {
-      width: 70%;
+      width: 55%;
     }
 
     &__divider {
@@ -246,13 +269,45 @@
       max-height: 60rem;
       opacity: 1;
     }
+
+    &__display-cards {
+      flex-direction: row;
+    }
+
+    &__socials {
+      justify-content: space-evenly;
+      width: 40%;
+    }
   }
 }
 
 @media (max-width: $breakpoint-mobile) {
   .sidebar {
+    &__top {
+      flex-direction: column;
+      gap: var(--spacing-vertical-xxl);
+      align-items: center;
+    }
+
     &__image-wrapper {
-      width: 80%;
+      width: 100%;
+    }
+
+    &__name {
+      font-size: var(--font-size-base400);
+    }
+
+    &__designation {
+      font-size: var(--font-size-base200);
+    }
+
+    &__toggle-display-button {
+      top: -1rem;
+      right: -1rem;
+    }
+
+    &__display-cards {
+      flex-direction: column;
     }
   }
 }
