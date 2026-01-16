@@ -96,10 +96,13 @@
 
 @media (max-width: $breakpoint-mobile) {
   .portfolio-navbar {
+    justify-content: space-between;
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-s);
+
     &__button {
       gap: 0;
       min-width: auto;
-      padding: var(--spacing-vertical-s) var(--spacing-horizontal-m);
+      padding: var(--spacing-vertical-s) var(--spacing-horizontal-s);
       font-size: var(--font-size-base200);
       transition: width 0.3s ease;
 

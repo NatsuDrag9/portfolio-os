@@ -1,5 +1,10 @@
 import { AboutMeProps } from '@apps/default/AboutMe/AboutMe';
+import { SkillsProps, Skill } from '@apps/default/Skills/Skills';
 import { DetailCardProps } from '@apps/default/WorkExperience/DetailsCard/DetailsCard';
+import {
+  CodeBlockEditRegular,
+  SettingsCogMultipleRegular,
+} from '@fluentui/react-icons';
 
 export const ABOUT_ME_DETAILS: AboutMeProps = {
   name: 'Rohit Imandi',
@@ -108,3 +113,62 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
     ],
   },
 ];
+
+const SKILLS_DATA: Skill[] = [
+  {
+    id: 1,
+    title: 'Skills',
+    image: CodeBlockEditRegular,
+    skillItems: [
+      {
+        id: 1,
+        name: 'React and its core principles, Typescript, Javascript',
+      },
+      {
+        id: 2,
+        name: 'State management Libraries – Redux, Zustand',
+      },
+      {
+        id: 3,
+        name: 'Testing and Documentation – Storybook, Vitest, Jest, React Testing Library',
+      },
+      {
+        id: 4,
+        name: 'CSS Preprocessors: SASS/SCSS',
+      },
+      {
+        id: 5,
+        name: 'RESTFUL APIs integration',
+      },
+      {
+        id: 6,
+        name: 'Accessibility and WCAG guidelines',
+      },
+      {
+        id: 7,
+        name: 'Responsive Design using flexbox and grid',
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Tools',
+    image: SettingsCogMultipleRegular,
+    skillItems: [
+      { id: 1, name: 'Github and Gitlab' },
+      { id: 2, name: 'Lighthouse' },
+      { id: 3, name: 'Shell Scripting' },
+      { id: 4, name: 'VSCode' },
+      { id: 5, name: 'React Dev Tools' },
+      { id: 6, name: 'Git Hooks - Husky' },
+      {
+        id: 7,
+        name: 'AI tools – Claude, Chat GPT, Gemini',
+      },
+    ],
+  },
+];
+
+export const SKILLS: SkillsProps = {
+  items: SKILLS_DATA,
+};

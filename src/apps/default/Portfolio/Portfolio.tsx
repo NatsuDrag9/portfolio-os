@@ -12,6 +12,7 @@ import WorkExperience from '../WorkExperience/WorkExperience';
 import {
   ABOUT_ME_DETAILS,
   WORK_EXPERIENCE_DETAILS,
+  SKILLS,
 } from '@constants/portfolioConstants';
 
 // NOTE: Portfolio is by default set to dark theme
@@ -38,7 +39,7 @@ function Portfolio() {
       case 'portfolio-projects':
         return <Projects />;
       case 'portfolio-skills':
-        return <Skills />;
+        return <Skills items={SKILLS.items} />;
       case 'portfolio-workexp':
         return <WorkExperience experience={WORK_EXPERIENCE_DETAILS} />;
       case 'portfolio-contact':

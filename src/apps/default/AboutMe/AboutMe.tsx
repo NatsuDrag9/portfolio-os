@@ -33,14 +33,14 @@ function AboutMe({ name, education, otherActitvities, quote }: AboutMeProps) {
         <div className="about-me__section">
           <h6 className="about-me__sub-heading">
             Apart from coding, other activities that I enjoy:
-            <ul className="about-me__activity-list">
-              {otherActitvities.map((item, index) => (
-                <li key={`${index + 1}`} className="about-me__activity-item">
-                  {item}
-                </li>
-              ))}
-            </ul>
           </h6>
+          <ul className="about-me__activity-list">
+            {otherActitvities.map((item, index) => (
+              <li key={`${index + 1}`} className="about-me__activity-item">
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
