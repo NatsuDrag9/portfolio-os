@@ -22,6 +22,30 @@
   outline: none;
 }
 
+@mixin separator-element {
+  &__separator {
+    // NOTE: One way of adding color
+    // width: 100%;
+    // height: 1px;
+    // background-color: color-mix(
+    //   in srgb,
+    //   var(--color-neutral-stroke2),
+    //   transparent 35%
+    // );
+
+    // NOTE: Another way of adding color
+    width: 100%;
+    height: 1px;
+    border: 1px solid
+      color-mix(in srgb, var(--color-neutral-stroke2), transparent 10%);
+
+    .dark-theme & {
+      border: 1px solid
+        color-mix(in srgb, var(--color-neutral-stroke2), transparent 60%);
+    }
+  }
+}
+
 // ACRYLIC MATERIAL - Frosted glass effect (dark variant - used for dark backgrounds)
 @mixin acrylic-material($opacity: 60%) {
   border: 1px solid

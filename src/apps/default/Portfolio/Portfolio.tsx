@@ -9,7 +9,10 @@ import LetsConnect from '../LetsConnect/LetsConnect';
 import { PORTFOLIO_NAV_BUTTONS, PortfolioSectionId } from './constants';
 import { ButtonDetailProps } from '@components/PortfolioNavbar/PortfolioNavbar';
 import WorkExperience from '../WorkExperience/WorkExperience';
-import { ABOUT_ME_DETAILS } from '@constants/portfolioConstants';
+import {
+  ABOUT_ME_DETAILS,
+  WORK_EXPERIENCE_DETAILS,
+} from '@constants/portfolioConstants';
 
 // NOTE: Portfolio is by default set to dark theme
 
@@ -37,7 +40,7 @@ function Portfolio() {
       case 'portfolio-skills':
         return <Skills />;
       case 'portfolio-workexp':
-        return <WorkExperience />;
+        return <WorkExperience experience={WORK_EXPERIENCE_DETAILS} />;
       case 'portfolio-contact':
         return <LetsConnect />;
       default:

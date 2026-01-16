@@ -45,7 +45,7 @@ function Sidebar() {
         </div>
       </div>
 
-      <div className="sidebar__divider" />
+      <div className="sidebar__separator" />
 
       <div className="sidebar__bottom">
         <div className="sidebar__display-cards">

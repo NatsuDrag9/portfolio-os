@@ -117,16 +117,18 @@
     font-weight: var(-font-weight-medium);
   }
 
-  &__divider {
-    width: 100%;
-    border: 1px solid
-      color-mix(in srgb, var(--color-neutral-stroke2), transparent 10%);
+  // &__divider {
+  //   width: 100%;
+  //   border: 1px solid
+  //     color-mix(in srgb, var(--color-neutral-stroke2), transparent 10%);
 
-    .dark-theme & {
-      border: 1px solid
-        color-mix(in srgb, var(--color-neutral-stroke2), transparent 40%);
-    }
-  }
+  //   .dark-theme & {
+  //     border: 1px solid
+  //       color-mix(in srgb, var(--color-neutral-stroke2), transparent 40%);
+  //   }
+  // }
+
+  @include separator-element;
 
   &__bottom {
     display: flex;
@@ -236,7 +238,7 @@
       width: 55%;
     }
 
-    &__divider {
+    &__separator {
       // max-height: 0;
       // overflow: hidden;
       // opacity: 0;

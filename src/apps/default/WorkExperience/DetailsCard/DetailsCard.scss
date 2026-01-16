@@ -1,0 +1,118 @@
+.details-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-vertical-xl);
+  width: 100%;
+  padding: var(--spacing-horizontal-l) var(--spacing-vertical-l);
+
+  &__top {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base500);
+  }
+
+  &__duration,
+  &__location,
+  &__company-name {
+    margin: 0;
+    color: var(--color-neutral-foreground4);
+    font-size: var(--font-size-base300);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base200);
+  }
+
+  &__duration,
+  &__location {
+    width: 100%;
+    text-align: right;
+  }
+
+  &__detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-s);
+    width: 100%;
+    color: var(--color-neutral-foreground2);
+    font-size: var(--font-size-base400);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-base400);
+
+    @include fade-in-element(0.7s);
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .details-card {
+    &__title {
+      font-size: var(--font-size-base400);
+      line-height: var(--line-height-base400);
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base300);
+
+      line-height: var(--line-height-base300);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .details-card {
+    &__title {
+      width: 100%;
+      font-size: var(--font-size-base300);
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base100);
+      line-height: var(--line-height-base100);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .details-card {
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-xxs);
+
+    &__top {
+      gap: 0.5rem 0.75rem;
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base100);
+      line-height: var(--line-height-base100);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+  }
+}
