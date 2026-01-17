@@ -1,10 +1,16 @@
 import { AboutMeProps } from '@apps/default/AboutMe/AboutMe';
 import { SkillsProps, Skill } from '@apps/default/Skills/Skills';
 import { DetailCardProps } from '@apps/default/WorkExperience/DetailsCard/DetailsCard';
+import { ProjectsCardProps } from '@apps/default/Projects/ProjectsCard/ProjectsCard';
 import {
   CodeBlockEditRegular,
   SettingsCogMultipleRegular,
 } from '@fluentui/react-icons';
+import {
+  PortfolioOs,
+  ReactStateParadigmDemo,
+  Tetris,
+} from '@assets/images/specifics';
 
 export const ABOUT_ME_DETAILS: AboutMeProps = {
   name: 'Rohit Imandi',
@@ -172,3 +178,40 @@ const SKILLS_DATA: Skill[] = [
 export const SKILLS: SkillsProps = {
   items: SKILLS_DATA,
 };
+
+export const PROJECTS_DATA: ProjectsCardProps[] = [
+  {
+    title: 'Compare React State Management Paradigms',
+    description:
+      'Compares the three primary approaches—Selector (Centralized), Atomic (Jotai/Recoil), and Pure Signal (Preact Signals)—to reveal crucial differences in performance, rendering granularity, and architecture.',
+    coverImage: ReactStateParadigmDemo,
+    badges: {
+      codeUrl: 'https://github.com/NatsuDrag9/react-state-paradigm-demo',
+      demoUrl: 'https://natsudrag9.github.io/react-state-paradigm-demo/',
+      articleUrl:
+        'https://rohitimandi.medium.com/zustand-jotai-and-signals-a-head-to-head-comparison-of-granularity-and-efficiency-077599a4f68e',
+    },
+  },
+  {
+    title: 'Tetris Multiplayer Game',
+    description:
+      'A fullstack web application that allows users to play the classic game of Tetris either solo or against friends in real-time multiplayer mode',
+    coverImage: Tetris,
+    badges: {
+      codeUrl: 'https://github.com/NatsuDrag9/tetris-multiplayer',
+      // To Do: Add demoUrl
+      articleUrl:
+        'https://github.com/NatsuDrag9/tetris-multiplayer/wiki/Recruiters',
+    },
+  },
+  {
+    title: 'OS Based Portfolio',
+    description:
+      'A Windows 11-inspired desktop environment featuring a functional taskbar, start menu, draggable windows, and real-time settings management. Demonstrates advanced React patterns, state management, component architecture, and UI/UX design through an interactive operating system simulation.',
+    coverImage: PortfolioOs,
+    badges: {
+      codeUrl: 'https://github.com/NatsuDrag9/portfolio-os',
+      // To Do: Add demoUrl and articleUrl
+    },
+  },
+];

@@ -1,7 +1,24 @@
 import './Projects.scss';
+import ProjectsCard, { ProjectsCardProps } from './ProjectsCard/ProjectsCard';
 
-function Projects() {
-  return <div className="projects">This is projects section</div>;
+export interface ProjectsProps {
+  projects: ProjectsCardProps[];
+}
+
+function Projects({ projects }: ProjectsProps) {
+  return (
+    <div className="projects">
+      {projects.map((project, index) => (
+        <ProjectsCard
+          key={index}
+          title={project.title}
+          description={project.description}
+          coverImage={project.coverImage}
+          badges={project.badges}
+        />
+      ))}
+    </div>
+  );
 }
 
 export default Projects;

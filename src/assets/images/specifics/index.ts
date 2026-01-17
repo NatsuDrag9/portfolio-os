@@ -13,6 +13,9 @@ import DeviMa from './devi-ma.svg';
 import Linkedin from './linkedin.svg';
 import Medium from './medium.svg';
 import Github from './github.svg';
+import Tetris from './tetris.png';
+import ReactStateParadigmDemo from './react-state-paradigm-demo.png';
+import PortfolioOs from './portfolio-os.png';
 
 export {
   Natsu,
@@ -30,4 +33,7 @@ export {
   Linkedin,
   Github,
   Medium,
+  ReactStateParadigmDemo,
+  Tetris,
+  PortfolioOs,
 };
