@@ -101,6 +101,7 @@
   }
 }
 
+// Media queries
 @media (max-width: $breakpoint-tablet-landscape) {
   .projects-card {
     gap: var(--spacing-vertical-l);
@@ -123,6 +124,47 @@
 }
 
 @media (max-width: $breakpoint-tablet-portrait) {
+  .projects-card {
+    gap: var(--spacing-vertical-xl);
+
+    &__title {
+      font-size: var(--font-size-base300);
+    }
+
+    &__description {
+      font-size: var(--font-size-base100);
+    }
+
+    &__link {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+  }
+}
+
+// Container queries - responds to .projects container width
+@container (max-width: $breakpoint-tablet-landscape) {
+  .projects-card {
+    gap: var(--spacing-vertical-l);
+
+    &__title {
+      font-size: var(--font-size-base400);
+      line-height: var(--line-height-base400);
+    }
+
+    &__description {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+
+    &__link {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+  }
+}
+
+@container (max-width: $breakpoint-tablet-portrait) {
   .projects-card {
     gap: var(--spacing-vertical-xl);
 

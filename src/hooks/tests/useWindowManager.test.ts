@@ -59,16 +59,16 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.launchWindow('file-explorer');
+        result.current.launchWindow('vscode');
       });
 
       expect(mockAddWindow).toHaveBeenCalledOnce();
       expect(mockAddWindow).toHaveBeenCalledWith(
-        'file-explorer',
+        'vscode',
         expect.objectContaining({
-          id: 'file-explorer',
-          appName: 'File Explorer',
-          windowName: 'FileExplorer',
+          id: 'vscode',
+          appName: 'VSCode',
+          windowName: 'VSCode',
         })
       );
     });
@@ -87,15 +87,15 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.launchWindow('file-explorer');
+        result.current.launchWindow('notepad');
         result.current.launchWindow('vscode');
       });
 
       expect(mockAddWindow).toHaveBeenCalledTimes(2);
       expect(mockAddWindow).toHaveBeenNthCalledWith(
         1,
-        'file-explorer',
-        expect.objectContaining({ id: 'file-explorer' })
+        'notepad',
+        expect.objectContaining({ id: 'notepad' })
       );
       expect(mockAddWindow).toHaveBeenNthCalledWith(
         2,
@@ -154,7 +154,7 @@ describe('useWindowManager', () => {
         const { result } = renderHook(() => useWindowManager());
 
         act(() => {
-          result.current.launchWindow('file-explorer');
+          result.current.launchWindow('notepad');
           result.current.launchWindow('google-chrome');
           result.current.launchWindow('vscode');
           result.current.launchWindow('firefox');
@@ -336,7 +336,7 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.restoreOrFocusApp('file-explorer');
+        result.current.restoreOrFocusApp('vscode');
       });
 
       expect(mockAddWindow).toHaveBeenCalledOnce();
@@ -347,7 +347,7 @@ describe('useWindowManager', () => {
         ...mockWorkspaceState,
         activeWindows: [
           {
-            id: 'file-explorer-1',
+            id: 'firefox-1',
             zIndex: 1,
             isMaximized: 'normal',
             previousDisplayState: 'normal',
@@ -358,11 +358,11 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.restoreOrFocusApp('file-explorer');
+        result.current.restoreOrFocusApp('firefox');
       });
 
       expect(mockAddWindow).not.toHaveBeenCalled();
-      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('file-explorer-1', 2);
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('firefox-1', 2);
     });
 
     it('should restore minimized single window', () => {
@@ -370,7 +370,7 @@ describe('useWindowManager', () => {
         ...mockWorkspaceState,
         activeWindows: [
           {
-            id: 'file-explorer-1',
+            id: 'firefox-1',
             zIndex: 1,
             isMaximized: 'minimized',
             previousDisplayState: 'maximized',
@@ -381,11 +381,11 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.restoreOrFocusApp('file-explorer');
+        result.current.restoreOrFocusApp('firefox');
       });
 
       expect(mockSetWindowIsMaximized).toHaveBeenCalledWith(
-        'file-explorer-1',
+        'firefox-1',
         'maximized'
       );
     });
@@ -395,13 +395,13 @@ describe('useWindowManager', () => {
         ...mockWorkspaceState,
         activeWindows: [
           {
-            id: 'file-explorer-1',
+            id: 'firefox-1',
             zIndex: 1,
             isMaximized: 'normal',
             previousDisplayState: 'normal',
           },
           {
-            id: 'file-explorer-2',
+            id: 'firefox-2',
             zIndex: 2,
             isMaximized: 'normal',
             previousDisplayState: 'normal',
@@ -412,7 +412,7 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.restoreOrFocusApp('file-explorer');
+        result.current.restoreOrFocusApp('firefox');
       });
 
       expect(mockAddWindow).not.toHaveBeenCalled();
@@ -430,7 +430,7 @@ describe('useWindowManager', () => {
             previousDisplayState: 'normal',
           },
           {
-            id: 'file-explorer-1',
+            id: 'firefox-1',
             zIndex: 2,
             isMaximized: 'normal',
             previousDisplayState: 'normal',
@@ -441,10 +441,10 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.restoreOrFocusApp('file-explorer');
+        result.current.restoreOrFocusApp('firefox');
       });
 
-      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('file-explorer-1', 3);
+      expect(mockUpdateWindowZIndex).toHaveBeenCalledWith('firefox-1', 3);
     });
 
     describe('browser apps behavior', () => {
@@ -549,7 +549,7 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.launchWindow('file-explorer');
+        result.current.launchWindow('notepad');
         result.current.focusWindow('window1');
         result.current.launchWindow('vscode');
         result.current.closeWindow('window1');
@@ -564,10 +564,10 @@ describe('useWindowManager', () => {
       const { result } = renderHook(() => useWindowManager());
 
       act(() => {
-        result.current.launchWindow('file-explorer');
+        result.current.launchWindow('notepad');
         result.current.launchWindow('google-chrome');
         result.current.focusWindow('window1');
-        result.current.launchWindow('github');
+        result.current.launchWindow('firefox');
       });
 
       expect(mockAddWindow).toHaveBeenCalledTimes(1);

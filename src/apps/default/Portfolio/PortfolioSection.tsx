@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { ReactNode } from 'react';
+import AboutMe from '../AboutMe/AboutMe';
+import Projects from '../Projects/Projects';
+import Skills from '../Skills/Skills';
+import WorkExperience from '../WorkExperience/WorkExperience';
+import DownloadableResume from '../DownloadableResume/DownloadableResume';
 import {
-  PORTFOLIO_ABOUT_LINK,
-  PORTFOLIO_PROJECTS_LINK,
-  PORTFOLIO_SKILLS_LINK,
-  PORTFOLIO_RESUME_LINK,
-} from '@constants/appConstants';
-import Loader from '@components/Loader/Loader';
+  ABOUT_ME_DETAILS,
+  WORK_EXPERIENCE_DETAILS,
+  SKILLS,
+  PROJECTS_DATA,
+} from '@constants/portfolioConstants';
 import './Portfolio.scss';
 
 interface PortfolioSectionProps {
@@ -13,47 +17,37 @@ interface PortfolioSectionProps {
 }
 
 function PortfolioSection({ appId }: PortfolioSectionProps) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Map app IDs to portfolio URLs
-  const sectionMap: Record<string, string> = {
-    'portfolio-about': PORTFOLIO_ABOUT_LINK,
-    'portfolio-projects': PORTFOLIO_PROJECTS_LINK,
-    'portfolio-skills': PORTFOLIO_SKILLS_LINK,
-    'portfolio-resume': PORTFOLIO_RESUME_LINK,
+  const renderSection = (): ReactNode => {
+    switch (appId) {
+      case 'portfolio-about':
+        return (
+          <AboutMe
+            name={ABOUT_ME_DETAILS.name}
+            education={ABOUT_ME_DETAILS.education}
+            otherActitvities={ABOUT_ME_DETAILS.otherActitvities}
+            quote={ABOUT_ME_DETAILS.quote}
+          />
+        );
+      case 'portfolio-projects':
+        return <Projects projects={PROJECTS_DATA} />;
+      case 'portfolio-skills':
+        return <Skills items={SKILLS.items} />;
+      case 'portfolio-workexp':
+        return <WorkExperience experience={WORK_EXPERIENCE_DETAILS} />;
+      case 'portfolio-resume':
+        return <DownloadableResume />;
+      default:
+        return (
+          <div className="portfolio-section">
+            <p className="portfolio-section__error">
+              Invalid portfolio section
+            </p>
+          </div>
+        );
+    }
   };
 
-  const url = sectionMap[appId || ''];
-
-  if (!url) {
-    return (
-      <div className="portfolio-section">
-        <p className="portfolio-section__error">Invalid portfolio section</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="portfolio-section">
-      {isLoading && (
-        <div className="portfolio-section__loader">
-          <Loader />
-        </div>
-      )}
-      <iframe
-        src={url}
-        className="portfolio-section__iframe"
-        title={`Portfolio - ${appId?.replace('portfolio-', '')}`}
-        onLoad={() => setIsLoading(false)}
-        style={{
-          border: 'none',
-          width: '100%',
-          height: '100%',
-          display: isLoading ? 'none' : 'block',
-        }}
-      />
-    </div>
-  );
+  return <div className="portfolio-section dark-theme">{renderSection()}</div>;
 }
 
 export default PortfolioSection;

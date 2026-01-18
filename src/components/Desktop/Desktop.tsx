@@ -29,6 +29,8 @@ import {
 import { isDevMode, logInDev } from '@utils/logUtils';
 import { useWindowManager } from '@hooks/useWindowManager';
 
+// To Do: Add properties window
+
 function Desktop() {
   const [showDesktopContextMenu, setShowDesktopContextMenu] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({

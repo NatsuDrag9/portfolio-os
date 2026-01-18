@@ -27,7 +27,10 @@ import {
   ArrowRightRegular,
   ArrowDownRegular,
   BriefcaseRegular,
+  DocumentArrowDownRegular,
 } from '@fluentui/react-icons';
+
+// To Do: Uncomment File Explorer when Portfolio container query styles have been fixed
 
 export const APP_REGISTRY: AppMetadata[] = [
   // Recommended apps
@@ -94,7 +97,7 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'portfolio-resume',
     appName: 'Resume',
-    desktopIcon: ArrowDownRegular,
+    desktopIcon: DocumentArrowDownRegular,
     defaultPinned: false,
     windowName: 'PortfolioSection',
     startMenuAppCategory: 'default',
@@ -131,15 +134,15 @@ export const APP_REGISTRY: AppMetadata[] = [
     windowName: 'Portfolio',
     startMenuAppCategory: 'default',
   },
-  {
-    id: 'file-explorer',
-    appName: 'File Explorer',
-    mobileIcon: '/apps/file-explorer-48.png',
-    desktopIcon: '/apps/file-explorer-96.png',
-    defaultPinned: true,
-    windowName: 'FileExplorer',
-    startMenuAppCategory: 'default',
-  },
+  // {
+  //   id: 'file-explorer',
+  //   appName: 'File Explorer',
+  //   mobileIcon: '/apps/file-explorer-48.png',
+  //   desktopIcon: '/apps/file-explorer-96.png',
+  //   defaultPinned: true,
+  //   windowName: 'FileExplorer',
+  //   startMenuAppCategory: 'default',
+  // },
   {
     id: 'github',
     appName: 'Github',

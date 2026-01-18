@@ -4,6 +4,7 @@
   grid-auto-rows: auto;
   gap: 2rem 4rem;
   align-items: center;
+  container-type: inline-size;
 
   @include fade-in-element;
 }

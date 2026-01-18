@@ -4,6 +4,7 @@
   gap: var(--spacing-vertical-xl);
   width: 100%;
   padding: var(--spacing-horizontal-l) var(--spacing-vertical-l);
+  container-type: inline-size;
 
   &__top {
     display: grid;
@@ -96,6 +97,70 @@
 }
 
 @media (max-width: $breakpoint-mobile) {
+  .details-card {
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-xxs);
+
+    &__top {
+      gap: 0.5rem 0.75rem;
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base100);
+      line-height: var(--line-height-base100);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+  }
+}
+
+@container (max-width: $breakpoint-tablet-landscape) {
+  .details-card {
+    &__title {
+      font-size: var(--font-size-base400);
+      line-height: var(--line-height-base400);
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base300);
+      line-height: var(--line-height-base300);
+    }
+  }
+}
+
+@container (max-width: $breakpoint-tablet-portrait) {
+  .details-card {
+    &__title {
+      width: 100%;
+      font-size: var(--font-size-base300);
+    }
+
+    &__duration,
+    &__location,
+    &__company-name {
+      font-size: var(--font-size-base100);
+      line-height: var(--line-height-base100);
+    }
+
+    &__detail-list {
+      font-size: var(--font-size-base200);
+      line-height: var(--line-height-base200);
+    }
+  }
+}
+
+@container (max-width: $breakpoint-mobile) {
   .details-card {
     padding: var(--spacing-vertical-l) var(--spacing-horizontal-xxs);
 

@@ -207,7 +207,7 @@ export const PROJECTS_DATA: ProjectsCardProps[] = [
   {
     title: 'OS Based Portfolio',
     description:
-      'A Windows 11-inspired desktop environment featuring a functional taskbar, start menu, draggable windows, and real-time settings management. Demonstrates advanced React patterns, state management, component architecture, and UI/UX design through an interactive operating system simulation.',
+      'A Windows 11-inspired interactive desktop operating system simulation featuring a functional taskbar, start menu, draggable windows, and real-time settings management.',
     coverImage: PortfolioOs,
     badges: {
       codeUrl: 'https://github.com/NatsuDrag9/portfolio-os',
