@@ -32,13 +32,15 @@ import {
 
 // To Do: Uncomment File Explorer when Portfolio container query styles have been fixed
 
+export const BASE_URL = '/portfolio-os';
+
 export const APP_REGISTRY: AppMetadata[] = [
   // Recommended apps
   {
     id: 'google-chrome',
     appName: 'Google Chrome',
-    mobileIcon: '/apps/chrome-48.png',
-    desktopIcon: '/apps/chrome-96.png',
+    mobileIcon: `${BASE_URL}/apps/chrome-48.png`,
+    desktopIcon: `${BASE_URL}/apps/chrome-96.png`,
     defaultPinned: true,
     windowName: 'GoogleChrome',
     startMenuAppCategory: 'recommended',
@@ -46,8 +48,8 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'vscode',
     appName: 'VSCode',
-    mobileIcon: '/apps/vscode-48.png',
-    desktopIcon: '/apps/vscode-96.png',
+    mobileIcon: `${BASE_URL}/apps/vscode-48.png`,
+    desktopIcon: `${BASE_URL}/apps/vscode-96.png`,
     defaultPinned: true,
     windowName: 'VSCode',
     startMenuAppCategory: 'recommended',
@@ -55,7 +57,7 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'firefox',
     appName: 'Firefox',
-    desktopIcon: '/apps/firefox.png',
+    desktopIcon: `${BASE_URL}/apps/firefox.png`,
     defaultPinned: true,
     windowName: 'Firefox',
     startMenuAppCategory: 'recommended',
@@ -63,8 +65,8 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'notepad',
     appName: 'Notepad',
-    mobileIcon: '/apps/notepad-48.png',
-    desktopIcon: '/apps/notepad-96.png',
+    mobileIcon: `${BASE_URL}/apps/notepad-48.png`,
+    desktopIcon: `${BASE_URL}/apps/notepad-96.png`,
     defaultPinned: true,
     windowName: 'Notepad',
     startMenuAppCategory: 'recommended',
@@ -137,8 +139,8 @@ export const APP_REGISTRY: AppMetadata[] = [
   // {
   //   id: 'file-explorer',
   //   appName: 'File Explorer',
-  //   mobileIcon: '/apps/file-explorer-48.png',
-  //   desktopIcon: '/apps/file-explorer-96.png',
+  //   mobileIcon: `${BASE_URL}/apps/file-explorer-48.png`,
+  //   desktopIcon: `${BASE_URL}/apps/file-explorer-96.png`,
   //   defaultPinned: true,
   //   windowName: 'FileExplorer',
   //   startMenuAppCategory: 'default',
@@ -146,7 +148,7 @@ export const APP_REGISTRY: AppMetadata[] = [
   {
     id: 'github',
     appName: 'Github',
-    desktopIcon: '/apps/github-60.png',
+    desktopIcon: `${BASE_URL}/apps/github-60.png`,
     defaultPinned: true,
     windowName: 'Github',
     startMenuAppCategory: 'default',
@@ -158,8 +160,8 @@ export const APP_REGISTRY: AppMetadata[] = [
 export const START_MENU_WINDOWS = {
   id: 'windows',
   name: 'Start Menu',
-  mobileIcon: '/apps/windows-11-48.png',
-  desktopIcon: '/apps/windows-11-96.png',
+  mobileIcon: `${BASE_URL}/apps/windows-11-48.png`,
+  desktopIcon: `${BASE_URL}/apps/windows-11-96.png`,
 } as const;
 
 export const RIGHT_CLICK_OPTIONS: Record<

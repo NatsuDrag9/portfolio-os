@@ -86,8 +86,8 @@ function WindowContainer({ children, windowId }: WindowContainerProps) {
         width: isMobileFullscreen ? '100%' : defaultWidth,
         height: isMobileFullscreen ? '100%' : defaultHeight,
       }}
-      minWidth={600}
-      minHeight={400}
+      minWidth={isMobileFullscreen ? 0 : 600}
+      minHeight={isMobileFullscreen ? 0 : 400}
       bounds="parent"
       onDragStop={(_e, d) => {
         updateWindowPosition(windowId, d.x, d.y);

@@ -123,6 +123,14 @@
       margin-top: 1rem;
     }
   }
+
+  .portfolio-section {
+    padding: var(--spacing-vertical-xl) var(--spacing-horizontal-xl);
+
+    .projects {
+      // grid-template-rows: 45rem;
+    }
+  }
 }
 
 @media (max-width: $breakpoint-mobile) {

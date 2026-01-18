@@ -141,7 +141,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 29; // Below &__left for sidebar to be clickable
     width: 100%;
     height: 100%;
     background-color: color-mix(in srgb, var(--color-neutral-background1) 60%);
@@ -182,6 +182,7 @@
     padding-top: 3.5rem; // Space for hamburger button
 
     &__hamburger {
+      top: 0;
       display: flex;
     }
 
@@ -219,8 +220,12 @@
       }
 
       .user-card {
-        margin-left: 2rem;
+        margin-top: 5rem;
       }
+    }
+
+    &-sidebar {
+      width: 100%;
     }
 
     &__right {
@@ -237,6 +242,14 @@
     &__menu-toggle:checked ~ &__menu-overlay {
       opacity: 1;
       pointer-events: auto;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile) {
+  .settings {
+    &__left {
+      width: 70%;
     }
   }
 }
