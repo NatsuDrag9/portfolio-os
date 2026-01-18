@@ -58,9 +58,9 @@ try {
   console.log(
     'Storybook will be at: https://yourusername.github.io/portfolio-os/storybook/\n'
   );
-  console.log('Next steps:');
-  console.log('1. Run: yarn deploy:gh-pages');
-  console.log('2. Or push the dist/ folder to the gh-pages branch manually\n');
+  // console.log('Next steps:');
+  // console.log('1. Run: yarn deploy:gh-pages');
+  // console.log('2. Or push the dist/ folder to the gh-pages branch manually\n');
 } catch (error) {
   console.error('Build failed:', error.message);
   process.exit(1);

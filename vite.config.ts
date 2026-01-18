@@ -4,6 +4,7 @@ import { analyzer } from 'vite-bundle-analyzer';
 
 // https://vitejs.dev/config/
 const viteConfig = defineConfig({
+  base: '/portfolio-os/',
   plugins: [
     react(),
     process.env.VITE_BUNDLE_ANALYZE === 'true' && analyzer(),
