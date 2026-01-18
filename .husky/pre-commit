@@ -1,0 +1,7 @@
+# Linting
+
+yarn lint-staged
+
+# Runs storybook and non-storybook unit-tests
+
+yarn test-unit
