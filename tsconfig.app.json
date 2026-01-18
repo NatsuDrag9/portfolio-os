@@ -5,20 +5,19 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "skipLibCheck": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false,
-    "moduleDetection": "force",
+    "moduleDetection": "auto",
     "noEmit": true,
     "jsx": "react-jsx",
 
     /* Path Aliases */
     "baseUrl": ".",
-    "ignoreDeprecations": "6.0",
     "paths": {
       "@services/*": ["src/services/*"],
       "@assets/*": ["src/assets/*"],
@@ -56,6 +55,7 @@
     "eslint.config.js",
     ".storybook/vitest.setup.ts",
     ".storybook/main.ts",
-    "scripts/generate-tokens.js"
+    "scripts/generate-tokens.js",
+    "scripts/deploy.js"
   ]
 }

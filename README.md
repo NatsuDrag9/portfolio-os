@@ -58,6 +58,13 @@ To use this template with your own portfolio details, follow these steps:
    - `GITHUB_LINK` - Your GitHub profile URL
    - `PORTFOLIO_LINK` - Your portfolio domain (if deployed)
 
+**Key Files for Customization:**
+
+- `src/constants/portfolioConstants.ts` - Portfolio content (about, experience, skills, projects)
+- `src/apps/default/Portfolio/Sidebar/constants.ts` - Name, title, and social links
+- `src/assets/images/specifics/` - Profile picture and project screenshots
+- `public/docs/` - Resume PDF file
+
 ## Project Structure
 
 ```
@@ -95,13 +102,6 @@ portfolio-os/
 └── README.md
 ```
 
-**Key Files for Customization:**
-
-- `src/constants/portfolioConstants.ts` - Portfolio content (about, experience, skills, projects)
-- `src/apps/default/Portfolio/Sidebar/constants.ts` - Name, title, and social links
-- `src/assets/images/specifics/` - Profile picture and project screenshots
-- `public/docs/` - Resume PDF file
-
 ## System Requirements
 
 | Technology | Version  |
@@ -111,6 +111,58 @@ portfolio-os/
 | TypeScript | ~5.9.3   |
 | Vite       | ^6.0.0   |
 | Storybook  | 8.6.14   |
+
+## Deployment to GitHub Pages
+
+This project is configured to deploy both your portfolio and Storybook to GitHub Pages from a single build.
+
+### Setup
+
+1. **Update your GitHub repository URL in package.json** (optional, if not using default):
+   The `gh-pages` package will automatically detect your repository from git config.
+
+2. **Ensure GitHub Pages is enabled:**
+   - Go to your repository Settings → Pages
+   - Under "Build and deployment", select "Deploy from a branch"
+   - Choose the `gh-pages` branch as the source
+
+### Deployment Commands
+
+**Option 1: Automatic deployment**
+
+```bash
+yarn deploy:gh-pages
+```
+
+This command:
+
+- Builds your portfolio application
+- Builds Storybook component library
+- Combines them (portfolio at `/`, Storybook at `/storybook/`)
+- Automatically pushes to the `gh-pages` branch
+
+**Option 2: Manual deployment**
+
+```bash
+yarn build:deploy        # Builds and prepares dist/ folder
+# Then manually push dist/ to gh-pages branch
+```
+
+### Access Your Deployed Site
+
+After deployment completes:
+
+- **Portfolio:** `https://yourusername.github.io/portfolio-os/`
+- **Storybook:** `https://yourusername.github.io/portfolio-os/storybook/`
+
+### Local Preview Before Deployment
+
+Test your build locally before deploying:
+
+```bash
+yarn build:deploy
+yarn preview
+```
 
 ## Documentation
 
