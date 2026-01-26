@@ -167,6 +167,9 @@ yarn preview
 ## Documentation
 
 **For Employers & Recruiters:**
+
+<!-- To Do: Create github wiki pages and add links to recruiters, developers and users (people who'd like to use this portfolio for themselves. Ensure credit is given) section -->
+
 Visit the live portfolio at your deployed URL to explore the interactive Windows 11-inspired interface and view projects, experience, and skills.
 
 **For Developers:**
