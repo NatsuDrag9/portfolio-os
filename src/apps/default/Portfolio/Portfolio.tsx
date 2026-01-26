@@ -23,6 +23,16 @@ function Portfolio() {
     useState<PortfolioSectionId>('portfolio-about');
 
   const handleSectionChange = (id: string | number) => {
+    // Trigger resume download if Resume button is clicked
+    if (id === 'portfolio-resume') {
+      const resumePath = '/portfolio-os/Rohit_Resume_Frontend_2.pdf';
+      const link = document.createElement('a');
+      link.href = resumePath;
+      link.download = 'Rohit_Resume_Frontend.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
     setActiveSection(id as PortfolioSectionId);
   };
 

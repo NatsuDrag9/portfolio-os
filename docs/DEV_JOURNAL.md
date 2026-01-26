@@ -190,3 +190,11 @@ Even with `z-index: 300`, RightClickMenu is only compared within Icon 1's stacki
 
 - Finds the `settings` window from `activeWindows` array
 - Add `onClose: ()=> void` prop to all settings panel which is called when user clicks Apply button
+
+<!-- Missed a lot in between -->
+
+### 26-1-2026
+
+#### Remove extra step to download resume when user clicks Resume button in PortfolioNavbar
+
+**Files Changed**: DownloadableResume.tsx, Portfolio.tsx
