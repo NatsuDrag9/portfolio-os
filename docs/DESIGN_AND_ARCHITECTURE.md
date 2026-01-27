@@ -6,13 +6,15 @@ This document provides a comprehensive overview of Portfolio OS's design and arc
 
 1. **[Technology Stack](#technology-stack)** - Languages, frameworks, and libraries
 2. **[High-Level Architecture](#high-level-architecture)** - System overview
-3. **[UI Flow](./UI_FLOW.md)** - User interface navigation and screen transitions
-4. **[Data Flow](./DATA_FLOW.md)** - How data moves through the application
-5. **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy and interactions
-6. **[Implementation Details](./IMPLEMENTATION_DETAILS.md)** - Code patterns and technical implementation
-7. **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step flows for key features
-8. **[Design Decisions](#design-decisions)** - Why certain choices were made
-9. **[Performance & Optimization](#performance--optimization)** - Performance considerations
+3. **[Store Documentation](./STORE_DOCUMENTATION.md)** - Zustand stores and state management
+4. **[Screens Documentation](./SCREENS_DOCUMENTATION.md)** - Boot state machine and screen architecture
+5. **[UI Flow](./UI_FLOW.md)** - User interface navigation and screen transitions
+6. **[Data Flow](./DATA_FLOW.md)** - How data moves through the application
+7. **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy and interactions
+8. **[Implementation Details](./IMPLEMENTATION_DETAILS.md)** - Code patterns and technical implementation
+9. **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step flows for key features
+10. **[Design Decisions](#design-decisions)** - Why certain choices were made
+11. **[Performance & Optimization](#performance--optimization)** - Performance considerations
 
 ---
 
