@@ -172,11 +172,18 @@ yarn preview
 
 Visit the live portfolio at your deployed URL to explore the interactive Windows 11-inspired interface and view projects, experience, and skills.
 
+**For recruiters**:
+
+- [Wiki page](https://github.com/NatsuDrag9/portfolio-os/wiki/Recruiters)
+- [View Live Demo](https://natsudrag9.github.io/portfolio-os/)
+- [View Component Library](https://natsudrag9.github.io/portfolio-os/storybook/)
+
 **For Developers:**
 
 - **Component Library:** Run `yarn storybook` to view interactive component documentation with various states and use cases
 - **Customization Guide:** See [Customizing Your Portfolio](#customizing-your-portfolio) section above
 - **GitHub Repository:** [NatsuDrag9/portfolio-os](https://github.com/NatsuDrag9/portfolio-os)
+- [Detailed Documentation](https://github.com/NatsuDrag9/portfolio-os/wiki/For-Developers)
 
 ## Credits and References
 
