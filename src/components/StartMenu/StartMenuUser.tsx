@@ -50,8 +50,13 @@ function StartMenuUser() {
           )}
           <div className="start-menu__user-details">
             <h6 className="start-menu__user-details-title">{username}</h6>
-            <p className="start-menu__user-details-text">Local Account</p>
-            <p className="start-menu__user-details-text">(Personal)</p>
+            <p className="start-menu__user-details-text">
+              {isAdmin ? 'System Admin' : 'Explorer'}
+            </p>
+            {/* NOTE: Took the phrase from Claude */}
+            <p className="start-menu__user-details-text">
+              {isAdmin ? '(Owner)' : '(Window Shopping)'}
+            </p>
           </div>
         </div>
       )}

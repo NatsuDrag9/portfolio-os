@@ -301,3 +301,17 @@
     text-align: center;
   }
 }
+
+@media (max-width: $breakpoint-mobile) {
+  .start-menu {
+    .app-icon__image {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+
+    .app-icon__image--fluent {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}

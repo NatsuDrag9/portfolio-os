@@ -124,6 +124,8 @@
     cursor: pointer;
     transition: background-color 0.15s ease;
 
+    @include fade-in-element(0.5s);
+
     &:hover {
       background-color: var(--color-neutral-background2);
 
@@ -316,5 +318,17 @@
     left: 47%;
     width: 90%;
     height: 55vh;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-small) {
+  .start-menu {
+    height: 60vh;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-extra-small) {
+  .start-menu {
+    height: 70vh;
   }
 }

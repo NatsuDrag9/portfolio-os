@@ -193,3 +193,8 @@ Dustin Brett's portfolio - [link](https://dustinbrett.com/)
 
 **Design**
 Special thanks to [Jai Kishan](https://www.linkedin.com/in/jai-kishan-kuntumalla-906717156/) and [Satya Sai Teja](https://www.linkedin.com/in/kssaiteja/) for their feedback on UI and design.
+
+**Code**
+
+- [Github1s](https://github1s.com/) to display this repo in vscode app
+-

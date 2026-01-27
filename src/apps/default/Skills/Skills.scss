@@ -96,6 +96,8 @@
 
 @media (max-width: $breakpoint-mobile) {
   .skills {
+    gap: var(--spacing-vertical-m);
+
     &__bottom {
       grid-template-columns: repeat(1, 1fr);
     }

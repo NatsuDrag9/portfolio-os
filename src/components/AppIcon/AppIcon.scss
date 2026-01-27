@@ -466,7 +466,7 @@
 }
 
 // Mobile Small (< 450px)
-@media (max-width: #{$breakpoint-mobile - 1}) {
+@media (max-width: $breakpoint-mobile) {
   .app-icon {
     width: 5.6rem;
     padding: var(--spacing-horizontal-xxs);
@@ -483,6 +483,16 @@
 
     &__name {
       font-size: var(--font-size-base100);
+    }
+
+    //  &--start-menu &__image {
+    //   width: clamp(2.5rem, 4vw, 3.5rem);
+    //   height: clamp(2.5rem, 4vw, 3.5rem);
+    // }
+
+    &--start-menu &__image--fluent {
+      width: clamp(3rem, 4vw, 4rem);
+      height: clamp(3rem, 4vw, 4rem);
     }
   }
 }

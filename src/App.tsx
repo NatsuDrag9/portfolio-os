@@ -14,9 +14,11 @@ function App() {
   const { bootStatus } = useBootStatus();
   const { currentTheme } = useSystemUIState();
 
-  // Check if current URL is /portfolio
+  // Check if current URL is /portfolio (dev) or #/portfolio (GitHub Pages)
   const isPortfolioRoute = useMemo(
-    () => window.location.pathname.endsWith('/portfolio'),
+    () =>
+      window.location.pathname.endsWith('/portfolio') ||
+      window.location.hash === '#/portfolio',
     []
   );
 

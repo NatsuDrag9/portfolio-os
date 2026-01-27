@@ -1,7 +1,8 @@
 /* Breakpoints - Device-Based (Firefox DevTools Reference) */
 
 // Mobile
-$breakpoint-mobile-small: 390px; // iPhone SE, small phones
+$breakpoint-mobile-extra-small: 380px; // iPhone SE and smaller phones
+$breakpoint-mobile-small: 390px; // small phones
 $breakpoint-mobile: 450px; // Standard mobile
 $breakpoint-mobile-lg: 576px; // Large phones (iPhone 12 Pro)
 

@@ -130,3 +130,11 @@
     overflow: hidden;
   }
 }
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .window-container {
+    &__paint {
+      height: 89vh;
+    }
+  }
+}

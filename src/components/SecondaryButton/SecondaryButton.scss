@@ -66,3 +66,13 @@
     color: var(--color-neutral-foreground1);
   }
 }
+
+@media (max-width: $breakpoint-mobile) {
+  .secondary-button {
+    height: 2.5rem;
+
+    &__name {
+      font-size: var(--font-size-base200);
+    }
+  }
+}

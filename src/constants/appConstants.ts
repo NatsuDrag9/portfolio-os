@@ -3,8 +3,10 @@ export const FIREFOX_LINK = 'https://duckduckgo.com/';
 export const GITHUB_LINK = 'https://github.com/NatsuDrag9';
 
 // Portfolio links - dynamically constructed from base URL
+// Uses hash-based routing for GitHub Pages compatibility (#/portfolio)
 const BASE_URL = window.location.origin;
-export const PORTFOLIO_LINK = `${BASE_URL}/portfolio`;
+const PATHNAME = window.location.pathname.replace(/\/$/, ''); // Remove trailing slash
+export const PORTFOLIO_LINK = `${BASE_URL}${PATHNAME}/#/portfolio`;
 export const PORTFOLIO_ABOUT_LINK = `${PORTFOLIO_LINK}#about`;
 export const PORTFOLIO_PROJECTS_LINK = `${PORTFOLIO_LINK}#projects`;
 export const PORTFOLIO_SKILLS_LINK = `${PORTFOLIO_LINK}#skills`;
