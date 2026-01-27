@@ -97,23 +97,41 @@ src/
 
 ### 2. Zustand State Management
 
-- **Single store** with separate slices by domain
+- **Multiple stores** for different domains (Auth, SystemUI, WorkspaceState, BootStatus, Settings)
 - **Minimal boilerplate** - subscriptions and actions
 - **Direct state mutations** - simpler than Redux
 - No middleware or complex action creators
 
-**Store Structure:**
+**Store Overview:**
+
+The app uses 4 specialized stores from `src/store/store.ts`:
+
+| Store                 | Responsibility                               |
+| --------------------- | -------------------------------------------- |
+| **useWorkspaceState** | Window management, desktop layout, taskbar   |
+| **useSystemUIState**  | Theme, brightness, UI preferences, date/time |
+| **useAuth**           | User authentication, permissions             |
+| **useBootStatus**     | Boot sequence, startup operations            |
+
+**Example Usage:**
 
 ```typescript
-// Example: Window management
-const useWindowStore = create((set) => ({
-  windows: [],
-  activeWindowId: null,
-  openWindow: (appId, config) => set(/* ... */),
-  closeWindow: (windowId) => set(/* ... */),
-  setActiveWindow: (windowId) => set(/* ... */),
-}));
+// Window management
+const { addWindow, activeWindows } = useWorkspaceState();
+addWindow('portfolio-default', appMetadata);
+
+// Theme switching
+const { currentTheme, setTheme } = useSystemUIState();
+setTheme('dark');
+
+// Permission checking
+const { isAdmin } = useAuth();
+
+// Boot status
+const { bootStatus } = useBootStatus();
 ```
+
+**For detailed store documentation** including all state properties, actions, and usage examples, see **[Store Documentation](./STORE_DOCUMENTATION.md)**.
 
 ### 3. Responsive Design
 
@@ -131,99 +149,27 @@ const useWindowStore = create((set) => ({
 
 ---
 
-## Design Decisions
-
-### Why Zustand?
-
-- Less boilerplate than Redux
-- Easier learning curve
-- Perfect for medium-sized apps
-- Better TypeScript inference
-- Minimal overhead
-
-### Why React Hooks?
-
-- Modern React patterns
-- Simpler state management in components
-- Easier to test and refactor
-- Code reuse through custom hooks
-
-### Why Vite?
-
-- Fast development server (instant HMR)
-- Optimized production builds
-- Native ES modules support
-- Great plugin ecosystem
-- Smaller bundle size than Webpack
-- Have professional experience
-
-### Why SCSS?
-
-- Nesting reduces repetition
-- Variables and mixins for consistency
-- Better maintainability
-- BEM methodology for organization
-- Have professional experience
-
-### Why Component-Based?
-
-- Reusability and composition
-- Easier testing and maintenance
-- Scalable architecture
-- Clear separation of concerns
-- Documented with Storybook
-
----
-
-## Performance & Optimization
-
-### Current Optimizations
-
-- **Code splitting** at route level (if routing is added)
-- **Tree-shaking** enabled in production build
-- **Lazy loading** for heavy components
-- **Image optimization** - compressed assets
-- **SCSS nesting** - generated CSS only for used styles
-
-### Monitoring
-
-```bash
-# Analyze bundle size
-VITE_BUNDLE_ANALYZE=true yarn build
-
-# Check build output
-ls -lh dist/
-
-# Preview production build
-yarn preview
-```
-
-### Best Practices
-
-- Use `React.memo()` for expensive components
-- Use `useMemo()` for expensive computations
-- Use `useCallback()` for stable function references
-- Keep components focused and small
-- Lazy load heavy libraries (recharts, etc.)
-
----
-
 ## Detailed Documentation
 
 For in-depth information on specific aspects, see:
 
-### User Interactions
+### State Management
 
-- **[UI Flow](./UI_FLOW.md)** - How screens navigate and transition
-- **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step flows with code
+- **[Store Documentation](./STORE_DOCUMENTATION.md)** - Complete reference for all Zustand stores (useWorkspaceState, useSystemUIState, useAuth, useBootStatus), including state properties, actions, and usage examples
 
-### Technical Implementation
+### Screen Architecture & Navigation
+
+- **[Screens Documentation](./SCREENS_DOCUMENTATION.md)** - Technical boot state machine, screen architecture, state management per screen, and navigation conditions between different states
+- **[UI Flow](./UI_FLOW.md)** - User journeys, visual flows, and user interactions from the user perspective when navigating through screens and features
+
+### Implementation Details
 
 - **[Data Flow](./DATA_FLOW.md)** - How data moves through the application
-- **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy
+- **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy and interactions
+- **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step code walkthroughs of key features with real implementations
 - **[Implementation Details](./IMPLEMENTATION_DETAILS.md)** - Code patterns and examples
 
-### Project Setup
+### Customization & Setup
 
 - **[Customization Guide](./CUSTOMIZATION_GUIDE.md)** - Personalize your portfolio
 - **[Helper Scripts](./HELPER_SCRIPTS.md)** - Available npm/yarn commands

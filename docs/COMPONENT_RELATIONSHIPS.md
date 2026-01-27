@@ -10,15 +10,16 @@ Visual representation of component hierarchy, dependencies, and data flow betwee
 graph TD
     A["App.tsx<br/>Root Component"]
 
-    A --> B["DefaultApp<br/>Desktop Environment"]
+    A --> B["Workspace.tsx<br/>Desktop Environment"]
 
     B --> B1["Desktop Background"]
     B --> B2["Taskbar Component"]
     B --> B3["StartMenu Component"]
-    B --> B4["System Tray"]
-    B --> B5["Window Container<br/>Maps openWindows"]
+    B --> B4["WindowManager<br/>Maps activeWindows"]
 
-    B5 --> C["Window Component<br/>for each app"]
+    B4 --> B5["WindowContainer<br/>Drag/Resize Wrapper"]
+
+    B5 --> C["App Component<br/>based on windowName"]
 
     C --> C1["Portfolio App"]
     C --> C2["File Explorer"]
@@ -79,29 +80,30 @@ graph TD
 
 ```mermaid
 graph TD
-    A["DefaultApp.tsx<br/>Desktop Wrapper"]
+    A["Workspace.tsx<br/>Desktop Wrapper"]
 
-    A --> A1["useWindowStore<br/>Get openWindows"]
+    A --> A1["useWorkspaceState<br/>Get activeWindows"]
+    A --> A2["useSystemUIState<br/>Get UI state"]
 
     A --> B["Render Desktop<br/>Background"]
-    A --> C["Render Windows<br/>Map openWindows Array"]
+    A --> C["Render WindowManager<br/>Map activeWindows Array"]
     A --> D["Render Taskbar"]
     A --> E["Render StartMenu"]
 
-    C --> C1["Window Component"]
-    C1 --> C1a["Window Frame<br/>Title, Close Btn"]
-    C1 --> C1b["App Content<br/>Based on appId"]
+    C --> C1["WindowContainer<br/>for each window"]
+    C1 --> C1a["Window Frame<br/>Title Bar, Controls"]
+    C1 --> C1b["App Content<br/>Based on windowName"]
 
     C1b --> C1b1["Portfolio App"]
     C1b --> C1b2["File Explorer"]
     C1b --> C1b3["GitHub App"]
 
-    D --> D1["Taskbar Icons<br/>Show openWindows"]
-    D1 --> D1a["onClick: setActiveWindow"]
+    D --> D1["Taskbar Icons<br/>Show activeWindows"]
+    D1 --> D1a["onClick: update z-index"]
 
-    E --> E1["Start Menu Icon<br/>toggleStartMenu"]
+    E --> E1["Start Menu Icon<br/>setStartMenuOpen"]
     E --> E2["App Icons Grid"]
-    E2 --> E2a["onClick: openWindow"]
+    E2 --> E2a["onClick: addWindow"]
 ```
 
 ---
@@ -111,19 +113,20 @@ graph TD
 ```mermaid
 graph LR
     A["App.tsx"]
-    B["DefaultApp"]
-    C["useWindowStore"]
-    D["Portfolio"]
-    E["PortfolioNavbar"]
-    F["Section Components"]
+    B["Workspace.tsx"]
+    C["useWorkspaceState"]
+    D["WindowManager"]
+    E["WindowContainer"]
+    F["Portfolio"]
+    G["PortfolioNavbar"]
 
     A --> B
     B --> C
     B --> D
     D --> E
-    D --> F
-    E --> E1["Custom Hooks<br/>useMediaQuery"]
-    D --> C
+    E --> F
+    F --> G
+    G --> H["Custom Hooks<br/>useMediaQuery"]
 ```
 
 ---
@@ -197,17 +200,19 @@ graph TD
     A["src/components/"]
 
     A --> B["PortfolioNavbar"]
-    A --> C["Window"]
-    A --> D["TaskBar"]
+    A --> C["WindowContainer"]
+    A --> D["Taskbar"]
     A --> E["StartMenu"]
-    A --> F["Button"]
-    A --> G["Icon"]
+    A --> F["WindowManager"]
+    A --> G["Button"]
+    A --> H["Icon"]
 
     B -->|Used in| B1["Portfolio App"]
-    C -->|Used in| C1["DefaultApp"]
-    C1 -->|For Each App| C1a["Portfolio<br/>FileExplorer<br/>GitHub<br/>Settings"]
-    D -->|Used in| D1["DefaultApp"]
-    E -->|Used in| E1["DefaultApp"]
+    C -->|Used in| C1["WindowManager"]
+    C1 -->|Wraps Each App| C1a["Portfolio<br/>FileExplorer<br/>GitHub<br/>Settings"]
+    D -->|Used in| D1["Workspace"]
+    E -->|Used in| E1["Workspace"]
+    F -->|Used in| F1["Workspace"]
 ```
 
 ---
@@ -215,12 +220,14 @@ graph TD
 ## Hierarchy Summary by Type
 
 ### Container Components
+
 - `App.tsx` - Root
 - `DefaultApp.tsx` - Desktop wrapper
 - `Portfolio.tsx` - Portfolio main
 - `PortfolioSection.tsx` - Conditional renderer (alternate)
 
 ### Presentational Components
+
 - `PortfolioNavbar` - Navigation
 - `Sidebar` - Info display
 - `AboutMe` - About section
@@ -230,6 +237,7 @@ graph TD
 - `DownloadableResume` - Resume section
 
 ### Shared/UI Components
+
 - `Window` - Window frame
 - `TaskBar` - Bottom taskbar
 - `StartMenu` - App launcher
@@ -240,6 +248,7 @@ graph TD
 ## Component Communication Patterns
 
 ### Direct Props (Parent → Child)
+
 ```
 Portfolio.tsx
   ↓
@@ -249,6 +258,7 @@ Portfolio.tsx
 ```
 
 ### Callbacks (Child → Parent)
+
 ```
 Button.onClick()
   ↓
@@ -258,6 +268,7 @@ Button.onClick()
 ```
 
 ### Store (Global State)
+
 ```
 useWindowStore Hook
   ↓
@@ -267,6 +278,7 @@ useWindowStore Hook
 ```
 
 ### Context (if used)
+
 ```
 ThemeContext
   ↓
@@ -283,13 +295,13 @@ ThemeContext
 graph TD
     A["App Mounts"]
     B["Initialize Zustand Stores"]
-    C["Render DefaultApp"]
+    C["Render Workspace"]
     D["User Clicks Portfolio Icon"]
-    E["dispatch openWindow"]
-    F["Window Added to Store"]
-    G["DefaultApp Re-renders"]
-    H["Map openWindows"]
-    I["Render Window Component"]
+    E["dispatch addWindow"]
+    F["Window Added to activeWindows"]
+    G["Workspace Re-renders"]
+    H["WindowManager Maps activeWindows"]
+    I["Render WindowContainer"]
     J["Render Portfolio App"]
     K["Portfolio.tsx Mounts"]
     L["useState activeSection"]
@@ -301,80 +313,3 @@ graph TD
 ```
 
 ---
-
-## Component Size & Responsibility
-
-| Component | Size | Responsibility |
-|-----------|------|-----------------|
-| **App.tsx** | Small | Root, setup |
-| **DefaultApp.tsx** | Medium | Desktop wrapper |
-| **Portfolio.tsx** | Medium | Section management |
-| **PortfolioNavbar** | Small | Navigation UI |
-| **Sidebar** | Small | Info display |
-| **AboutMe** | Small | Content display |
-| **Projects** | Medium | List + cards |
-| **Skills** | Small | Grid display |
-| **WorkExperience** | Medium | List + cards |
-
----
-
-## Anti-Patterns to Avoid
-
-### ❌ Props Drilling Too Deep
-```
-Parent → Child1 → Child2 → Child3 → Child4
-With props that only Child4 uses
-```
-**Solution:** Use store or context
-
-### ❌ Logic in Presentational Components
-```
-// ❌ Wrong
-function ProjectCard({ project }) {
-  const [expanded, setExpanded] = useState(false);
-  const formattedDate = formatDate(project.date);
-  return ...
-}
-```
-**Solution:** Keep presentation, move logic to parent
-
-### ❌ Circular Dependencies
-```
-ComponentA imports ComponentB
-ComponentB imports ComponentA
-```
-**Solution:** Extract shared logic to separate file
-
----
-
-## Best Practices Applied
-
-✅ **Separation of Concerns**
-- Container components handle logic
-- Presentational components handle UI
-
-✅ **Single Responsibility**
-- Each component has one main job
-- Sidebar displays info, Portfolio manages state
-
-✅ **Reusability**
-- Common components in `/components/`
-- Used across different sections
-
-✅ **Type Safety**
-- Props interfaces defined
-- No implicit prop types
-
-✅ **Responsive**
-- Mobile-first design
-- Hooks like `useMediaQuery` for adaptation
-
----
-
-## Related Documentation
-
-- [Implementation Details](./IMPLEMENTATION_DETAILS.md) - Code patterns
-- [Data Flow](./DATA_FLOW.md) - How data flows
-- [UI Flow](./UI_FLOW.md) - User interactions
-- [Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md) - Real examples
-- [Design & Architecture](./DESIGN_AND_ARCHITECTURE.md) - Overview

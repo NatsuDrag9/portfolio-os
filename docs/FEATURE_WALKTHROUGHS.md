@@ -6,166 +6,239 @@ Step-by-step code walkthroughs of key features with actual implementation detail
 
 ## Feature 1: Opening a Window (Portfolio App)
 
-### Step 1: User Clicks Start Menu Icon
+### Step 1: User Toggles Start Menu
 
-**File:** `src/apps/recommended/DefaultApp.tsx`
+**File:** `src/screens/Workspace/Workspace.tsx`
 
-```typescript
-function StartMenuIcon() {
-  const toggleStartMenu = useUiStore((state) => state.toggleStartMenu);
-
-  return (
-    <button onClick={() => toggleStartMenu()}>
-      Start Menu Icon
-    </button>
-  );
-}
-```
-
-### Step 2: Start Menu Opens, User Clicks Portfolio
-
-**File:** `src/apps/recommended/StartMenu.tsx`
+The Workspace component renders the StartMenu component:
 
 ```typescript
-function StartMenu() {
-  const startMenuOpen = useUiStore((state) => state.startMenuOpen);
-  const openWindow = useWindowStore((state) => state.openWindow);
-
-  const handleAppClick = (appId: string) => {
-    openWindow(appId, {
-      position: { x: 100, y: 100 },
-      size: { width: 800, height: 600 },
-    });
+function Workspace() {
+  // ...
+  const renderWithLoader = () => {
+    return (
+      <>
+        <Desktop />
+        <WindowManager />
+        <StartMenu />  {/* Start Menu is rendered here */}
+      </>
+    );
   };
 
   return (
-    startMenuOpen && (
-      <div className="start-menu">
-        <div className="app-grid">
-          {APP_ICONS.map((app) => (
-            <button
-              key={app.id}
-              onClick={() => handleAppClick(app.id)}
-              className="app-icon"
-            >
-              {app.icon} {app.name}
-            </button>
-          ))}
-        </div>
-      </div>
-    )
+    <div className="workspace">
+      {/* ... */}
+      {renderWithLoader()}
+      <Taskbar />
+    </div>
   );
 }
 ```
 
-### Step 3: Store Updates with openWindow Action
+### Step 2: Start Menu Opens, User Clicks Portfolio App
 
-**File:** `src/store/useWindowStore.ts`
+**File:** `src/components/StartMenu/StartMenu.tsx`
+
+When user clicks an app icon, it calls `addWindow()` from the store:
 
 ```typescript
-openWindow: (appId, config) => {
+// StartMenu retrieves addWindow action from store
+const { addWindow } = useWorkspaceState();
+
+// When user clicks Portfolio icon:
+const handleAppClick = (appMetadata: AppMetadata) => {
+  addWindow(appMetadata.id, appMetadata);
+};
+```
+
+### Step 3: Store Updates Windows with addWindow Action
+
+**File:** `src/store/store.ts` - `useWorkspaceState`
+
+```typescript
+addWindow: (appId: string, appMetadata: AppMetadata) => {
   set((state) => {
-    const newWindow: WindowInstance = {
-      id: `${appId}-${Date.now()}`, // 'portfolio-default-1234567'
-      appId,
-      position: config.position || { x: 100, y: 100 },
-      size: config.size || { width: 800, height: 600 },
-      zIndex: state.nextZIndex,       // Auto-increment z-index
-      isMinimized: false,
-      ...config,
+    // Increment instance counter for this app
+    const instanceCount = (state.windowInstanceCounters[appId] || 0) + 1;
+    const windowId = `${appId}-${instanceCount}`;
+
+    // Create new window data
+    const newWindow: WindowData = {
+      id: windowId,
+      title: appMetadata.appName,
+      windowName: appMetadata.windowName,
+      isMaximized: 'normal',
+      previousDisplayState: 'normal',
+      position: { x: 100, y: 80 },
+      zIndex: state.activeWindows.length + 1,
+      size: { width: 700, height: 400 },
+      customTheme: undefined,
+      snapPosition: 'fullscreen',
     };
 
     return {
-      openWindows: [...state.openWindows, newWindow], // Add to array
-      activeWindowId: newWindow.id,                   // Set as active
-      nextZIndex: state.nextZIndex + 1,              // Increment
+      activeWindows: [...state.activeWindows, newWindow],
+      windowInstanceCounters: {
+        ...state.windowInstanceCounters,
+        [appId]: instanceCount,
+      },
     };
   });
-}
+};
 ```
 
-### Step 4: DefaultApp Re-renders with New Window
+### Step 4: WindowManager Maps Windows to Components
 
-**File:** `src/apps/recommended/DefaultApp.tsx`
+**File:** `src/components/WindowManager/WindowManager.tsx`
+
+The WindowManager subscribes to `activeWindows` and renders each window:
 
 ```typescript
-function DefaultApp() {
-  const openWindows = useWindowStore((state) => state.openWindows);
+function WindowManager() {
+  const { activeWindows } = useWorkspaceState();
+
+  const renderWindowContent = (windowName: string, windowId: string) => {
+    switch (windowName) {
+      case 'Portfolio':
+        return <Portfolio key={windowId} />;
+      case 'PortfolioSection': {
+        // Extract appId from windowId (format: 'portfolio-about-1')
+        const appId = windowId.substring(0, windowId.lastIndexOf('-'));
+        return <PortfolioSection key={windowId} appId={appId} />;
+      }
+      // ... other cases
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div className="desktop">
-      <Background />
-      <Taskbar />
-      <StartMenu />
+    <>
+      {activeWindows
+        .filter((window): window is typeof window & { id: string; windowName: string } =>
+          !!window.id && !!window.windowName
+        )
+        .map((window) => {
+          const content = renderWindowContent(window.windowName, window.id);
+          if (!content) return null;
 
-      {/* Map openWindows and render each */}
-      {openWindows.map((windowData) => (
-        <Window key={windowData.id} windowData={windowData}>
-          <AppContainer appId={windowData.appId} />
-        </Window>
-      ))}
-    </div>
+          return (
+            <WindowContainer key={window.id} windowId={window.id}>
+              {content}
+            </WindowContainer>
+          );
+        })}
+    </>
   );
 }
 ```
 
-### Step 5: Window Component Renders with App Inside
+### Step 5: WindowContainer Renders Window with Controls
 
-**File:** `src/components/Window/Window.tsx`
+**File:** `src/components/WindowContainer/WindowContainer.tsx`
+
+The WindowContainer component wraps the app content with window controls (minimize, maximize, close):
 
 ```typescript
-function Window({ windowData, children }: WindowProps) {
-  const updatePosition = useWindowStore((state) => state.updateWindowPosition);
-  const setActiveWindow = useWindowStore((state) => state.setActiveWindow);
+function WindowContainer({ children, windowId }: WindowContainerProps) {
+  const {
+    activeWindows,
+    setWindowIsMaximized,
+    requestCloseWindow,
+    updateWindowPosition,
+    updateWindowSize,
+  } = useWorkspaceState();
 
-  const windowStyle = {
-    transform: `translate(${windowData.position.x}px, ${windowData.position.y}px)`,
-    width: `${windowData.size.width}px`,
-    height: `${windowData.size.height}px`,
-    zIndex: windowData.zIndex,
-  };
+  const windowData = useMemo(
+    () => activeWindows.find((w) => w.id === windowId),
+    [activeWindows, windowId]
+  );
 
-  const handleDrag = (e: MouseEvent) => {
-    // Update position while dragging
-    updatePosition(windowData.id, e.clientX, e.clientY);
+  const handleWindowDisplayClick = (displayType: WindowDisplayType) => {
+    if (displayType === 'maximized') {
+      const newState =
+        windowData?.isMaximized === 'maximized' ? 'normal' : 'maximized';
+      setWindowIsMaximized(windowId, newState);
+      return;
+    }
+    setWindowIsMaximized(windowId, displayType);
   };
 
   return (
-    <div
-      className="window"
-      style={windowStyle}
-      onMouseDown={() => setActiveWindow(windowData.id)}
+    <Rnd
+      position={{
+        x: isMobileFullscreen ? 0 : defaultX,
+        y: isMobileFullscreen ? 0 : defaultY,
+      }}
+      size={{
+        width: isMobileFullscreen ? '100%' : defaultWidth,
+        height: isMobileFullscreen ? '100%' : defaultHeight,
+      }}
+      onDragStop={(_e, d) => {
+        updateWindowPosition(windowId, d.x, d.y);
+      }}
+      onResizeStop={(_e, _direction, ref, _delta, position) => {
+        updateWindowSize(windowId, ref.offsetWidth, ref.offsetHeight);
+        updateWindowPosition(windowId, position.x, position.y);
+      }}
     >
-      <div className="window__title-bar">
-        <span>{windowData.appId}</span>
-        <button>Close</button>
+      <div className="window-container__top">
+        <h5 className="window-container__title">
+          {windowData?.title ?? 'Untitled'}
+        </h5>
+        <div className="window-container__window-buttons">
+          <button onClick={() => handleWindowDisplayClick('minimized')}>
+            <SubtractRegular />
+          </button>
+          <button onClick={() => handleWindowDisplayClick('maximized')}>
+            <SquareMultipleRegular />
+          </button>
+          <button onClick={() => requestCloseWindow(windowId)}>
+            <DismissRegular />
+          </button>
+        </div>
       </div>
-      <div className="window__content">{children}</div>
-    </div>
+      <div className="window-container__paint">{children}</div>
+    </Rnd>
   );
 }
 ```
 
-### Step 6: Portfolio App Renders Inside Window
+### Step 6: Portfolio App Renders Inside WindowContainer
 
 **File:** `src/apps/default/Portfolio/Portfolio.tsx`
 
 ```typescript
 function Portfolio() {
-  const [activeSection, setActiveSection] = useState('portfolio-about');
+  const [activeSection, setActiveSection] =
+    useState<PortfolioSectionId>('portfolio-about');
+
+  const handleSectionChange = (id: string | number) => {
+    // Trigger resume download if Resume button is clicked
+    if (id === 'portfolio-resume') {
+      const resumePath = '/portfolio-os/Rohit_Resume_Frontend_2.pdf';
+      const link = document.createElement('a');
+      link.href = resumePath;
+      link.download = 'Rohit_Resume_Frontend.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    setActiveSection(id as PortfolioSectionId);
+  };
+
+  const navButtons: ButtonDetailProps[] = PORTFOLIO_NAV_BUTTONS.map((btn) => ({
+    ...btn,
+    isActive: btn.id === activeSection,
+    onButtonClick: handleSectionChange,
+  }));
 
   return (
-    <div className="portfolio">
-      <Sidebar /> {/* Shows personal info */}
+    <div className="portfolio dark-theme">
+      <Sidebar />
       <div className="portfolio__main">
-        <PortfolioNavbar
-          buttons={navButtons}
-          onButtonClick={(id) => setActiveSection(id)}
-        />
-        <div className="portfolio__section-wrapper">
-          {/* Displays selected section */}
-          {activeSection === 'portfolio-about' && <AboutMe />}
-        </div>
+        <PortfolioNavbar buttons={navButtons} />
+        <div className="portfolio__section-wrapper">{renderSection()}</div>
       </div>
     </div>
   );
@@ -173,100 +246,141 @@ function Portfolio() {
 ```
 
 ### Result
-✅ User sees Portfolio app in a draggable window on desktop
+
+✅ User sees Portfolio app in a draggable, resizable window on desktop
 
 ---
 
 ## Feature 2: Resume Download
 
-### Step 1: User in Portfolio App, Clicks Resume Button
+### Step 1: User Clicks Resume Button in Portfolio Navbar
 
 **File:** `src/components/PortfolioNavbar/PortfolioNavbar.tsx`
 
-```typescript
-const buttons = [
-  {
-    id: 'portfolio-resume',
-    name: 'Resume',
-    isActive: id === 'portfolio-resume',
-    onButtonClick: handleSectionChange, // Parent callback
-  },
-  // ... other buttons
-];
+The PortfolioNavbar receives button data with a callback:
 
+```typescript
+interface ButtonDetailProps {
+  id: string;
+  name: string;
+  image: React.ComponentType;
+  isActive: boolean;
+  onButtonClick: (id: string | number) => void;
+}
+
+// Buttons are passed from Portfolio component with onButtonClick = handleSectionChange
 {buttons.map((btn) => (
-  <button key={btn.id} onClick={() => btn.onButtonClick(btn.id)}>
-    {btn.name}
+  <button
+    key={btn.id}
+    onClick={() => btn.onButtonClick(btn.id)}
+    className={`portfolio-navbar__button ${
+      btn.isActive ? 'portfolio-navbar__button--active' : ''
+    }`}
+  >
+    <ItemIcon image={btn.image} />
+    {shouldShowName && (
+      <span className="portfolio-navbar__button-name">
+        {btn.name}
+      </span>
+    )}
   </button>
 ))}
 ```
 
-### Step 2: Parent Component (Portfolio) Handles Click
+### Step 2: Portfolio Component Handles Resume Click
 
 **File:** `src/apps/default/Portfolio/Portfolio.tsx`
 
+When user clicks Resume button, `handleSectionChange` is called:
+
 ```typescript
 const handleSectionChange = (id: string | number) => {
-  // SPECIAL CASE: Resume button has download logic
+  // Trigger resume download if Resume button is clicked
   if (id === 'portfolio-resume') {
-    // Create temporary anchor element
     const resumePath = '/portfolio-os/Rohit_Resume_Frontend_2.pdf';
     const link = document.createElement('a');
-
-    // Configure anchor
     link.href = resumePath;
-    link.download = 'Rohit_Resume_Frontend.pdf'; // Filename user sees
-
-    // Add to DOM temporarily
+    link.download = 'Rohit_Resume_Frontend.pdf';
     document.body.appendChild(link);
-
-    // Trigger browser download
     link.click();
-
-    // Clean up - remove from DOM
     document.body.removeChild(link);
   }
-
-  // Update section state (happens regardless)
   setActiveSection(id as PortfolioSectionId);
 };
 ```
 
 ### Step 3: Browser Initiates Download
 
-**HTTP Request:**
+The browser receives the download request and starts downloading the PDF:
+
 ```
 GET /portfolio-os/Rohit_Resume_Frontend_2.pdf HTTP/1.1
-Host: yourusername.github.io
+Host: natsudrag9.github.io
+Accept: application/pdf
 ```
 
 **Server Response:**
+
 ```
 HTTP/1.1 200 OK
 Content-Type: application/pdf
 Content-Disposition: attachment; filename="Rohit_Resume_Frontend.pdf"
+Content-Length: [PDF SIZE]
 [PDF FILE CONTENT]
 ```
 
-### Step 4: Resume Section Renders
+### Step 4: DownloadableResume Component Renders
 
 **File:** `src/apps/default/DownloadableResume/DownloadableResume.tsx`
 
+Once the Resume section is selected, this component renders:
+
 ```typescript
 function DownloadableResume() {
+  // Automatic download is now triggered in Portfolio.tsx handleSectionChange
+  // and in PortfolioSection.tsx when opened from desktop
+
   return (
     <div className="download-resume">
       <h6 className="download-resume__title">
         Your resume is being downloaded...
       </h6>
-      {/* Button removed - download happens immediately */}
     </div>
   );
 }
 ```
 
+### Step 5: Desktop Resume Download (PortfolioSection)
+
+When user opens Resume from desktop/start menu (PortfolioSection):
+
+**File:** `src/apps/default/Portfolio/PortfolioSection.tsx`
+
+```typescript
+function PortfolioSection({ appId }: PortfolioSectionProps) {
+  const hasDownloadedRef = useRef(false);
+
+  useEffect(() => {
+    // Trigger resume download when Resume section is opened (only once)
+    if (appId === 'portfolio-resume' && !hasDownloadedRef.current) {
+      hasDownloadedRef.current = true;
+      const resumePath = '/portfolio-os/Rohit_Resume_Frontend_2.pdf';
+      const link = document.createElement('a');
+      link.href = resumePath;
+      link.download = 'Rohit_Resume_Frontend.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }, [appId]);
+
+  return <div className="portfolio-section dark-theme">{renderSection()}</div>;
+}
+```
+
 ### Result
-✅ Resume downloads to user's computer immediately when Resume button is clicked
+
+✅ Resume downloads immediately whether clicked from navbar or opened as a separate window
 
 ---
 
@@ -368,6 +482,7 @@ const navButtons = PORTFOLIO_NAV_BUTTONS.map((btn) => ({
 **Projects button now has `isActive: true`**
 
 **CSS:**
+
 ```scss
 .portfolio-navbar__button {
   &--active {
@@ -378,6 +493,7 @@ const navButtons = PORTFOLIO_NAV_BUTTONS.map((btn) => ({
 ```
 
 ### Result
+
 ✅ Projects section displays with active button styling
 
 ---
@@ -492,115 +608,119 @@ User resizes browser below 450px breakpoint:
 ```
 
 ### Result
+
 ✅ Navigation adapts automatically to screen size
 
 ---
 
-## Feature 5: Dragging Windows
+## Feature 5: Dragging and Resizing Windows
 
-### Step 1: User Mouse Down on Window Title Bar
+### Step 1: WindowContainer Uses React-RND for Drag & Resize
 
-**File:** `src/components/Window/Window.tsx`
+**File:** `src/components/WindowContainer/WindowContainer.tsx`
+
+The WindowContainer component wraps windows with the `Rnd` (React-No-Drag) library for dragging and resizing:
 
 ```typescript
-function Window({ windowData }: WindowProps) {
-  const updateWindowPosition = useWindowStore(
-    (state) => state.updateWindowPosition
+function WindowContainer({ children, windowId }: WindowContainerProps) {
+  const {
+    activeWindows,
+    updateWindowPosition,
+    updateWindowSize,
+  } = useWorkspaceState();
+
+  const windowData = useMemo(
+    () => activeWindows.find((w) => w.id === windowId),
+    [activeWindows, windowId]
   );
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const startX = e.clientX;
-    const startY = e.clientY;
-    const initialX = windowData.position.x;
-    const initialY = windowData.position.y;
-
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      const deltaX = moveEvent.clientX - startX;
-      const deltaY = moveEvent.clientY - startY;
-
-      // Calculate new position
-      const newX = initialX + deltaX;
-      const newY = initialY + deltaY;
-
-      // Update store immediately (smooth drag)
-      updateWindowPosition(windowData.id, newX, newY);
-    };
-
-    const handleMouseUp = () => {
-      // Stop listening to movement
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
+  const defaultX = windowData?.position?.x ?? 50;
+  const defaultY = windowData?.position?.y ?? 50;
+  const defaultWidth = windowData?.size?.width ?? 450;
+  const defaultHeight = windowData?.size?.height ?? 300;
 
   return (
-    <div
-      className="window"
-      style={{
-        transform: `translate(${windowData.position.x}px, ${windowData.position.y}px)`,
+    <Rnd
+      position={{ x: defaultX, y: defaultY }}
+      size={{ width: defaultWidth, height: defaultHeight }}
+      minWidth={600}
+      minHeight={400}
+      bounds="parent"
+      onDragStop={(_e, d) => {
+        updateWindowPosition(windowId, d.x, d.y);
       }}
+      onResizeStop={(_e, _direction, ref, _delta, position) => {
+        updateWindowSize(windowId, ref.offsetWidth, ref.offsetHeight);
+        updateWindowPosition(windowId, position.x, position.y);
+      }}
+      dragHandleClassName="window-container__top"
+      className={`window-container window-container--${windowData?.isMaximized}`}
     >
-      <div
-        className="window__title-bar"
-        onMouseDown={handleMouseDown}
-      >
-        {/* Title */}
+      <div className="window-container__top">
+        <h5 className="window-container__title">
+          {windowData?.title ?? 'Untitled'}
+        </h5>
+        {/* Window control buttons (minimize, maximize, close) */}
       </div>
-      {/* Content */}
-    </div>
+      <div className="window-container__paint">{children}</div>
+    </Rnd>
   );
 }
 ```
 
-### Step 2: Store Updates Position
+### Step 2: User Drags Window Title Bar
 
-**File:** `src/store/useWindowStore.ts`
+When user clicks and holds on the window title bar (the `dragHandleClassName="window-container__top"`), Rnd library:
+
+1. Captures the mouse down event
+2. Tracks mouse movement
+3. Continuously updates window position while dragging
+4. Fires `onDragStop` callback when mouse is released
+
+### Step 3: Store Updates Position on Drag Stop
+
+**File:** `src/store/store.ts`
+
+When drag ends, the store is updated with the new position:
 
 ```typescript
-updateWindowPosition: (windowId, x, y) => {
+updateWindowPosition: (windowId: string, x: number, y: number) => {
   set((state) => ({
-    openWindows: state.openWindows.map((w) =>
-      w.id === windowId
-        ? { ...w, position: { x, y } } // Update position
-        : w
+    activeWindows: state.activeWindows.map((w) =>
+      w.id === windowId ? { ...w, position: { x, y } } : w
     ),
   }));
-}
+};
 ```
 
-### Step 3: DOM Updates with Transform
+### Step 4: User Resizes Window
+
+Similarly for resizing, when user drags a window edge/corner:
+
+1. Rnd detects resize action
+2. Fires `onResizeStop` callback with new dimensions and position
+3. Both `updateWindowSize` and `updateWindowPosition` are called
 
 ```typescript
-style={{
-  transform: `translate(${newX}px, ${newY}px)`,
-}}
+updateWindowSize: (windowId: string, width: number, height: number) => {
+  set((state) => ({
+    activeWindows: state.activeWindows.map((w) =>
+      w.id === windowId ? { ...w, size: { width, height } } : w
+    ),
+  }));
+};
 ```
 
-**CSS:**
-```scss
-.window {
-  position: absolute;
-  transform: translate3d(x, y, 0); // GPU-accelerated
-  transition: none; // Instant for smooth drag
-}
-```
+### Step 5: Position is Persisted in Store
 
-### Step 4: Mouse Up - Drag Ends
+The updated position and size are now saved in the `activeWindows` state, allowing:
 
-Position is now saved in store at final location
+- Window state to persist if page refreshes
+- Multiple windows to maintain their positions independently
+- Window state to be restored when switching between applications
 
 ### Result
-✅ User can drag window smoothly around desktop
+
+✅ User can drag and resize windows smoothly with Rnd library handling all mouse event tracking
 
 ---
-
-## Related Documentation
-
-- [UI Flow](./UI_FLOW.md) - Visual flow diagrams
-- [Data Flow](./DATA_FLOW.md) - How data moves
-- [Component Relationships](./COMPONENT_RELATIONSHIPS.md) - Component hierarchy
-- [Implementation Details](./IMPLEMENTATION_DETAILS.md) - Code patterns
-- [Design & Architecture](./DESIGN_AND_ARCHITECTURE.md) - Overview

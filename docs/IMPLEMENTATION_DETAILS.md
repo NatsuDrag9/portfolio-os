@@ -144,6 +144,7 @@ export default Portfolio;
 ```
 
 **Key Patterns:**
+
 - Local state with `useState` for UI state (activeSection)
 - Callback pattern: `onButtonClick -> handleSectionChange`
 - Conditional rendering: `renderSection()` switch case
@@ -215,6 +216,7 @@ export default PortfolioNavbar;
 ```
 
 **Key Patterns:**
+
 - Props interfaces for type safety
 - Presentational: Only receives props, no state management
 - Responsive logic: `useMediaQuery` hook for mobile detection
@@ -318,6 +320,7 @@ export const useWindowStore = create<WindowStore>((set, get) => ({
 ```
 
 **Key Patterns:**
+
 - Single store for all window state
 - Immutable updates with spread operator
 - Setter functions with `set()` callback
@@ -338,6 +341,7 @@ Portfolio OS uses strict TypeScript configuration for maximum type safety:
 - **JSX:** React 19 - handles JSX syntax
 
 **tsconfig.json excerpt:**
+
 ```json
 {
   "compilerOptions": {
@@ -384,6 +388,7 @@ export type PortfolioSectionId =
 ### Avoiding Common TypeScript Pitfalls
 
 **❌ Avoid `any` type:**
+
 ```typescript
 // Bad - loses type safety
 function processData(data: any) {
@@ -392,6 +397,7 @@ function processData(data: any) {
 ```
 
 **✅ Use specific types:**
+
 ```typescript
 // Good - fully typed
 interface DataInput {
@@ -404,12 +410,14 @@ function processData(data: DataInput) {
 ```
 
 **❌ Avoid implicit types:**
+
 ```typescript
 // Bad - type is inferred as 'any'
 const apiUrl = process.env.REACT_APP_API_URL;
 ```
 
 **✅ Explicitly type variables:**
+
 ```typescript
 // Good - explicit type
 const apiUrl: string = process.env.REACT_APP_API_URL || '';
@@ -548,6 +556,7 @@ function List<T>({ items, renderItem, keyExtractor }: ListProps<T>) {
 ```
 
 **Key Patterns:**
+
 - Block: Main component (`.portfolio`)
 - Element: Child of block (`.portfolio__sidebar`)
 - Modifier: Variation (`.portfolio-navbar__button--active`)
@@ -675,11 +684,7 @@ export type PortfolioSectionId =
 ```typescript
 // src/constants/portfolioConstants.ts
 
-import {
-  AboutMeDetails,
-  WorkExperience,
-  Project,
-} from '@definitions';
+import { AboutMeDetails, WorkExperience, Project } from '@definitions';
 
 export const ABOUT_ME_DETAILS: AboutMeDetails = {
   name: 'Rohit Savart',
@@ -694,7 +699,8 @@ export const ABOUT_ME_DETAILS: AboutMeDetails = {
   otherActitvities: [
     {
       title: 'Full Stack Development Certification',
-      description: 'Completed comprehensive course covering frontend and backend',
+      description:
+        'Completed comprehensive course covering frontend and backend',
     },
   ],
   quote: 'Building things that matter, one line of code at a time.',
@@ -705,7 +711,8 @@ export const WORK_EXPERIENCE_DETAILS: WorkExperience[] = [
     company: 'Tech Company Name',
     position: 'Full Stack Developer',
     duration: 'Jan 2023 - Present',
-    description: 'Developing full-stack web applications using React and Node.js',
+    description:
+      'Developing full-stack web applications using React and Node.js',
     technologies: ['React', 'TypeScript', 'Node.js', 'PostgreSQL'],
   },
 ];
@@ -925,11 +932,3 @@ async function fetchUserData(userId: string) {
 ```
 
 ---
-
-## Related Documentation
-
-- [Data Flow](./DATA_FLOW.md) - How data flows through the app
-- [Component Relationships](./COMPONENT_RELATIONSHIPS.md) - Component hierarchy
-- [UI Flow](./UI_FLOW.md) - User interactions and navigation
-- [Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md) - Step-by-step examples
-- [Design & Architecture](./DESIGN_AND_ARCHITECTURE.md) - Main overview

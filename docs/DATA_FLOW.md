@@ -19,15 +19,15 @@ graph TD
     C --> D["App.tsx Mounts"]
     D --> E["Zustand Store<br/>Initializes"]
 
-    E --> E1["windowStore<br/>openWindows: []<br/>activeWindowId: null"]
-    E --> E2["settingsStore<br/>theme: 'dark'<br/>volume: 50"]
-    E --> E3["uiStore<br/>startMenuOpen: false"]
+    E --> E1["useWorkspaceState<br/>activeWindows: []<br/>windowInstanceCounters: {}"]
+    E --> E2["useSystemUIState<br/>currentTheme: 'light'<br/>startMenuOpen: false"]
+    E --> E3["useAuth<br/>username<br/>isAdmin"]
 
     E1 --> F["Store Ready"]
     E2 --> F
     E3 --> F
 
-    F --> G["DefaultApp.tsx<br/>Mounts"]
+    F --> G["Workspace.tsx<br/>Mounts"]
     G --> H["Initialize Desktop<br/>Components"]
 
     H --> I["Load Desktop<br/>Background/Wallpaper"]
@@ -76,22 +76,22 @@ graph TD
 graph TD
     A["Zustand Store<br/>Global State"]
 
-    A --> B["windowStore<br/>Window Management"]
-    A --> C["settingsStore<br/>User Settings"]
-    A --> D["uiStore<br/>UI State"]
-    A --> E["appStore<br/>App-Specific State"]
+    A --> B["useWorkspaceState<br/>Window Management"]
+    A --> C["useSystemUIState<br/>UI & Theme Settings"]
+    A --> D["useAuth<br/>Authentication"]
+    A --> E["useBootStatus<br/>Boot Sequence"]
 
-    B --> B1["State:<br/>openWindows: []<br/>activeWindowId<br/>windowPositions: Map"]
-    B --> B2["Actions:<br/>openWindow<br/>closeWindow<br/>setActiveWindow<br/>updatePosition"]
+    B --> B1["State:<br/>activeWindows: []<br/>windowInstanceCounters<br/>taskbarPinnedAppIds"]
+    B --> B2["Actions:<br/>addWindow<br/>removeWindow<br/>updateWindowPosition<br/>setWindowIsMaximized"]
 
-    C --> C1["State:<br/>theme: 'dark'<br/>volume: 50<br/>notifications"]
-    C --> C2["Actions:<br/>updateTheme<br/>updateVolume<br/>toggleNotifications"]
+    C --> C1["State:<br/>currentTheme<br/>startMenuOpen<br/>brightnessLevel"]
+    C --> C2["Actions:<br/>setTheme<br/>setStartMenuOpen<br/>setBrightnessLevel"]
 
-    D --> D1["State:<br/>startMenuOpen: bool<br/>fullscreenApp"]
-    D --> D2["Actions:<br/>toggleStartMenu<br/>setFullscreen"]
+    D --> D1["State:<br/>username<br/>isAdmin<br/>isReadOnlyMode"]
+    D --> D2["Actions:<br/>updateAuthState<br/>updateUserAvatar"]
 
-    E --> E1["State:<br/>Various app<br/>-specific states"]
-    E --> E2["Actions:<br/>App-specific<br/>mutations"]
+    E --> E1["State:<br/>bootStatus<br/>allOperations"]
+    E --> E2["Actions:<br/>updateBootStatus"]
 ```
 
 ---
@@ -102,7 +102,7 @@ graph TD
 
 ```mermaid
 graph TD
-    A["Component Mounts<br/>useWindowStore Hook"]
+    A["Component Mounts<br/>useWorkspaceState Hook"]
     B["Subscribe to Store"]
     C["Store Returns State<br/>+ Actions"]
 
@@ -115,21 +115,22 @@ graph TD
 ```
 
 **Example Code Pattern:**
+
 ```typescript
-function MyComponent() {
+function WindowManager() {
   // Subscribe to specific parts of store
-  const windows = useWindowStore((state) => state.openWindows);
-  const closeWindow = useWindowStore((state) => state.closeWindow);
+  const activeWindows = useWorkspaceState((state) => state.activeWindows);
+  const removeWindow = useWorkspaceState((state) => state.removeWindow);
 
   // Component has data and actions
   return (
-    <div>
-      {windows.map(w => (
-        <button onClick={() => closeWindow(w.id)}>
-          {w.appId}
-        </button>
+    <>
+      {activeWindows.map(w => (
+        <WindowContainer key={w.id} windowId={w.id}>
+          {/* Window content */}
+        </WindowContainer>
       ))}
-    </div>
+    </>
   );
 }
 ```
@@ -172,41 +173,43 @@ graph TD
 sequenceDiagram
     participant User
     participant Component as UI Component
-    participant Store as Zustand Store
-    participant Desktop as Desktop Component
+    participant Store as useWorkspaceState
+    participant WindowMgr as WindowManager
 
     User->>Component: Click App Icon
     Component->>Component: Handler Triggered
-    Component->>Store: Dispatch openWindow<br/>appId: 'portfolio'
+    Component->>Store: Dispatch addWindow<br/>appId, appMetadata
 
-    Store->>Store: Generate windowId<br/>Set initial position<br/>Calculate z-index
+    Store->>Store: Generate windowId<br/>Increment instance counter<br/>Set initial position
 
-    Store->>Store: Update State:<br/>windows.push({<br/>  id: 'port-1'<br/>  appId: 'portfolio'<br/>  x: 100, y: 100<br/>  w: 800, h: 600<br/>  zIndex: 5<br/>})
+    Store->>Store: Update State:<br/>activeWindows.push({<br/>  id: 'portfolio-1'<br/>  title: 'Portfolio'<br/>  windowName: 'Portfolio'<br/>  position: {x:100, y:80}<br/>  size: {w:700, h:400}<br/>  zIndex: 2<br/>})
 
-    Store-->>Desktop: Notify of State Change
-    Desktop->>Desktop: Re-render
-    Desktop->>Desktop: Map openWindows<br/>Array
-    Desktop->>Desktop: Render Window<br/>Components
+    Store-->>WindowMgr: Notify of State Change
+    WindowMgr->>WindowMgr: Re-render
+    WindowMgr->>WindowMgr: Map activeWindows<br/>Array
+    WindowMgr->>WindowMgr: Render WindowContainer<br/>Components
 
-    Desktop-->>User: Window Appears<br/>on Screen
+    WindowMgr-->>User: Window Appears<br/>on Screen
 ```
 
 **State Shape:**
+
 ```typescript
-interface WindowInstance {
-  id: string;              // 'port-1'
-  appId: string;           // 'portfolio-default'
+interface WindowData {
+  id: string;              // 'portfolio-1'
+  title: string;           // 'Portfolio'
+  windowName: string;      // 'Portfolio' (maps to app in WindowManager)
   position: { x: number; y: number };
   size: { width: number; height: number };
   zIndex: number;
-  isMinimized: boolean;
+  isMaximized: WindowDisplayType; // 'normal' | 'maximized' | 'minimized'
   // ... other properties
 }
 
 // Store state
 {
-  openWindows: WindowInstance[],
-  activeWindowId: string | null
+  activeWindows: WindowData[],
+  windowInstanceCounters: Record<string, number>
 }
 ```
 
@@ -258,6 +261,7 @@ graph TD
 ```
 
 **Component Structure:**
+
 ```typescript
 function Portfolio() {
   const [activeSection, setActiveSection] = useState('portfolio-about');
@@ -376,6 +380,7 @@ graph TD
 ```
 
 **Data Source Flow:**
+
 ```
 src/constants/portfolioConstants.ts
   ↓
@@ -420,6 +425,7 @@ graph TD
 ```
 
 **Code Implementation:**
+
 ```typescript
 const isMobileView = useMediaQuery('(max-width: 450px)');
 const shouldShowName = !isMobileView || item.isActive;
@@ -450,88 +456,15 @@ graph LR
 
 ---
 
-## Data Consistency Patterns
-
-### Preventing Data Corruption
-
-**Pattern 1: Immutable Updates**
-```typescript
-// ❌ WRONG - Mutating state directly
-state.windows[0].x = 100;
-
-// ✅ CORRECT - Creating new object
-set({
-  windows: state.windows.map(w =>
-    w.id === windowId ? {...w, x: 100} : w
-  )
-});
-```
-
-**Pattern 2: Single Source of Truth**
-```typescript
-// All window state in ONE store
-useWindowStore.getState().openWindows
-
-// NOT scattered in multiple components
-const [windows, setWindows] = useState([]); // ❌ Avoid
-```
-
-**Pattern 3: Derived Data**
-```typescript
-// Compute in component, don't store
-const activeWindow = windows.find(
-  w => w.id === activeWindowId
-);
-
-// NOT in store state
-activeWindow: {...}  // ❌ Creates inconsistency
-```
-
----
-
-## Performance: Data Flow Optimization
-
-### Selector Optimization
-
-```typescript
-// ❌ Creates new array every render
-const windows = useWindowStore((state) => state.windows);
-
-// ✅ Only re-render when windows actually changes
-const windows = useWindowStore(
-  (state) => state.windows,
-  (prev, next) => prev === next  // Shallow compare
-);
-```
-
-### Subscription Efficiency
-
-```typescript
-// ❌ Subscribes to entire store
-const allState = useWindowStore();
-
-// ✅ Only subscribes to needed data
-const windows = useWindowStore(state => state.windows);
-```
-
----
-
 ## Data Sources
 
-| Data Type | Source | Access | Example |
-|-----------|--------|--------|---------|
-| **Window State** | Zustand Store | `useWindowStore()` | Open windows, positions |
-| **Settings** | Zustand Store | `useSettingsStore()` | Theme, volume |
-| **Portfolio Data** | Constants File | `import { ... }` | About, projects, skills |
-| **Component State** | React useState | `useState()` | Active section |
-| **Dynamic State** | Computed | Function | Filtered lists |
+| Data Type           | Source         | Access                | Example                      |
+| ------------------- | -------------- | --------------------- | ---------------------------- |
+| **Window State**    | Zustand Store  | `useWorkspaceState()` | Active windows, positions    |
+| **UI State**        | Zustand Store  | `useSystemUIState()`  | Theme, brightness, startMenu |
+| **Auth State**      | Zustand Store  | `useAuth()`           | Username, admin status       |
+| **Portfolio Data**  | Constants File | `import { ... }`      | About, projects, skills      |
+| **Component State** | React useState | `useState()`          | Active section               |
+| **Dynamic State**   | Computed       | Function              | Filtered lists               |
 
 ---
-
-## Related Documentation
-
-- [UI Flow](./UI_FLOW.md) - How users interact with the UI
-- [Component Relationships](./COMPONENT_RELATIONSHIPS.md) - Component connections
-- [Implementation Details](./IMPLEMENTATION_DETAILS.md) - Code implementation
-- [Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md) - Step-by-step examples
-- [Design & Architecture](./DESIGN_AND_ARCHITECTURE.md) - Main overview

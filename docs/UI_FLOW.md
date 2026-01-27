@@ -5,6 +5,7 @@ Visual representation of user interactions, screen navigation, and state transit
 ## Overview
 
 Portfolio OS has three main navigation contexts:
+
 1. **Application Startup** - Initialization and desktop boot
 2. **Desktop Environment** - The window system (Taskbar, Start Menu, Windows)
 3. **Portfolio Application** - The main app with multiple sections
@@ -39,9 +40,11 @@ graph TD
 ```
 
 **Code Entry Points:**
+
 - `src/main.tsx` - React app entry
 - `src/App.tsx` - Root component
-- `src/apps/recommended/DefaultApp.tsx` - Desktop environment
+- `src/screens/Workspace/Workspace.tsx` - Desktop environment
+- `src/components/WindowManager/WindowManager.tsx` - Window management
 
 ---
 
@@ -54,15 +57,17 @@ graph TD
 
     A --> B
 
-    B --> C["Window Store<br/>windows: []<br/>activeWindowId: null<br/>openWindow()<br/>closeWindow()"]
-    B --> D["Settings Store<br/>theme: 'dark'<br/>volume: 50<br/>updateTheme()"]
-    B --> E["UI Store<br/>startMenuOpen: false<br/>toggleStartMenu()"]
+    B --> C["WorkspaceState Store<br/>activeWindows: []<br/>addWindow()<br/>removeWindow()"]
+    B --> D["SystemUIState Store<br/>currentTheme: 'light'<br/>startMenuOpen: false<br/>setTheme()"]
+    B --> E["AuthState Store<br/>username<br/>isAdmin"]
+    B --> F["BootStatus Store<br/>bootStatus<br/>allOperations"]
 
-    C --> F["Store Ready<br/>All Slices Available"]
-    D --> F
-    E --> F
+    C --> G["Store Ready<br/>All Slices Available"]
+    D --> G
+    E --> G
+    F --> G
 
-    F --> G["Components Can Subscribe<br/>to Store Updates"]
+    G --> H["Components Can Subscribe<br/>to Store Updates"]
 ```
 
 ---
@@ -80,7 +85,7 @@ graph TD
 
     B --> C{"What Did User Do?"}
 
-    C -->|Click Start Menu Icon| D["Toggle Start Menu<br/>startMenuOpen = true"]
+    C -->|Click Start Menu Icon| D["Toggle Start Menu<br/>setStartMenuOpen(true)"]
     C -->|Click Start Menu Item| E["Open Application"]
     C -->|Click Taskbar Icon| F["Switch to App Window"]
     C -->|Click on Empty Area| G["Nothing Happens"]
@@ -89,13 +94,13 @@ graph TD
     H --> I["User Selects App<br/>or Closes Menu"]
     I --> A
 
-    E --> J["Dispatch openWindow<br/>with appId"]
-    J --> K["Add to Store<br/>openWindows Array"]
-    K --> L["Render Window Component<br/>with App Content"]
+    E --> J["Dispatch addWindow<br/>with appMetadata"]
+    J --> K["Add to Store<br/>activeWindows Array"]
+    K --> L["WindowManager Renders<br/>Window Component"]
     L --> M["Window Appears<br/>on Desktop"]
     M --> A
 
-    F --> N["setActiveWindow<br/>Update z-index"]
+    F --> N["Update z-index<br/>via store"]
     N --> M
 
     G --> A
@@ -133,17 +138,17 @@ graph TD
     B["Start Menu Handler<br/>Triggered"]
     A --> B
 
-    B --> C["Dispatch<br/>openWindow<br/>appId: 'portfolio-default'"]
-    C --> D["Zustand Store<br/>Updates"]
+    B --> C["Dispatch addWindow<br/>appId: 'portfolio-default'<br/>appMetadata"]
+    C --> D["Zustand Store<br/>useWorkspaceState Updates"]
 
-    D --> E["Add to openWindows:<br/>windowId: 'port-1'<br/>appId: 'portfolio-default'<br/>position: x, y<br/>size: w, h<br/>zIndex: 1"]
+    D --> E["Add to activeWindows:<br/>windowId: 'portfolio-1'<br/>title: 'Portfolio'<br/>windowName: 'Portfolio'<br/>position: x:100, y:80<br/>size: w:700, h:400"]
 
-    E --> F["React Re-renders<br/>Desktop"]
-    F --> G["Map openWindows<br/>Render Window Components"]
+    E --> F["React Re-renders<br/>Workspace"]
+    F --> G["WindowManager Maps<br/>activeWindows"]
 
-    G --> H["Render Window Frame<br/>Title Bar + Close Btn"]
-    H --> I["Render App Content<br/>Based on appId"]
-    I --> J["Portfolio App<br/>Renders Inside Window"]
+    G --> H["Render WindowContainer<br/>Drag/Resize Handlers"]
+    H --> I["Render App Content<br/>Based on windowName"]
+    I --> J["Portfolio App<br/>Renders Inside WindowContainer"]
 
     J --> K["Portfolio Shows<br/>About Section"]
     K --> L["Window Visible<br/>on Desktop"]
@@ -344,6 +349,7 @@ graph TD
 ```
 
 **PortfolioNavbar responsive logic:**
+
 ```typescript
 const isMobileView = useMediaQuery('(max-width: 450px)');
 const shouldShowName = !isMobileView || item.isActive;
@@ -430,21 +436,13 @@ graph TD
 
 ## Quick Reference: Navigation Paths
 
-| Flow | Path |
-|------|------|
-| **App Start** | Browser → App.tsx → Store Init → Desktop Ready |
-| **Open Portfolio** | Start Menu → Click Portfolio → Window Opens → About Section |
-| **Switch Sections** | Click Nav Button → handleSectionChange → Section Renders |
+| Flow                | Path                                                             |
+| ------------------- | ---------------------------------------------------------------- |
+| **App Start**       | Browser → App.tsx → Store Init → Desktop Ready                   |
+| **Open Portfolio**  | Start Menu → Click Portfolio → Window Opens → About Section      |
+| **Switch Sections** | Click Nav Button → handleSectionChange → Section Renders         |
 | **Download Resume** | Click Resume → Download Logic → Download Starts → Resume Section |
-| **Close Window** | Click Close X → closeWindow() → Window Removed |
-| **Switch Apps** | Click Taskbar Icon → setActiveWindow → App Focused |
+| **Close Window**    | Click Close X → closeWindow() → Window Removed                   |
+| **Switch Apps**     | Click Taskbar Icon → setActiveWindow → App Focused               |
 
 ---
-
-## Related Documentation
-
-- [Data Flow](./DATA_FLOW.md) - How data moves through the app
-- [Component Relationships](./COMPONENT_RELATIONSHIPS.md) - Component hierarchy
-- [Implementation Details](./IMPLEMENTATION_DETAILS.md) - Code examples
-- [Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md) - Step-by-step with code
-- [Design & Architecture](./DESIGN_AND_ARCHITECTURE.md) - Main overview
