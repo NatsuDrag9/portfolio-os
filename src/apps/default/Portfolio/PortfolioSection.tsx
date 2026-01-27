@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import AboutMe from '../AboutMe/AboutMe';
 import Projects from '../Projects/Projects';
 import Skills from '../Skills/Skills';
@@ -17,6 +17,22 @@ interface PortfolioSectionProps {
 }
 
 function PortfolioSection({ appId }: PortfolioSectionProps) {
+  const hasDownloadedRef = useRef(false);
+
+  useEffect(() => {
+    // Trigger resume download when Resume section is opened (only once)
+    if (appId === 'portfolio-resume' && !hasDownloadedRef.current) {
+      hasDownloadedRef.current = true;
+      const resumePath = '/portfolio-os/Rohit_Resume_Frontend_2.pdf';
+      const link = document.createElement('a');
+      link.href = resumePath;
+      link.download = 'Rohit_Resume_Frontend.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }, [appId]);
+
   const renderSection = (): ReactNode => {
     switch (appId) {
       case 'portfolio-about':
