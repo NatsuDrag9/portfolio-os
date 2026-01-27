@@ -11,10 +11,9 @@ This document provides a comprehensive overview of Portfolio OS's design and arc
 5. **[UI Flow](./UI_FLOW.md)** - User interface navigation and screen transitions
 6. **[Data Flow](./DATA_FLOW.md)** - How data moves through the application
 7. **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy and interactions
-8. **[Implementation Details](./IMPLEMENTATION_DETAILS.md)** - Code patterns and technical implementation
-9. **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step flows for key features
-10. **[Design Decisions](#design-decisions)** - Why certain choices were made
-11. **[Performance & Optimization](#performance--optimization)** - Performance considerations
+8. **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step flows for key features
+9. **[Design Decisions](#design-decisions)** - Why certain choices were made
+10. **[Performance & Optimization](#performance--optimization)** - Performance considerations
 
 ---
 
@@ -164,12 +163,11 @@ For in-depth information on specific aspects, see:
 - **[Screens Documentation](./SCREENS_DOCUMENTATION.md)** - Technical boot state machine, screen architecture, state management per screen, and navigation conditions between different states
 - **[UI Flow](./UI_FLOW.md)** - User journeys, visual flows, and user interactions from the user perspective when navigating through screens and features
 
-### Implementation Details
+### Technical Details
 
 - **[Data Flow](./DATA_FLOW.md)** - How data moves through the application
 - **[Component Relationships](./COMPONENT_RELATIONSHIPS.md)** - Component hierarchy and interactions
 - **[Feature Walkthroughs](./FEATURE_WALKTHROUGHS.md)** - Step-by-step code walkthroughs of key features with real implementations
-- **[Implementation Details](./IMPLEMENTATION_DETAILS.md)** - Code patterns and examples
 
 ### Customization & Setup
 
