@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://rohitimandi-dev.xyz/portfolio-os/",
   "scripts": {
     "generate:tokens": "node scripts/generate-tokens.js",
     "dev": "vite",
@@ -18,8 +19,7 @@
     "test-unit": "vitest --run --coverage",
     "test": "vitest",
     "build:deploy": "node scripts/deploy.js",
-    "deploy:gh-pages": "yarn build:deploy && gh-pages -d dist",
-    "homepage": "https://natsudrag9.github.io/portfolio-os/"
+    "deploy:gh-pages": "yarn build:deploy && gh-pages -d dist"
   },
   "dependencies": {
     "@fluentui/react-icons": "^2.0.315",
