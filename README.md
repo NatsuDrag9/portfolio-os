@@ -175,8 +175,8 @@ Visit the live portfolio at your deployed URL to explore the interactive Windows
 **For recruiters**:
 
 - [Wiki page](https://github.com/NatsuDrag9/portfolio-os/wiki/Recruiters)
-- [View Live Demo](https://natsudrag9.github.io/portfolio-os/)
-- [View Component Library](https://natsudrag9.github.io/portfolio-os/storybook/)
+- [View Live Demo](http://rohitimandi-dev.xyz/)
+- [View Component Library](http://rohitimandi-dev.xyz/storybook)
 
 **For Developers:**
 
