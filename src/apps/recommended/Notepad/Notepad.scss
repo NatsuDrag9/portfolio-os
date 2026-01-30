@@ -57,7 +57,7 @@
     flex: 1;
     box-sizing: border-box;
     width: 100%;
-    max-height: calc(100% - 7rem);
+    max-height: calc(100% - 10.5rem);
     padding: 0 var(--spacing-horizontal-m);
     overflow-y: auto;
     border: none;
@@ -237,6 +237,55 @@
       display: inline-block;
       width: 1.6rem;
       height: 1.6rem;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .notepad {
+    &__input-area {
+      max-height: calc(100% - 4rem);
+    }
+  }
+}
+
+// @media (max-width: $breakpoint-mobile-lg) {
+//   .notepad {
+//     &__input-area {
+//       max-height: calc(100% - 4rem);
+//     }
+//   }
+// }
+
+@media (max-width: $breakpoint-mobile) {
+  .notepad {
+    &__header {
+      height: 3.5rem;
+    }
+
+    &__header-button {
+      font-size: var(--font-size-base200);
+    }
+
+    &__input-area {
+      font-size: var(--font-size-base200);
+    }
+
+    &__status-bar {
+      justify-content: space-between;
+    }
+
+    &__status-bar-value {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      font-size: var(--font-size-base100);
+
+      &:not(:last-child)::after {
+        height: 1.8rem;
+        margin-left: var(--spacing-horizontal-m);
+        background-color: var(--color-neutral-stroke2);
+      }
     }
   }
 }

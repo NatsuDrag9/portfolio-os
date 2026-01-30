@@ -62,8 +62,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-vertical-xl);
-    width: 30%;
-    min-width: 20rem;
+    width: 20%;
+    min-width: 22rem;
     min-height: 0;
     padding: var(--spacing-vertical-l) var(--spacing-horizontal-m);
 
@@ -144,13 +144,21 @@
     z-index: 29; // Below &__left for sidebar to be clickable
     width: 100%;
     height: 100%;
-    background-color: color-mix(in srgb, var(--color-neutral-background1) 60%);
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-background1) 60%,
+      transparent
+    );
     cursor: not-allowed;
     pointer-events: auto;
   }
 
   .dark-theme &__read-only-overlay {
-    background-color: color-mix(in srgb, var(--color-neutral-background2) 70%);
+    background-color: color-mix(
+      in srgb,
+      var(--color-neutral-background2) 70%,
+      transparent
+    );
   }
 
   &-sidebar {
@@ -171,6 +179,15 @@
 
     .user-card {
       background-color: var(--color-neutral-background3);
+    }
+  }
+}
+
+// Container queries - adjust sidebar width based on settings container size
+@container settings (max-width: #{$breakpoint-desktop}) {
+  .settings {
+    &__left {
+      width: 30%;
     }
   }
 }

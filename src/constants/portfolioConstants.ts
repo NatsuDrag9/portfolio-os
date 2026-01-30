@@ -211,7 +211,8 @@ export const PROJECTS_DATA: ProjectsCardProps[] = [
     coverImage: PortfolioOs,
     badges: {
       codeUrl: 'https://github.com/NatsuDrag9/portfolio-os',
-      // To Do: Add demoUrl and articleUrl
+      demoUrl: 'https://rohitimandi-dev.xyz/',
+      articleUrl: 'https://github.com/NatsuDrag9/portfolio-os/wiki',
     },
   },
 ];

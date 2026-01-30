@@ -94,12 +94,12 @@ function Notepad() {
     reader.readAsText(file);
   };
 
-  const handleSave = () => {
+  const handleSave = (filenameOverride?: string) => {
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = filename;
+    link.download = filenameOverride || filename;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -108,10 +108,11 @@ function Notepad() {
     const newFilename = window.prompt('Enter filename:', filename);
     if (!newFilename) return;
 
-    setFilename(
-      newFilename.endsWith('.txt') ? newFilename : `${newFilename}.txt`
-    );
-    handleSave();
+    const finalFilename = newFilename.endsWith('.txt')
+      ? newFilename
+      : `${newFilename}.txt`;
+    setFilename(finalFilename);
+    handleSave(finalFilename);
   };
 
   const handlePrint = () => {

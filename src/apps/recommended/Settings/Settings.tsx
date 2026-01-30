@@ -130,7 +130,7 @@ function Settings() {
           <div className="user-card__content-container">
             <h6 className="user-card__title">{username}</h6>
             <p className="user-card__description">
-              {isAdmin ? 'Admin Account' : 'Temporary Account'}
+              {isAdmin ? 'Admin Account' : 'Explorer'}
             </p>
           </div>
         </div>
