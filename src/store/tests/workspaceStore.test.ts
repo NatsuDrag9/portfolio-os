@@ -258,7 +258,7 @@ describe('useWorkspaceState', () => {
       expect(window.windowName).toBe('ChromeApp');
       expect(window.isMaximized).toBe('normal');
       expect(window.previousDisplayState).toBe('normal');
-      expect(window.position).toStrictEqual({ x: 100, y: 80 });
+      expect(window.position).toStrictEqual({ x: 320, y: 80 });
       expect(window.size).toStrictEqual({ width: 700, height: 400 });
       expect(window.customTheme).toBeUndefined();
       expect(window.snapPosition).toBe('fullscreen');

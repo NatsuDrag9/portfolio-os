@@ -32,7 +32,8 @@ import {
 
 // To Do: Uncomment File Explorer when Portfolio container query styles have been fixed
 
-export const BASE_URL = '/portfolio-os';
+// export const BASE_URL = '/portfolio-os';
+export const BASE_URL = '';
 
 export const APP_REGISTRY: AppMetadata[] = [
   // Recommended apps

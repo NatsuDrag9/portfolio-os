@@ -224,7 +224,7 @@ export const useWorkspaceState = create<WorkspaceState>((set, get) => ({
         windowName: appMetadata.windowName,
         isMaximized: 'normal',
         previousDisplayState: 'normal',
-        position: { x: 100, y: 80 },
+        position: { x: 320, y: 80 },
         zIndex: state.activeWindows.length + 1,
         size: { width: 700, height: 400 },
         customTheme: undefined,
