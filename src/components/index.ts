@@ -11,3 +11,4 @@ export { default as GenericDropdown } from './GenericDropdown/GenericDropdown';
 export { default as Loader } from './Loader/Loader';
 export { default as DisplayCard } from './DisplayCard/DisplayCard';
 export { default as PortfolioNavbar } from './PortfolioNavbar/PortfolioNavbar';
+export { default as HelpNotificationModal } from './HelpNotificationModal/HelpNotificationModal';

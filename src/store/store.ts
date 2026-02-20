@@ -83,6 +83,7 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
     triggeredFrom: 'undefined',
     isLoading: false,
   },
+  isHelpNotificationDismissed: false,
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => {
     set({ taskbarAlignment: alignment });
@@ -166,6 +167,9 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
   setDisplayLoader: (value: DisplayLoader) => {
     set({ displayLoader: value });
   },
+  dismissHelpNotification: () => {
+    set({ isHelpNotificationDismissed: true });
+  },
   reset: () => {
     set({
       taskbarAlignment: 'bottom',
@@ -188,6 +192,7 @@ export const useSystemUIState = create<SystemUIState>((set) => ({
         triggeredFrom: 'undefined',
         isLoading: false,
       },
+      isHelpNotificationDismissed: false,
     });
   },
 }));

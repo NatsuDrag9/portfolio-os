@@ -1,0 +1,239 @@
+.help-notification-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @include fade-in-element(0.3s);
+
+  &.exiting {
+    @include fade-out-element(0.5s);
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--color-background-overlay);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+  }
+
+  &__container {
+    position: relative;
+    width: 50%;
+    padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    border: 1px solid var(--color-brand-stroke2);
+    border-radius: 0.75rem;
+    background: var(--color-brand-background);
+    box-shadow: var(--shadow64);
+    animation: slide-up 0.4s ease-out;
+  }
+
+  &__close-btn {
+    @include disable-default-button-styles;
+
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: var(--spacing-vertical-s) var(--spacing-horizontal-s);
+    color: var(--color-neutral-background1);
+    font-size: var(--font-size-base200);
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__fluent-icon {
+    width: 2.2rem;
+    height: auto;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-l);
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-neutral-background1);
+    font-size: var(--font-size-hero800);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: var(--color-neutral-background3);
+    font-size: var(--font-size-base500);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+  }
+
+  &__portfolio-icon {
+    width: 5rem;
+    height: 5rem;
+    color: var(--color-neutral-background1);
+  }
+
+  &__message {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-snudge);
+
+    p {
+      width: 60%;
+      margin: 0 auto;
+      color: var(--color-neutral-background4);
+      font-size: var(--font-size-base300);
+      line-height: var(--line-height-base300);
+
+      strong {
+        color: var(--color-neutral-background1);
+        font-weight: var(--font-weight-semibold);
+      }
+    }
+  }
+
+  &__dismiss-btn {
+    width: fit-content;
+    padding: var(--spacing-vertical-m) var(--spacing-horizontal-l);
+    margin: 0 auto;
+    border: none;
+    border-radius: 0.375rem;
+    background: var(--color-neutral-background1);
+    color: var(--color-brand-background);
+    font-size: var(--font-size-base200);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-base300);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: var(--shadow16);
+    }
+
+    &:active {
+      transform: translateY(0.1rem);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-landscape) {
+  .help-notification-modal {
+    &__container {
+      height: 60vh;
+    }
+
+    &__content {
+      gap: normal;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    &__message {
+      p {
+        width: 80%;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-tablet-portrait) {
+  .help-notification-modal {
+    &__container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      max-width: 70%;
+      height: 35vh;
+      padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    }
+
+    &__title {
+      font-size: var(--font-size-hero700);
+    }
+
+    &__content {
+      height: 80%;
+    }
+
+    &__portfolio-icon {
+      width: 3.75rem;
+      height: 3.75rem;
+    }
+
+    &__message {
+      p {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile-lg) {
+  .help-notification-modal {
+    &__container {
+      width: 90%;
+      max-width: 90%;
+
+      height: 40vh;
+      padding: var(--spacing-vertical-l) var(--spacing-horizontal-l);
+    }
+
+    &__content {
+      height: 80%;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-mobile-small) {
+  .help-notification-modal {
+    &__container {
+      width: 100%;
+      height: 45vh;
+    }
+
+    &__content {
+      height: 80%;
+    }
+
+    &__title {
+      font-size: var(--font-size-hero700);
+    }
+
+    &__subtitle {
+      font-size: var(--font-size-base400);
+    }
+
+    &__message {
+      p {
+        font-size: var(--font-size-base200);
+        line-height: var(--line-height-base200);
+      }
+    }
+  }
+}

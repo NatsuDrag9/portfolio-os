@@ -92,6 +92,7 @@ export interface SystemUIState {
   autoSyncDateTime: boolean; // Auto-sync date/time with system
   timezone: string; // User's timezone
   displayLoader: DisplayLoader;
+  isHelpNotificationDismissed: boolean; // Whether the help notification modal has been dismissed in current session
 
   updateTaskbarAlignment: (alignment: TaskbarAlignmentType) => void;
   setIsSearchVisible: (isVisible: boolean) => void;
@@ -110,6 +111,7 @@ export interface SystemUIState {
   setAutoSyncDateTime: (autoSync: boolean) => void;
   setTimezone: (timezone: string) => void;
   setDisplayLoader: (value: DisplayLoader) => void;
+  dismissHelpNotification: () => void;
   reset: () => void;
 }
 

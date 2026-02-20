@@ -6,6 +6,7 @@ import {
   StartMenu,
   Taskbar,
   WindowManager,
+  HelpNotificationModal,
 } from '@components/index';
 import { useEffect } from 'react';
 
@@ -16,6 +17,8 @@ function Workspace() {
     brightnessLevel,
     displayLoader,
     setDisplayLoader,
+    isHelpNotificationDismissed,
+    dismissHelpNotification,
   } = useSystemUIState();
 
   // Reset the displayLoader state after a timeout regardless of wherever it's triggered from
@@ -64,6 +67,10 @@ function Workspace() {
       <h4 className="workspace__title"> Hello, {username}</h4>
       {renderWithLoader()}
       <Taskbar />
+      <HelpNotificationModal
+        isOpen={!isHelpNotificationDismissed}
+        onDismiss={dismissHelpNotification}
+      />
       {isNightLightActive && <div className="workspace__night-light-overlay" />}
       {brightnessLevel < 100 && (
         <div
