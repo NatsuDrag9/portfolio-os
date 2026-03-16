@@ -1,31 +1,20 @@
+import { useEffect } from 'react';
 import './DownloadableResume.scss';
+import { DOWNLOADABLE_RESUME_LINK } from '@constants/appConstants';
 
 function DownloadableResume() {
-  // Automatic download is now triggered in Portfolio.tsx handleSectionChange
-  // when the Resume button is clicked. Code below kept for reference.
-
-  /* const handleButtonClick = () => {
-    const resumePath = '/docs/Rohit_Resume_Frontend_2.pdf';
-    const link = document.createElement('a');
-    link.href = resumePath;
-    link.download = 'Rohit_Resume_Frontend.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }; */
+  useEffect(() => {
+    // A short delay for the message to be displayed briefly
+    setTimeout(() => {
+      window.open(DOWNLOADABLE_RESUME_LINK, '_blank');
+    }, 1000);
+  }, []);
 
   return (
     <div className="download-resume">
       <h6 className="download-resume__title">
-        Your resume is being downloaded...
+        Redirecting to google drive link...
       </h6>
-      {/* <button
-        className="download-resume__download-button"
-        onClick={handleButtonClick}
-      >
-        <span className="download-resume__text-two">Resume</span>
-        <DocumentArrowDownRegular className="download-resume__fluent-icon" />
-      </button> */}
     </div>
   );
 }
