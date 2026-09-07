@@ -16,6 +16,7 @@ import Github from './github.svg';
 import Tetris from './tetris.png';
 import ReactStateParadigmDemo from './react-state-paradigm-demo.png';
 import PortfolioOs from './portfolio-os.png';
+import WealthTechCrm from './wealth-tech-crm.png';
 
 export {
   Natsu,
@@ -36,4 +37,5 @@ export {
   ReactStateParadigmDemo,
   Tetris,
   PortfolioOs,
+  WealthTechCrm,
 };

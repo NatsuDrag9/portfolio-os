@@ -12,4 +12,4 @@ export const PORTFOLIO_PROJECTS_LINK = `${PORTFOLIO_LINK}#projects`;
 export const PORTFOLIO_SKILLS_LINK = `${PORTFOLIO_LINK}#skills`;
 export const PORTFOLIO_RESUME_LINK = `${PORTFOLIO_LINK}#resume`;
 export const DOWNLOADABLE_RESUME_LINK =
-  'https://drive.google.com/file/d/1AZzpVJ3iqYimkQn1HWW0OqsLXq5Je_e3/view?usp=drive_link';
+  'https://drive.google.com/file/d/16ETxBHxwvvJcd4BwOJTg5RwrnjAaGBKn/view?usp=drive_link';

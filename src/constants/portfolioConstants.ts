@@ -10,6 +10,7 @@ import {
   PortfolioOs,
   ReactStateParadigmDemo,
   Tetris,
+  WealthTechCrm,
 } from '@assets/images/specifics';
 
 export const ABOUT_ME_DETAILS: AboutMeProps = {
@@ -58,62 +59,35 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
     details: [
       {
         id: 1,
-        name: 'Worked as the primary frontend developer for multiple web projects, handling design, architecture, and implementation.',
+        name: 'Primary developer for key web projects, leading UI architecture, component design, and API integration.',
       },
       {
         id: 2,
-        name: 'CRM Applications (Vite + React)',
+        name: 'CRM Applications (Vite + React + TypeScript)',
         description: [
-          'Built and maintained two workflow CRM web applications — one as part of a small three-member team, and another independently from the ground up based on a reusable scaffolding template I created for new React+Vite projects',
-          'Created a reusable form builder using React Hook Form, shared across modules and projects.',
-          'Set up Storybook documentation and wrote unit tests with React Testing Library for resuable components.',
-          'Used RTK Query for API integration and data caching.',
+          'Built and maintained two workflow CRM web applications — one as part of a small three-member team, and another independently from the ground up based on a reusable scaffolding template created for new React+Vite projects.',
+          'Created a reusable JSON-driven form builder using React Hook Form, shared across modules to speed up feature development.',
+          'Set up Storybook documentation and wrote unit tests with Vitest & React Testing Library for reusable components.',
+          'Utilized RTK Query for client-side API integration, state normalization, and response data caching.',
         ],
       },
       {
         id: 3,
         name: 'Company Landing Page (Next.js)',
         description: [
-          'Developed the new company landing page with Next.js, focusing on SEO, responsiveness, and performance (green Lighthouse scores in all categories).',
-          'Implemented a backend-for-frontend (BFF) layer for authentication and API integration creating a custom class using Axios.',
-          'Added Razorpay integration for payments',
-          'Added animations using Framer Motion.',
-          'Ensured proper API proxy configuration to avoid CORS issues, documented in internal wiki.',
+          'Developed the official company landing page with Next.js, focusing on SEO, responsive design, and performance (achieving green Lighthouse scores across all categories).',
+          'Designed a custom API client factory module that dynamically generated authenticated Axios client instances for payment and auth API workflows.',
+          'Integrated Razorpay payment gateway workflows requiring user authentication and mobile verification.',
+          'Configured Next.js server API proxies to eliminate CORS issues and protect sensitive endpoints, documenting configurations in internal wiki.',
+          'Implemented smooth page animations using Framer Motion.',
         ],
       },
       {
         id: 4,
-        name: 'Code Quality and Collaboration',
+        name: 'Cross-functional Collaboration & Code Quality',
         description: [
-          'Improved maintainability through reusable components, testing, and documentation.',
-          'Collaborated with backend and design teams on API integration and UI improvements.',
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    roleTitle: 'Student Worker',
-    companyName: 'MoveInnovation',
-    employmentType: 'Part-time',
-    startDateAndYear: 'Aug 2021',
-    endDateAndYear: 'Dec 2022',
-    location: 'Copenhagen, Denmark',
-    details: [
-      {
-        id: 1,
-        name: 'Tested and debugged PCBs designed in-house',
-      },
-      {
-        id: 2,
-        name: 'Assembled and soldered multiple electronic devices (including SMDs)',
-      },
-      {
-        id: 3,
-        name: 'Assist engineers and technicians in:',
-        description: [
-          'Quality check and testing of in-house manufactured electronic devices',
-          'Assembling of electronic devices',
+          'Co-designed RESTful API endpoints and payload schemas with backend engineering teams for seamless frontend-backend integration.',
+          'Improved maintainability through reusable component design, testing suites, and developer documentation.',
         ],
       },
     ],
@@ -123,54 +97,67 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
 const SKILLS_DATA: Skill[] = [
   {
     id: 1,
-    title: 'Skills',
+    title: 'Frontend Engineering',
     image: CodeBlockEditRegular,
     skillItems: [
       {
         id: 1,
-        name: 'React and its core principles, Typescript, Javascript',
+        name: 'React, Next.js, TypeScript, JavaScript (ES6+)',
       },
       {
         id: 2,
-        name: 'State management Libraries – Redux, Zustand',
+        name: 'State Management: Redux Toolkit, RTK Query, Zustand',
       },
       {
         id: 3,
-        name: 'Testing and Documentation – Storybook, Vitest, Jest, React Testing Library',
+        name: 'Testing & Docs: Vitest, Jest, React Testing Library, Storybook',
       },
       {
         id: 4,
-        name: 'CSS Preprocessors: SASS/SCSS',
+        name: 'Styling & UI: HTML5, CSS3, SASS/SCSS, Framer Motion, Flexbox/Grid',
       },
       {
         id: 5,
-        name: 'RESTFUL APIs integration',
-      },
-      {
-        id: 6,
-        name: 'Accessibility and WCAG guidelines',
-      },
-      {
-        id: 7,
-        name: 'Responsive Design using flexbox and grid',
+        name: 'Accessibility (WCAG) & Responsive Web Design',
       },
     ],
   },
   {
     id: 2,
-    title: 'Tools',
+    title: 'Backend Engineering & Databases',
     image: SettingsCogMultipleRegular,
     skillItems: [
-      { id: 1, name: 'Github and Gitlab' },
-      { id: 2, name: 'Lighthouse' },
-      { id: 3, name: 'Shell Scripting' },
-      { id: 4, name: 'VSCode' },
-      { id: 5, name: 'React Dev Tools' },
-      { id: 6, name: 'Git Hooks - Husky' },
       {
-        id: 7,
-        name: 'AI tools – Claude, Chat GPT, Gemini',
+        id: 1,
+        name: 'Java & Spring Boot (REST APIs, Spring Data JPA, Dependency Injection)',
       },
+      {
+        id: 2,
+        name: 'Node.js & Express.js (RESTful APIs, Middleware, JWT Authentication)',
+      },
+      {
+        id: 3,
+        name: 'Real-Time Web: Socket.io / WebSockets',
+      },
+      {
+        id: 4,
+        name: 'Databases: MongoDB, PostgreSQL, MySQL',
+      },
+      {
+        id: 5,
+        name: 'API Design & Client Architecture (Axios, Interceptors, Proxies)',
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: 'Tools & Workflows',
+    image: SettingsCogMultipleRegular,
+    skillItems: [
+      { id: 1, name: 'Version Control: Git, GitHub, GitLab' },
+      { id: 2, name: 'Build & Dev Tools: Vite, Postman, VSCode, React Dev Tools' },
+      { id: 3, name: 'Quality & Automation: Git Hooks (Husky), Lighthouse, Shell Scripting' },
+      { id: 4, name: 'AI Coding Tools: Antigravity CLI, Claude Code CLI, ChatGPT' },
     ],
   },
 ];
@@ -180,6 +167,7 @@ export const SKILLS: SkillsProps = {
 };
 
 export const PROJECTS_DATA: ProjectsCardProps[] = [
+  /*
   {
     title: 'Compare React State Management Paradigms',
     description:
@@ -202,6 +190,17 @@ export const PROJECTS_DATA: ProjectsCardProps[] = [
       // To Do: Add demoUrl
       articleUrl:
         'https://github.com/NatsuDrag9/tetris-multiplayer/wiki/Recruiters',
+    },
+  },
+  */
+  {
+    title: 'Wealth-Tech Enterprise CRM & Backend',
+    description:
+      'Fullstack enterprise CRM built with React, TypeScript, Redux Toolkit & RTK Query on the frontend, and Java Spring Boot (Spring Security, JWT, Spring Data JPA, Hibernate, MySQL/PostgreSQL) on the backend. Features RBAC user management, dynamic form engine, cursor pagination, and portfolio recommendation workflows.',
+    coverImage: WealthTechCrm,
+    badges: {
+      codeUrl: 'https://github.com/NatsuDrag9/wealth-tech-crm/',
+      // articleUrl: 'https://github.com/NatsuDrag9/wealth-tech-crm/tree/main/docs',
     },
   },
   {
