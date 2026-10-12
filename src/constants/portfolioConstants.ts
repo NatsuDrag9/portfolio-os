@@ -5,6 +5,8 @@ import { ProjectsCardProps } from '@apps/default/Projects/ProjectsCard/ProjectsC
 import {
   CodeBlockEditRegular,
   SettingsCogMultipleRegular,
+  BotSparkleRegular,
+  DatabaseRegular,
 } from '@fluentui/react-icons';
 import {
   PortfolioOs,
@@ -54,7 +56,7 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
     companyName: 'Savart',
     employmentType: 'Full-time',
     startDateAndYear: 'Aug 2024',
-    endDateAndYear: 'Present',
+    endDateAndYear: 'Aug-2026',
     location: 'Hyderabad, India',
     details: [
       {
@@ -90,6 +92,13 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
           'Improved maintainability through reusable component design, testing suites, and developer documentation.',
         ],
       },
+      {
+        id: 5,
+        name: 'AI-Assisted Frontend Development',
+        description: [
+          'Leveraged AI-assisted development tools such as Claude Code for code generation, codebase exploration, debugging, refactoring, testing, and evaluating implementation approaches.',
+        ],
+      },
     ],
   },
 ];
@@ -97,67 +106,114 @@ export const WORK_EXPERIENCE_DETAILS: DetailCardProps[] = [
 const SKILLS_DATA: Skill[] = [
   {
     id: 1,
-    title: 'Frontend Engineering',
+    title: 'Frontend Engineering & State Management',
     image: CodeBlockEditRegular,
     skillItems: [
       {
         id: 1,
-        name: 'React, Next.js, TypeScript, JavaScript (ES6+)',
+        name: 'React, Next.js, Vite',
       },
       {
         id: 2,
-        name: 'State Management: Redux Toolkit, RTK Query, Zustand',
+        name: 'TypeScript, JavaScript (ES6+), HTML5, CSS3/SASS',
       },
       {
         id: 3,
-        name: 'Testing & Docs: Vitest, Jest, React Testing Library, Storybook',
+        name: 'Redux Toolkit, RTK Query, Zustand',
       },
       {
         id: 4,
-        name: 'Styling & UI: HTML5, CSS3, SASS/SCSS, Framer Motion, Flexbox/Grid',
+        name: 'React Hook Form, Yup Validation',
       },
       {
         id: 5,
-        name: 'Accessibility (WCAG) & Responsive Web Design',
+        name: 'Reusable Component Libraries, Design Tokens',
+      },
+      {
+        id: 6,
+        name: 'Storybook, Responsive Web Design, WCAG, Code Splitting',
       },
     ],
   },
   {
     id: 2,
-    title: 'Backend Engineering & Databases',
-    image: SettingsCogMultipleRegular,
+    title: 'Backend, Databases & DevOps',
+    image: DatabaseRegular,
     skillItems: [
       {
         id: 1,
-        name: 'Java & Spring Boot (REST APIs, Spring Data JPA, Dependency Injection)',
+        name: 'Java, Spring Boot, Spring MVC, Node.js, Express.js',
       },
       {
         id: 2,
-        name: 'Node.js & Express.js (RESTful APIs, Middleware, JWT Authentication)',
+        name: 'Spring Data JPA, Hibernate, PostgreSQL, MongoDB, Redis, SQL',
       },
       {
         id: 3,
-        name: 'Real-Time Web: Socket.io / WebSockets',
+        name: 'RESTful APIs, Swagger/OpenAPI, BFF, OAuth2, JWT, RBAC',
       },
       {
         id: 4,
-        name: 'Databases: MongoDB, PostgreSQL, MySQL',
+        name: 'Docker, Docker Compose, AWS (EC2, S3)',
       },
       {
         id: 5,
-        name: 'API Design & Client Architecture (Axios, Interceptors, Proxies)',
+        name: 'GitHub Actions CI/CD, Pino Logging, Prometheus, Grafana',
+      },
+      {
+        id: 6,
+        name: 'Controller-Service-Repository Pattern, OOP, SOLID Principles',
       },
     ],
   },
   {
     id: 3,
-    title: 'Tools & Workflows',
+    title: 'AI-Assisted Development',
+    image: BotSparkleRegular,
+    skillItems: [
+      {
+        id: 1,
+        name: 'Claude Code CLI, Antigravity CLI, ChatGPT',
+      },
+      {
+        id: 2,
+        name: 'LLM APIs, Structured Outputs, Function Calling',
+      },
+      {
+        id: 3,
+        name: 'RAG (Retrieval-Augmented Generation), Embeddings, Vector Search',
+      },
+      {
+        id: 4,
+        name: 'Agentic AI, LangChain, LangGraph',
+      },
+      {
+        id: 5,
+        name: 'Golden Dataset Benchmarking, Recall@K, Faithfulness Checks',
+      },
+    ],
+  },
+  {
+    id: 4,
+    title: 'Testing & Developer Tools',
     image: SettingsCogMultipleRegular,
     skillItems: [
-      { id: 1, name: 'Version Control: Git, GitHub, GitLab' },
-      { id: 2, name: 'Build & Dev Tools: Vite, Postman, VSCode, React Dev Tools' },
-      { id: 3, name: 'Quality & Automation: Git Hooks (Husky), Lighthouse, Shell Scripting' },
-      { id: 4, name: 'AI Coding Tools: Antigravity CLI, Claude Code CLI, ChatGPT' },
+      {
+        id: 1,
+        name: 'React Testing Library, Vitest, Jest, Storybook',
+      },
+      {
+        id: 2,
+        name: 'JUnit, Vitest (State Graph & Tool-Calling Tests)',
+      },
+      {
+        id: 3,
+        name: 'Git, GitHub, Maven, Postman, Vite DevTools',
+      },
+      {
+        id: 4,
+        name: 'Git Hooks (Husky), ESLint, Prettier, Stylelint',
+      },
     ],
   },
 ];
