@@ -1,5 +1,4 @@
 import { SocialIcon } from 'react-social-icons';
-import { DeviMa } from '@assets/images/specifics';
 import './Sidebar.scss';
 import {
   DESIGNATION,
@@ -14,7 +13,6 @@ import { useMediaQuery } from '@hooks/useMediaQuery';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [imageHovered, setImageHovered] = useState(false);
   const isMobile = useMediaQuery('(max-width: 820px)');
 
   return (
@@ -33,12 +31,6 @@ function Sidebar() {
             />
           </button>
         )}
-        <div
-          className={`sidebar__image-wrapper ${imageHovered ? 'hovered' : ''}`}
-          onMouseEnter={() => setImageHovered(true)}
-        >
-          <img src={DeviMa} alt="user-avatar" className="sidebar__image" />
-        </div>
         <div className="sidebar__content">
           <p className="sidebar__name">{NAME}</p>
           <p className="sidebar__designation">{DESIGNATION}</p>

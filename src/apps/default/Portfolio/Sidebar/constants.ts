@@ -29,5 +29,5 @@ export const SIDEBAR_SOCIAL_LINKS: Record<string, SocialLinkData> = {
   },
 };
 
-export const DESIGNATION = 'Frontend Developer';
+export const DESIGNATION = 'AI-Native Software Developer';
 export const NAME = 'ROHIT IMANDI';
