@@ -51,6 +51,21 @@
 
     @include fade-in-element(0.7s);
   }
+
+  &__sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-vertical-xs);
+    margin-top: var(--spacing-vertical-xs);
+    padding-left: var(--spacing-horizontal-xl);
+  }
+
+  &__sub-list-item {
+    color: var(--color-neutral-foreground3);
+    font-size: var(--font-size-base300);
+    line-height: var(--line-height-base300);
+    letter-spacing: 0.03rem;
+  }
 }
 
 @media (max-width: $breakpoint-tablet-landscape) {

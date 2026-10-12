@@ -73,7 +73,8 @@
     color: var(--color-neutral-foreground4);
     font-size: var(--font-size-base300);
     font-weight: var(--font-weight-regular);
-    line-height: var(--line-height-base200);
+    line-height: var(--line-height-base300);
+    letter-spacing: 0.03rem;
   }
 
   &__link {
