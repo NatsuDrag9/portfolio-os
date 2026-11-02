@@ -125,15 +125,16 @@ gcloud iam service-accounts add-iam-policy-binding \
 
 ---
 
-## GitHub Repository Secrets & Variables
+## GitHub Repository Variables
 
-In your GitHub repository, navigate to **Settings** > **Secrets and variables** > **Actions** and add the following entries:
+In your GitHub repository, navigate to **Settings** > **Secrets and variables** > **Actions** > **Variables** tab:
 
-| Name | Type | Value | Example |
-| :--- | :--- | :--- | :--- |
-| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Secret or Variable | Full path to the identity provider | `projects/<PROJECT_NUMBER>/locations/global/workloadIdentityPools/github-pool/providers/github-provider` |
-| `GCP_SERVICE_ACCOUNT` | Secret or Variable | Email address of the Service Account | `gh-actions-gcs-deployer@<PROJECT_ID>.iam.gserviceaccount.com` |
-| `GCP_STORAGE_BUCKET` | Secret or Variable | Name of your GCS bucket | `my-portfolio-bucket` |
+| Variable Name | Description | Example |
+| :--- | :--- | :--- |
+| `GCP_PROJECT_ID` | Your Google Cloud project ID | `my-gcp-project-123456` |
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Full path to the identity provider | `projects/<PROJECT_NUMBER>/locations/global/workloadIdentityPools/github-pool/providers/github-provider` |
+| `GCP_SERVICE_ACCOUNT` | Email address of the Service Account | `gh-actions-gcs-deployer@<PROJECT_ID>.iam.gserviceaccount.com` |
+| `GCP_STORAGE_BUCKET` | Name of your GCS bucket | `my-portfolio-bucket` |
 
 ---
 
